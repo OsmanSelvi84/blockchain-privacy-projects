@@ -1,0 +1,25 @@
+{
+  "name": "10-did-management",
+  "version": "1.0.0",
+  "description": "Manage decentralized identifiers (DIDs).",
+  "main": "index.js",
+  "scripts": {
+    "test": "hardhat test",
+    "compile": "hardhat compile"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-ethers": "^4.0.12",
+    "@nomicfoundation/hardhat-node-test-runner": "^3.0.16",
+    "chai": "^5.2.0",
+    "hardhat": "^3.5.0",
+    "mocha": "^11.4.0"
+  },
+  "dependencies": {
+    "ethers": "^6.13.5",
+    "viem": "^2.50.4"
+  },
+  "type": "module"
+}
