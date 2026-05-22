@@ -12,11 +12,11 @@ A Decentralized Identifier DID Management System  using smart contracts. This pr
 Self-sovereign identity: the users own and control their identities without depending on a central authority.
 
 # Reference Implementation
-- **Repository:** https://github.com/decentralized-identity/ethr-did-registry
-- **Description:** The Ethereum DID Registry by the Decentralized Identity Foundation — the industry standard DID registry smart contract.
-- **Setup:** I have checked their README for installation and execution steps.
+**Repository:** https://github.com/decentralized-identity/ethr-did-registry
+**Description:** The Ethereum DID Registry by the Decentralized Identity Foundation — the industry standard DID registry smart contract.
+**Setup:** I have checked their README for installation and execution steps.
 
-# Project Structure
+# My Project Structure
 10-did-management/
 ├── contracts/
 │   └── DIDRegistry.sol       # Main smart contract
@@ -26,7 +26,7 @@ Self-sovereign identity: the users own and control their identities without depe
 │   └── DIDRegistry.test.ts   # Test file
 ├── hardhat.config.ts         # Hardhat configuration
 ├── package.json              # Dependencies
-└── README.md                 # This file
+└── README.md                 
 
 # Required Software
 - Node.js v22+
@@ -71,9 +71,9 @@ node --test test/DIDRegistry.test.ts
 ```
 
 Expected output:
-* Should create and resolve a DID
-* Should update a DID
-* Should revoke a DID
+* create and resolve a DID
+* update a DID
+* revoke a DID
 pass 3 / fail 0
 
 ## Smart Contract Features
