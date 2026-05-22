@@ -42,17 +42,17 @@ from ct.curve import G, H, ORDER
 
 def commit(value: int, blinding: int) -> PointJacobi:
     """Pedersen commitment C = value*H + blinding*G."""
-    raise NotImplementedError
+    return value * H + blinding * G
 
 
 def add(c1: PointJacobi, c2: PointJacobi) -> PointJacobi:
     """C1 + C2."""
-    raise NotImplementedError
+    return c1 + c2
 
 
 def sub(c1: PointJacobi, c2: PointJacobi) -> PointJacobi:
     """C1 - C2 (i.e. C1 + (-C2))."""
-    raise NotImplementedError
+    return c1 + (-c2)
 
 
 def balance_excess(
@@ -65,4 +65,15 @@ def balance_excess(
 
     For a balanced transaction, D = excess*G for some scalar excess.
     """
-    raise NotImplementedError
+    # Start by summing the inputs.
+    total = input_commitments[0]
+    for c in input_commitments[1:]:
+        total = total + c
+    # Subtract each output commitment.
+    for c in output_commitments:
+        total = total + (-c)
+    # Subtract the fee*H term so the H components cancel for a balanced tx.
+    # Use scalar negation so fee == 0 is handled cleanly (avoids negating
+    # the point at infinity, which the ecdsa library doesn't support).
+    total = total + ((ORDER - fee) % ORDER) * H
+    return total

@@ -32,6 +32,7 @@ under the same key leaks the key.
 
 import hashlib
 import secrets
+
 from ecdsa.ellipticcurve import PointJacobi
 from ct.curve import G, ORDER
 
@@ -41,19 +42,36 @@ def _point_to_bytes(point: PointJacobi) -> bytes:
     Serialize a curve point to compressed 33-byte SEC1 form:
     0x02 || x  if y is even,  0x03 || x  if y is odd.
     """
-    raise NotImplementedError
+    x = point.x()
+    y = point.y()
+    prefix = b"\x02" if y % 2 == 0 else b"\x03"
+    return prefix + x.to_bytes(32, "big")
 
 
 def challenge_hash(R: PointJacobi, P: PointJacobi, msg: bytes) -> int:
     """e = sha256(R_bytes || P_bytes || msg) mod ORDER."""
-    raise NotImplementedError
+    h = hashlib.sha256(_point_to_bytes(R) + _point_to_bytes(P) + msg).digest()
+    return int.from_bytes(h, "big") % ORDER
 
 
 def sign(private_key: int, msg: bytes) -> tuple[PointJacobi, int]:
     """Schnorr-sign `msg` with `private_key`; returns (R, s)."""
-    raise NotImplementedError
+    # Pick a fresh secure-random nonce in [1, ORDER-1]. NEVER reuse this.
+    k = secrets.randbelow(ORDER - 1) + 1
+    R = k * G
+    P_pub = private_key * G
+    e = challenge_hash(R, P_pub, msg)
+    s = (k + e * private_key) % ORDER
+    return R, s
 
 
 def verify(public_key: PointJacobi, msg: bytes, R: PointJacobi, s: int) -> bool:
     """Verify (R, s) on `msg` under `public_key`: s*G == R + e*public_key."""
-    raise NotImplementedError
+    # Reject malformed signatures: s must be in [0, ORDER).
+    if not (0 <= s < ORDER):
+        return False
+    e = challenge_hash(R, public_key, msg)
+    lhs = s * G
+    rhs = R + e * public_key
+    # Compare by coordinates so the point-at-infinity case doesn't surprise us.
+    return (lhs.x(), lhs.y()) == (rhs.x(), rhs.y())

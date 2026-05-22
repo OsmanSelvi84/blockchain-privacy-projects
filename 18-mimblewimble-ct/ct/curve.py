@@ -20,6 +20,8 @@ Square root on Fp when p ≡ 3 mod 4:  y = t^((p+1)/4) mod p.
 secp256k1's p satisfies p ≡ 3 mod 4, so this closed form applies.
 """
 
+import hashlib
+
 from ecdsa.curves import SECP256k1
 from ecdsa.ellipticcurve import PointJacobi
 
@@ -35,8 +37,23 @@ H_SEED = b"MimbleWimble-CT/H/v1"
 
 def derive_H() -> PointJacobi:
     """Derive H deterministically from H_SEED via try-and-increment."""
-    raise NotImplementedError
+    counter = 0
+    while True:
+        # Hash the seed with a counter to get a candidate x-coordinate.
+        h = hashlib.sha256(H_SEED + counter.to_bytes(4, "big")).digest()
+        x = int.from_bytes(h, "big") % P
+
+        # Check that x³ + 7 mod p is a quadratic residue (Euler's criterion).
+        t = (pow(x, 3, P) + 7) % P
+        if pow(t, (P - 1) // 2, P) == 1:
+            # Compute y = sqrt(t) mod p using the closed form for p ≡ 3 mod 4.
+            y = pow(t, (P + 1) // 4, P)
+            # Pick the even-y branch by convention so the derivation is unique.
+            if y % 2 != 0:
+                y = P - y
+            return PointJacobi(CURVE, x, y, 1, ORDER)
+        counter += 1
 
 
-# H is set by derive_H() once that function is implemented.
-H: PointJacobi | None = None
+# H is computed once at import time so all modules share the same instance.
+H: PointJacobi = derive_H()
