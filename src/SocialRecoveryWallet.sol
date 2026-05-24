@@ -2,7 +2,6 @@
 pragma solidity ^0.8.20;
 
 contract SocialRecoveryWallet {
-
     address public owner;
 
     uint256 public constant TOTAL_GUARDIANS = 3;
@@ -50,11 +49,11 @@ contract SocialRecoveryWallet {
     }
 
     // owner cüzdandan para gönderir
-    function send_money(
-        address receiver,
-        uint256 amount,
-        bytes calldata data
-    ) external only_owner returns (bytes memory) {
+    function send_money(address receiver, uint256 amount, bytes calldata data)
+        external
+        only_owner
+        returns (bytes memory)
+    {
         require(receiver != address(0), "Gecersiz hedef");
 
         (bool success, bytes memory result) = receiver.call{value: amount}(data);
