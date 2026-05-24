@@ -178,13 +178,6 @@ forge test -v
 - Solmate (installed via `forge install transmissions11/solmate`)
 - Node.js + Yarn (for package.json dependencies)
 
-**Execution steps:**
-
-```bash
-forge build
-forge test -v
-```
-
 **Comparison notes:**
 
 The reference implementation uses Solmate library for safe ETH transfers and 
