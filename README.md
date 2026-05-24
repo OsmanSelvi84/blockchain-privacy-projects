@@ -149,7 +149,7 @@ mkdir -p src/test/utils
 touch src/test/utils/console.sol
 ```
 
-Sonra `src/test/utils/console.sol` dosyasının içine şunu yaz:
+After you should write into `src/test/utils/console.sol` file :
 
 ```solidity
 // SPDX-License-Identifier: MIT
@@ -162,7 +162,7 @@ library console {
 }
 ```
 
-Sonra çalıştır:
+after execute:
 
 ```bash
 forge build
