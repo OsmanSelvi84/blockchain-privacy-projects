@@ -2,14 +2,16 @@
 pragma solidity ^0.8.20;
 
 contract SocialRecoveryWallet {
+
     address public owner;
 
     uint256 public constant TOTAL_GUARDIANS = 3;
     uint256 public constant MIN_APPROVALS = 2;
 
-    address[3] public guardians;
-    mapping(address => bool) public isguardian;
-    mapping(address => bool) public voted;
+    // guardian adresleri hash'lenerek saklanır, kimlikler gizli tutulur
+    bytes32[3] public guardian_hashes;
+    mapping(bytes32 => bool) public isguardian;
+    mapping(bytes32 => bool) public voted;
 
     bool public recovery_cond;
     address public candidate_owner;
@@ -27,7 +29,8 @@ contract SocialRecoveryWallet {
     }
 
     modifier only_guardian() {
-        require(isguardian[msg.sender], "Guardian degilsiniz");
+        bytes32 h = keccak256(abi.encodePacked(msg.sender));
+        require(isguardian[h], "Guardian degilsiniz");
         _;
     }
 
@@ -37,19 +40,21 @@ contract SocialRecoveryWallet {
         for (uint256 i = 0; i < TOTAL_GUARDIANS; i++) {
             require(_guardians[i] != address(0), "Gecersiz adres");
             require(_guardians[i] != owner, "Owner guardian olamaz");
-            require(!isguardian[_guardians[i]], "Ayni guardian iki kez eklenemez");
 
-            guardians[i] = _guardians[i];
-            isguardian[_guardians[i]] = true;
+            bytes32 h = keccak256(abi.encodePacked(_guardians[i]));
+            require(!isguardian[h], "Ayni guardian iki kez eklenemez");
+
+            guardian_hashes[i] = h;
+            isguardian[h] = true;
         }
     }
 
     // owner cüzdandan para gönderir
-    function send_money(address receiver, uint256 amount, bytes calldata data)
-        external
-        only_owner
-        returns (bytes memory)
-    {
+    function send_money(
+        address receiver,
+        uint256 amount,
+        bytes calldata data
+    ) external only_owner returns (bytes memory) {
         require(receiver != address(0), "Gecersiz hedef");
 
         (bool success, bytes memory result) = receiver.call{value: amount}(data);
@@ -65,10 +70,13 @@ contract SocialRecoveryWallet {
         require(_candidate != address(0), "Gecersiz aday");
         require(_candidate != owner, "Bu kisi zaten owner");
 
+        bytes32 h = keccak256(abi.encodePacked(msg.sender));
+        require(!voted[h], "Zaten oy kullandiniz");
+
         recovery_cond = true;
         candidate_owner = _candidate;
         vote_count = 1;
-        voted[msg.sender] = true;
+        voted[h] = true;
 
         emit recovery_started(msg.sender, _candidate);
     }
@@ -76,9 +84,11 @@ contract SocialRecoveryWallet {
     // diğer guardianlar oylama yapar, 2 oy dolunca owner değişir
     function cast_vote() external only_guardian {
         require(recovery_cond, "Aktif recovery yok");
-        require(!voted[msg.sender], "Zaten oy kullandiniz");
 
-        voted[msg.sender] = true;
+        bytes32 h = keccak256(abi.encodePacked(msg.sender));
+        require(!voted[h], "Zaten oy kullandiniz");
+
+        voted[h] = true;
         vote_count++;
 
         emit vote_cast(msg.sender, vote_count);
@@ -104,7 +114,7 @@ contract SocialRecoveryWallet {
         vote_count = 0;
 
         for (uint256 i = 0; i < TOTAL_GUARDIANS; i++) {
-            voted[guardians[i]] = false;
+            voted[guardian_hashes[i]] = false;
         }
     }
 
