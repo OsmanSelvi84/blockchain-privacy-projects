@@ -1,0 +1,142 @@
+const chalk = require("chalk");
+const fs = require("fs");
+const Utility = artifacts.require("dUtility");
+const OwnedSet = artifacts.require("OwnedSet");
+const dUtilityBenchmark = artifacts.require("dUtilityBenchmark");
+
+const web3Utils = require("web3-utils");
+const web3Helper = require("../lib/web3-client");
+const asyncUtils = require("../lib/async-loop");
+
+function toChecksumAddress(addr) {
+  const hex = String(addr).replace(/^0x/i, "");
+  return web3Utils.toChecksumAddress(`0x${hex}`);
+}
+const { address, password } = require("../ned-config");
+const {
+  UTILITY_ADDRESS,
+  AUTHORITY_ADDRESS,
+  OTHER_AUTHORITY_ADDRESSES,
+  OWNED_SET_ADDRESS,
+  TESTS_FAKE_ADDRESS,
+  VERIFIER_ADDRESS
+} = require("../lib/chain-constants");
+
+async function addValidator(validator, ownedSetInstance, web3) {
+  process.stdout.write(`  Adding ${validator} to OwnedSet contract ... `);
+  await web3.eth.personal.unlockAccount(address, password, null);
+  await ownedSetInstance.addValidator(validator, {
+    from: AUTHORITY_ADDRESS
+  });
+  process.stdout.write(chalk.green("done\n"));
+}
+
+async function finalizeChange(ownedSetInstance, web3) {
+  process.stdout.write(`  Finalizing changes to OwnedSet contract ... `);
+  await web3.eth.personal.unlockAccount(address, password, null);
+  await ownedSetInstance.finalizeChange();
+  process.stdout.write(chalk.green("done\n"));
+}
+
+function sendEtherAndWait(web3, toAddr) {
+  return new Promise((resolve, reject) => {
+    web3.eth
+      .sendTransaction({
+        from: AUTHORITY_ADDRESS,
+        to: toAddr,
+        value: web3.utils.toWei("1", "ether"),
+        gas: 21000
+      })
+      .on("receipt", resolve)
+      .on("error", reject);
+  });
+}
+
+module.exports = async (deployer, network, [authority]) => {
+  switch (network) {
+    case "ganache": {
+      await deployer.deploy(Utility);
+      const utilityInstance = await Utility.deployed();
+      await utilityInstance.addHousehold(authority);
+      break;
+    }
+    case "authority": {
+      const utilityInstanceInAuthority = await Utility.at(UTILITY_ADDRESS);
+      const ownedSetInstanceInAuthority = await OwnedSet.at(OWNED_SET_ADDRESS);
+      const web3 = web3Helper.connect("authority");
+      await web3Helper.waitUntilReady(web3);
+
+      process.stdout.write("  Set verifier contract address ... ");
+      await web3.eth.personal.unlockAccount(address, password, null);
+      await utilityInstanceInAuthority.setVerifier(VERIFIER_ADDRESS, {
+        from: AUTHORITY_ADDRESS
+      });
+      process.stdout.write(chalk.green("done\n"));
+
+      process.stdout.write("  Adding admin node to Utility contract ... ");
+      await web3.eth.personal.unlockAccount(address, password, null);
+      await utilityInstanceInAuthority.addHousehold(AUTHORITY_ADDRESS, {
+        from: AUTHORITY_ADDRESS
+      });
+      process.stdout.write(chalk.green("done\n"));
+
+      process.stdout.write("  Transfer ownership of Utility contract ... ");
+      await web3.eth.personal.unlockAccount(address, password, null);
+      await utilityInstanceInAuthority.transferOwnership(OWNED_SET_ADDRESS, {
+        from: AUTHORITY_ADDRESS
+      });
+      process.stdout.write(chalk.green("done\n"));
+
+      process.stdout.write("  Adding authority addresses ...\n");
+      await asyncUtils.forEach(OTHER_AUTHORITY_ADDRESSES, async a => {
+        const validatorAddr = toChecksumAddress(a);
+        await addValidator(validatorAddr, ownedSetInstanceInAuthority, web3);
+        await web3.eth.personal.unlockAccount(address, password, null);
+        process.stdout.write(
+          `Sending ether from ${AUTHORITY_ADDRESS} to ${validatorAddr} ...`
+        );
+        await sendEtherAndWait(web3, validatorAddr);
+        process.stdout.write(chalk.green("done\n"));
+      });
+
+      await addValidator(TESTS_FAKE_ADDRESS, ownedSetInstanceInAuthority, web3);
+      await finalizeChange(ownedSetInstanceInAuthority, web3);
+
+      process.stdout.write("  Removing 'fake' authority addresses ...");
+      await web3.eth.personal.unlockAccount(address, password, null);
+      await ownedSetInstanceInAuthority.removeValidator(TESTS_FAKE_ADDRESS, {
+        from: AUTHORITY_ADDRESS
+      });
+      process.stdout.write(chalk.green("done\n"));
+      await finalizeChange(ownedSetInstanceInAuthority, web3);
+      await web3.eth.personal.unlockAccount(address, password, null);
+      break;
+    }
+    case "benchmark": {
+      const verifier = artifacts.require("verifier.sol");
+      const web3 = web3Helper.connect("benchmark");
+      await web3.eth.personal.unlockAccount(address, password, null);
+      const contractAddress = await deployer.deploy(dUtilityBenchmark)
+        .then(inst => {
+          return inst.address;
+        });
+
+      await web3.eth.personal.unlockAccount(address, password, null);
+      const verifierAddress = await deployer.deploy(verifier, { gas: 20000000})
+        .then(inst => {
+          return inst.address;
+        });
+      await web3.eth.personal.unlockAccount(address, password, null);
+      fs.writeFile('tmp/addresses.txt', JSON.stringify({contract: contractAddress, verifier: verifierAddress}),
+        function (err) {
+          if (err) throw err;
+        }
+      );
+      break;
+    }
+    default: {
+      deployer.deploy(Utility);
+      break;
+    }
+  }
+};
