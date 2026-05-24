@@ -1,0 +1,14 @@
+node_modules/
+build/
+dashboard/node_modules/
+dashboard/build/
+tmp/
+zk/out/
+zk/proving.key
+zk/verification.key
+*.log
+.DS_Store
+.env
+.env.*
+dashboard/.env*
+.vscode/
