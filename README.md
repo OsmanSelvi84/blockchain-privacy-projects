@@ -68,6 +68,7 @@ Compiler run successful!
 ```bash
 forge test -v
 ```
+<img width="748" height="161" alt="image" src="https://github.com/user-attachments/assets/04d271a4-1c35-439c-b929-6c9bf687ae35" />
 
 Expected output:
 [PASS] test_owner()
