@@ -5,7 +5,6 @@ import "forge-std/Test.sol";
 import "../src/SocialRecoveryWallet.sol";
 
 contract WalletTest is Test {
-
     SocialRecoveryWallet wallet;
 
     address wallet_owner = address(0x1);
