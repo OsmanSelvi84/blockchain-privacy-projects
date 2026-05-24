@@ -144,10 +144,33 @@ This project was developed by studying the following reference implementation:
 ```bash
 git clone https://github.com/verumlotus/social-recovery-wallet.git
 cd social-recovery-wallet
-curl -L https://foundry.paradigm.xyz | bash
-foundryup
 forge install
+mkdir -p src/test/utils
+touch src/test/utils/console.sol
 ```
+
+Sonra `src/test/utils/console.sol` dosyasının içine şunu yaz:
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+library console {
+    function log(string memory) internal pure {}
+    function log(uint256) internal pure {}
+    function log(address) internal pure {}
+    function log(bool) internal pure {}
+}
+```
+
+Sonra çalıştır:
+
+```bash
+forge build
+forge test -v
+```
+**Expected output after `forge test -v`:**
+
+<img width="726" height="214" alt="image" src="https://github.com/user-attachments/assets/5cd1caf0-1873-48f0-9a37-3d10dc4bc98d" />
 
 **Dependencies:**
 - Foundry (forge)
