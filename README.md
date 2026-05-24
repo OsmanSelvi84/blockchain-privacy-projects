@@ -2,8 +2,9 @@
 
 This project is a Solidity implementation of a guardian-based social recovery 
 wallet system. It is based on the private-key recovery problem defined in 
-Section III-B of Bernal Bernabe et al. (2019), and draws from the consensus-based 
-recovery mechanism of uPort [20].
+Section III-B of Bernal Bernabe et al. (2019), *Privacy-Preserving Solutions 
+for Blockchain: Review and Challenges*, IEEE Access, and draws from the 
+consensus-based recovery mechanism of uPort [20].
 
 ---
 
@@ -15,7 +16,6 @@ Student branch: `students/220304016-begum-gunaydin`
 git clone https://github.com/OsmanSelvi84/blockchain-privacy-projects.git
 cd blockchain-privacy-projects
 git checkout students/220304016-begum-gunaydin
-cd social-recovery-wallet
 ```
 
 ---
