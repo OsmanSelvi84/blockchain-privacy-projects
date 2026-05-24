@@ -194,11 +194,30 @@ forge test -v
 | Dependencies | Solmate (ReentrancyGuard, ERC interfaces) | None, pure Solidity |
 | Guardian reveal | Guardian can optionally reveal identity | Not implemented |
 
-This project focuses on the core recovery mechanism defined in the academic 
-paper (Section III-B, Bernal Bernabe et al. 2019) with simplified guardian 
-management. Guardian addresses are hashed using keccak256 consistent with 
-the reference implementation, preserving privacy of guardian identities 
-until recovery is initiated.
+**Advantages over reference implementation:**
+
+- **No external dependencies:** Pure Solidity implementation without Solmate 
+  or any external library, making it easier to audit and deploy.
+
+- **Recovery cancellation:** Owner can cancel an active recovery process via 
+  `cancel_recovery()`. The reference implementation also has this feature, 
+  but this project's implementation resets all votes and recovery state 
+  completely via `_clear_recovery()`, ensuring a clean slate for future 
+  recovery attempts.
+
+- **Simplified deployment:** Fixed guardian count and threshold removes the 
+  risk of misconfiguration at deploy time. No need to calculate threshold 
+  values or manage dynamic guardian arrays.
+
+- **Automatic execution:** When the second guardian calls `cast_vote()`, 
+  ownership transfers automatically without requiring a separate 
+  `executeRecovery()` call. This reduces the number of transactions needed 
+  and lowers gas costs.
+
+- **Cleaner codebase:** Focused solely on the core recovery mechanism defined 
+  in Bernal Bernabe et al. (2019) Section III-B, without ERC721/ERC1155 
+  receiver standards or guardian transfer logic that are outside the scope 
+  of the academic paper.
 
 
 
