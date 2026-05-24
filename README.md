@@ -1,7 +1,150 @@
-# Blockchain Privacy Projects
+# Social Recovery Wallet
 
-COMP4052 - Introduction to Blockchain and DLT
+This project is a Solidity implementation of a guardian-based social recovery 
+wallet system. It is based on the private-key recovery problem defined in 
+Section III-B of Bernal Bernabe et al. (2019), and draws from the consensus-based 
+recovery mechanism of uPort [20].
 
-Instructor: Osman SELVİ
+---
 
-This repository created for collecting student projects for the term 2025-2026 Fall
+## Branch Information
+
+Student branch: `students/220304016-begum-gunaydin`
+
+```bash
+git clone https://github.com/OsmanSelvi84/blockchain-privacy-projects.git
+cd blockchain-privacy-projects
+git checkout students/220304016-begum-gunaydin
+cd social-recovery-wallet
+```
+
+---
+
+## Required Software
+
+| Tool | Version | Purpose |
+|---|---|---|
+| Foundry (forge) | latest | build & test |
+| Git | any | clone repo |
+
+---
+
+## Installation
+
+Install Foundry:
+
+```bash
+curl -L https://foundry.paradigm.xyz | bash
+foundryup
+```
+
+Verify installation:
+
+```bash
+forge --version
+```
+
+Install dependencies:
+
+```bash
+forge install
+```
+
+---
+
+## Build
+
+```bash
+forge build
+```
+
+Expected output:
+Compiler run successful!
+
+---
+
+## Run Tests
+
+```bash
+forge test -v
+```
+
+Expected output:
+[PASS] test_owner()
+[PASS] test_start_recovery()
+[PASS] test_change_owner()
+[PASS] test_cancel_recovery()
+[PASS] test_non_guardian()
+[PASS] test_double_vote()
+6 tests passed, 0 failed
+
+---
+
+## Project Structure
+src/SocialRecoveryWallet.sol   → main contract
+test/WalletTest.t.sol          → 6 test scenarios
+foundry.toml                   → foundry config
+
+---
+
+## How It Works
+
+1. Contract is deployed with 3 guardian addresses
+2. Any guardian calls `start_recovery(newOwner)` to initiate recovery
+3. A second guardian calls `cast_vote()` to approve
+4. When 2 votes are reached, owner is automatically changed
+5. If the owner still has access, they can call `cancel_recovery()`
+
+---
+
+## Sample Inputs / Outputs
+
+**Deploy:**
+guardians: [0xABC..., 0xDEF..., 0x123...]
+owner: 0xORIGINAL...
+
+**start_recovery(0xNEW...):**
+recovery_cond → true
+candidate_owner → 0xNEW...
+vote_count → 1
+
+**cast_vote() by second guardian:**
+vote_count → 2
+owner → 0xNEW...
+recovery_cond → false
+
+**cancel_recovery() by owner:**
+recovery_cond → false
+candidate_owner → 0x000...
+vote_count → 0
+
+---
+
+## Test Scenarios
+
+| Test | Description |
+|---|---|
+| test_owner | Checks owner is set correctly after deploy |
+| test_start_recovery | Guardian starts recovery successfully |
+| test_change_owner | Owner changes after 2 guardian votes |
+| test_cancel_recovery | Owner cancels an active recovery |
+| test_non_guardian | Non-guardian cannot start recovery |
+| test_double_vote | Same guardian cannot vote twice |
+
+---
+
+## Academic Reference
+
+This project is based on:
+
+> Bernal Bernabe et al. (2019), *Privacy-Preserving Solutions for Blockchain: 
+> Review and Challenges*, IEEE Access.
+> Section III-B: Private-Keys Management and Recovery
+> uPort [20]: consensus-based recovery mechanism
+
+| Paper Concept | Code Implementation |
+|---|---|
+| Threshold cryptography | `MIN_APPROVALS = 2` |
+| Consensus mechanism | `cast_vote()` |
+| Private key recovery | `start_recovery()` |
+| Guardian-based trust | `isguardian` mapping |
