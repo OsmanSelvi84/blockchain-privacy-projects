@@ -133,6 +133,43 @@ vote_count → 0
 
 ---
 
+## Reference Implementation
+
+This project was developed by studying the following reference implementation:
+
+**Repository:** https://github.com/verumlotus/social-recovery-wallet
+
+**Setup instructions for reference project:**
+
+```bash
+git clone https://github.com/verumlotus/social-recovery-wallet.git
+cd social-recovery-wallet
+curl -L https://foundry.paradigm.xyz | bash
+foundryup
+forge install
+```
+
+**Dependencies:**
+- Foundry (forge)
+- Solmate (installed via `forge install transmissions11/solmate`)
+- Node.js + Yarn (for package.json dependencies)
+
+**Execution steps:**
+
+```bash
+forge build
+forge test -v
+```
+
+**Comparison notes:**
+
+The reference implementation uses Solmate library for safe ETH transfers and 
+hashes guardian addresses for privacy. This project simplifies those aspects 
+by removing the Solmate dependency and storing guardian addresses directly, 
+while focusing on the core recovery mechanism defined in the academic paper.
+
+
+
 ## Academic Reference
 
 This project is based on:
