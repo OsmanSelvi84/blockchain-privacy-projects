@@ -180,10 +180,25 @@ forge test -v
 
 **Comparison notes:**
 
-The reference implementation uses Solmate library for safe ETH transfers and 
-hashes guardian addresses for privacy. This project simplifies those aspects 
-by removing the Solmate dependency and storing guardian addresses directly, 
-while focusing on the core recovery mechanism defined in the academic paper.
+| Feature | Reference (verumlotus) | This Project |
+|---|---|---|
+| Guardian identity | Hashed (keccak256), hidden until recovery | Hashed (keccak256), hidden until recovery |
+| Guardian count | Dynamic, set at deploy | Fixed at 3 |
+| Threshold | Dynamic, set at deploy | Fixed at 2 |
+| Guardian removal | 3-day time delay required | Not implemented |
+| Guardian transfer | Guardian can transfer to new guardian | Not implemented |
+| Recovery round tracking | Yes, currRecoveryRound counter | Not implemented |
+| Recovery cancellation | Owner can cancel | Owner can cancel ✅ |
+| External transactions | executeExternalTx() with reentrancy guard | send_money() without reentrancy guard |
+| ERC721/ERC1155 support | Yes, receiver standards implemented | Not implemented |
+| Dependencies | Solmate (ReentrancyGuard, ERC interfaces) | None, pure Solidity |
+| Guardian reveal | Guardian can optionally reveal identity | Not implemented |
+
+This project focuses on the core recovery mechanism defined in the academic 
+paper (Section III-B, Bernal Bernabe et al. 2019) with simplified guardian 
+management. Guardian addresses are hashed using keccak256 consistent with 
+the reference implementation, preserving privacy of guardian identities 
+until recovery is initiated.
 
 
 
