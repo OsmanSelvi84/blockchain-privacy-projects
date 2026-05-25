@@ -1,0 +1,136 @@
+{
+  "schnorr": [
+    {
+      "label": "simple_message",
+      "P": {
+        "x": "0x23ab470885152f738d9e1f41ec7db3d6400876ca6a8eb21504d24f4afb1d2eb",
+        "y": "0x2fe7426168a29740216ceaec01219e424cb2036fff543a5656dc6db463a11073"
+      },
+      "R": {
+        "x": "0xac89ac0b3102dd124a2f0080d3fcd429c1f035199cebce5d4d2280ba4228d37e",
+        "y": "0xd5e59ecf700cd1b3059393a9f649a07729d86c36774cc736e73aa7108c75574a"
+      },
+      "s": "0x325ca185afd4fa9f793bedd0d6b1703da92d4f97b1b42464e8ed36d5b88d7d33",
+      "message": "0x68656c6c6f20736f6c6964697479",
+      "should_verify": true
+    },
+    {
+      "label": "empty_message",
+      "P": {
+        "x": "0x1239a6059b5782ac38b8de88de22894587b099222bb0cf656b835311bc6db23f",
+        "y": "0x2952e8234bc30b53818b7ef189ecbfa4f829511f8447bff2ddd92c1da6a6cb79"
+      },
+      "R": {
+        "x": "0xc90e24f37864775089790c7ddab898351cd513165c31f03210c29bf4b7762853",
+        "y": "0xd426caa6227c6f9f9778c7990f89f5365b69e9defd0cef8def7e33b7e2070d4e"
+      },
+      "s": "0xd6c2faa717cb8fe557cfef79cc546968ca5ba554fac11e0ce89418e9698ffc17",
+      "message": "0x",
+      "should_verify": true
+    },
+    {
+      "label": "fee_8_bytes",
+      "P": {
+        "x": "0xb3e3f9d7af55c3db3b13bc7005ac90937a039281d6b0b2ba033f06a26b8b36f6",
+        "y": "0x2cb5f5691d33993a81e8635b07d6ed46867bf432926a207a8a184047fe1f38a4"
+      },
+      "R": {
+        "x": "0x30b2b86ae929f2e17fd47d668fcbff42c2a3c10b73800287cfd2cf5cfdc119f3",
+        "y": "0x85ac26e0f09f757466cfcbddd96901ec63a6ce8f3852746869c104ab94c0ec3e"
+      },
+      "s": "0x959e30260893477943a5d36385ff22ef66c8ba6b15616896e33d2057832df33",
+      "message": "0x0000000000000005",
+      "should_verify": true
+    }
+  ],
+  "balance": [
+    {
+      "label": "one_in_one_out",
+      "inputs": [
+        {
+          "x": "0x4ac85e8c223e66de8e0a06c0ed55b5c19f5d430c62976de357865b59811c2023",
+          "y": "0x613e41c393b09556e1454c06e73c395946c18c753545e69a196ffb3a80f53c13"
+        }
+      ],
+      "outputs": [
+        {
+          "x": "0x7d3e5b0e9238b6169f15bb03a728303d106c505f2c5a4b52352f7632dd415e4f",
+          "y": "0x78d8d1b50294a413a37046473c5ca7504bcf9d8c0a5b9cdced89bffabffb8bd2"
+        }
+      ],
+      "fee": 5,
+      "kernel_excess": {
+        "x": "0xe60fce93b59e9ec53011aabc21c23e97b2a31369b87a5ae9c44ee89e2a6dec0a",
+        "y": "0x81caf8c661a6a6d624660cb0a86c8efed6976e1bb2dc0f41e0cd330969e940e"
+      }
+    },
+    {
+      "label": "split",
+      "inputs": [
+        {
+          "x": "0xd67a6bfb44fedbef6d9f6245ee61beac95d255f376b587a7e81ddc0c2392200d",
+          "y": "0x52fcb347a830441e8b0e600d7db068c15b31b883620814ca7bce3a101c03b8eb"
+        }
+      ],
+      "outputs": [
+        {
+          "x": "0x762ae64def2407323d2dca129796d3d4a21040a465042208d5bec9419f521f46",
+          "y": "0x4b1cd1f99733c2dbfcd286d974a82f1bf236ad7cf4ed5920d9fa102ba07994df"
+        },
+        {
+          "x": "0x8ca0a268d1fe1e28ef6de1fc12b13b4929f1426583fffd1682dc334f3e4935cd",
+          "y": "0x83103078d3b63b5d6102cc230e64d519ffca890ca320dbdde4e6fc1569a791db"
+        }
+      ],
+      "fee": 5,
+      "kernel_excess": {
+        "x": "0x59ae134c1a41cfee81c5c2cd51ac727b4e7759552d729e07b25031df15661815",
+        "y": "0x1f3d7de97656d9ca42820cdd695603c77b85beb57baade72f632580ee1740004"
+      }
+    },
+    {
+      "label": "combine",
+      "inputs": [
+        {
+          "x": "0x7965d859abbc0e737a8d05e794bfc4ac3a024de9eb8cbbe533030f15229dfd15",
+          "y": "0x948057cc43f2ba523e28a03e32b62057db9563ecbb2896766aaa689019b4b909"
+        },
+        {
+          "x": "0x8b6fca308ed753d2a0ba1f5ea17b167c6f5b7a04269303a664b6320e65aaf094",
+          "y": "0x95273d87e0438595e2f2f88d937ab943980bd9355f49d07ab3b788ebfcfca1fc"
+        }
+      ],
+      "outputs": [
+        {
+          "x": "0xd0457b1a8caf1091c2e6ce26185e8ee1a62639f73a15b298e62500ec84602c08",
+          "y": "0xdca5d7a01b36204efe05ac724577edd1fe8515a7e45aa6a0b5a6e24699ba7308"
+        }
+      ],
+      "fee": 5,
+      "kernel_excess": {
+        "x": "0xd24a44e047e19b6f5afb81c7ca2f69080a5076689a010919f42725c2b789a33b",
+        "y": "0x6fb8d5591b466f8fc63db50f1c0f1c69013f996887b8244d2cdec417afea8fa3"
+      }
+    },
+    {
+      "label": "zero_fee",
+      "inputs": [
+        {
+          "x": "0x190b22c6b72832de87e8c4bc6396b5f46421ad453c214bbec9f8b8304b615cdf",
+          "y": "0xc4ee7ba27d4dcabf05d25dccc551b1e417835eb0a5af74c2683fd9fbb21ae774"
+        }
+      ],
+      "outputs": [
+        {
+          "x": "0x341daa1f9769ba210502376d4646c17b8a70928a53a7e467559c99acf9238ae3",
+          "y": "0x9da62171646d9d783050b9f8d55586c40034b4b6b0a2d79231bb2afd5ff1c6c6"
+        }
+      ],
+      "fee": 0,
+      "kernel_excess": {
+        "x": "0xe60fce93b59e9ec53011aabc21c23e97b2a31369b87a5ae9c44ee89e2a6dec0a",
+        "y": "0x81caf8c661a6a6d624660cb0a86c8efed6976e1bb2dc0f41e0cd330969e940e"
+      }
+    }
+  ]
+}

@@ -4,3 +4,9 @@ __pycache__/
 .pytest_cache/
 *.egg-info/
 .DS_Store
+
+# Hardhat / Node
+solidity/node_modules/
+solidity/cache/
+solidity/artifacts/
+solidity/typechain-types/

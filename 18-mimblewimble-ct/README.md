@@ -74,8 +74,17 @@ Expected output of `verify`:
 │   ├── test_rangeproof.py
 │   └── test_transaction.py
 ├── examples/                       # sample transaction JSON files
-└── scripts/
-    └── compare_with_reference.py   # differential test vs reference impl
+├── scripts/
+│   ├── compare_with_reference.py   # differential test vs reference impl
+│   └── generate_solidity_vectors.py # produce test vectors for the on-chain verifier
+└── solidity/                       # on-chain verifier (Hardhat project)
+    ├── contracts/
+    │   └── MimbleWimbleVerifier.sol
+    ├── test/
+    │   ├── MimbleWimbleVerifier.test.js
+    │   └── vectors.json            # generated from Python prover
+    ├── hardhat.config.js
+    └── package.json
 ```
 
 ---
@@ -111,6 +120,176 @@ PYTHONPATH=. python scripts/compare_with_reference.py
 
 This runs five scenarios through both impls and prints a comparison table.
 The instructor can vary the scenarios in `SCENARIOS` to test additional inputs.
+
+---
+
+## 3.5. Solidity on-chain verifier
+
+A Hardhat project under `solidity/` deploys a smart contract that verifies
+MimbleWimble transactions on Ethereum. It validates two things:
+
+1. **Kernel Schnorr signature** — that the spender knows the kernel excess
+   scalar (proves ownership of input blinding factors).
+2. **Commitment balance** — that `Σ C_in − Σ C_out − fee·H == kernelExcess`,
+   proving no value was inflated.
+
+Range proofs stay off-chain: the classical bit-commitment construction would
+cost tens of millions of gas per output to verify on EVM, since secp256k1
+has no native elliptic-curve precompile on Ethereum (only `ecrecover`).
+
+### Install and test
+
+```bash
+cd solidity
+npm install            # installs Hardhat + ethers + chai
+
+# Generate fresh test vectors from the Python prover (one-time):
+cd ..
+source .venv/bin/activate
+PYTHONPATH=. python scripts/generate_solidity_vectors.py
+
+# Compile + test the contract:
+cd solidity
+npx hardhat compile
+npx hardhat test
+```
+
+Expected output:
+
+```
+  MimbleWimbleVerifier
+    verifyKernelSignature
+      ✔ accepts a valid Schnorr signature [simple_message]
+      ✔ accepts a valid Schnorr signature [empty_message]
+      ✔ accepts a valid Schnorr signature [fee_8_bytes]
+      ✔ rejects a tampered signature
+      ✔ rejects a tampered message
+    verifyBalance
+      ✔ accepts a balanced transaction [one_in_one_out]
+      ✔ accepts a balanced transaction [split]
+      ✔ accepts a balanced transaction [combine]
+      ✔ accepts a balanced transaction [zero_fee]
+      ✔ rejects an unbalanced transaction (wrong fee)
+
+  10 passing
+```
+
+### Contract interface
+
+```solidity
+function verifyKernelSignature(
+    uint256 px, uint256 py,   // kernel excess point P
+    uint256 rx, uint256 ry,   // signature nonce point R
+    uint256 s,                // signature scalar
+    bytes calldata message    // signed message (e.g. the fee)
+) external view returns (bool);
+
+function verifyBalance(
+    uint256[] calldata inX, uint256[] calldata inY,
+    uint256[] calldata outX, uint256[] calldata outY,
+    uint256 fee,
+    uint256 kernelExcessX, uint256 kernelExcessY
+) external view returns (bool);
+```
+
+The two generators `G` and `H` are hardcoded as `internal constant` values
+in the contract. `H` is derived from the public seed
+`"MimbleWimble-CT/H/v1"` via try-and-increment in `ct/curve.py`; the
+on-chain constant must match the off-chain derivation byte-for-byte.
+
+### Gas characteristics
+
+Each `verifyKernelSignature` call runs two `ecMul` plus an `ecAdd`. With
+secp256k1 EC arithmetic implemented in pure Solidity (no native precompile),
+this is in the millions of gas — fine for a demo on a local node or a
+testnet, prohibitive on mainnet without optimizations. The contract is
+deliberately straightforward (affine coordinates, no Jacobian, no wNAF) so
+each line maps to a textbook formula.
+
+---
+
+## 3.5. Solidity on-chain verifier
+
+A Hardhat project under `solidity/` deploys a smart contract that verifies
+MimbleWimble transactions on Ethereum. It validates two things:
+
+1. **Kernel Schnorr signature** — that the spender knows the kernel excess
+   scalar (proves ownership of input blinding factors).
+2. **Commitment balance** — that `Σ C_in − Σ C_out − fee·H == kernelExcess`,
+   proving no value was inflated.
+
+Range proofs stay off-chain: the classical bit-commitment construction would
+cost tens of millions of gas per output to verify on EVM, since secp256k1
+has no native elliptic-curve precompile on Ethereum (only `ecrecover`).
+
+### Install and test
+
+```bash
+cd solidity
+npm install            # installs Hardhat + ethers + chai
+
+# Generate fresh test vectors from the Python prover (one-time):
+cd ..
+source .venv/bin/activate
+PYTHONPATH=. python scripts/generate_solidity_vectors.py
+
+# Compile + test the contract:
+cd solidity
+npx hardhat compile
+npx hardhat test
+```
+
+Expected output:
+
+```
+  MimbleWimbleVerifier
+    verifyKernelSignature
+      ✔ accepts a valid Schnorr signature [simple_message]
+      ✔ accepts a valid Schnorr signature [empty_message]
+      ✔ accepts a valid Schnorr signature [fee_8_bytes]
+      ✔ rejects a tampered signature
+      ✔ rejects a tampered message
+    verifyBalance
+      ✔ accepts a balanced transaction [one_in_one_out]
+      ✔ accepts a balanced transaction [split]
+      ✔ accepts a balanced transaction [combine]
+      ✔ accepts a balanced transaction [zero_fee]
+      ✔ rejects an unbalanced transaction (wrong fee)
+
+  10 passing
+```
+
+### Contract interface
+
+```solidity
+function verifyKernelSignature(
+    uint256 px, uint256 py,   // kernel excess point P
+    uint256 rx, uint256 ry,   // signature nonce point R
+    uint256 s,                // signature scalar
+    bytes calldata message    // signed message (e.g. the fee)
+) external view returns (bool);
+
+function verifyBalance(
+    uint256[] calldata inX, uint256[] calldata inY,
+    uint256[] calldata outX, uint256[] calldata outY,
+    uint256 fee,
+    uint256 kernelExcessX, uint256 kernelExcessY
+) external view returns (bool);
+```
+
+The two generators `G` and `H` are hardcoded as `internal constant` values
+in the contract. `H` is derived from the public seed
+`"MimbleWimble-CT/H/v1"` via try-and-increment in `ct/curve.py`; the
+on-chain constant must match the off-chain derivation byte-for-byte.
+
+### Gas characteristics
+
+Each `verifyKernelSignature` call runs two `ecMul` plus an `ecAdd`. With
+secp256k1 EC arithmetic implemented in pure Solidity (no native precompile),
+this is in the millions of gas — fine for a demo on a local node or a
+testnet, prohibitive on mainnet without optimizations. The contract is
+deliberately straightforward (affine coordinates, no Jacobian, no wNAF) so
+each line maps to a textbook formula.
 
 ---
 
