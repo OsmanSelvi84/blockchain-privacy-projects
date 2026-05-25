@@ -37,22 +37,29 @@ function App() {
         fetchTransfers()
       ])
       .then(data => {
-        //convert data from Ws to KWs
-        data[0].value = wsToKWh(data[0].value);
-        data[1].renewableEnergy = wsToKWh(data[1].renewableEnergy)
-        data[1].nonRenewableEnergy = wsToKWh(data[1].nonRenewableEnergy)
-        //assign latest meter change
-        data[4] = wsToKWh(data[2][0].produce - data[2][0].consume)
-        data[2] = data[2].map(entry => {
-          entry.produce = wsToKWh(entry.produce)
-          entry.consume = wsToKWh(entry.consume)
-          return entry
-        })
-        data[3] = data[3].map(entry => {
-          entry.amount = wsToKWh(entry.amount)
-          return entry
-        })
-        return data
+        const latestSensor = data[2][0];
+        const meterChangeKWh = latestSensor
+          ? wsToKWh(latestSensor.produce - latestSensor.consume)
+          : 0;
+
+        return [
+          { ...data[0], value: wsToKWh(data[0].value) },
+          {
+            ...data[1],
+            renewableEnergy: wsToKWh(data[1].renewableEnergy),
+            nonRenewableEnergy: wsToKWh(data[1].nonRenewableEnergy)
+          },
+          data[2].map(entry => ({
+            ...entry,
+            produce: wsToKWh(entry.produce),
+            consume: wsToKWh(entry.consume)
+          })),
+          data[3].map(entry => ({
+            ...entry,
+            amount: wsToKWh(entry.amount)
+          })),
+          meterChangeKWh
+        ];
       })
       setHouseholdStats(fetchedData[0]);
       setNetworkStats(fetchedData[1]);

@@ -7,9 +7,9 @@ import TransferItem from "./TransferItem";
 const TransfersTicker = React.memo(({ transfers }) => {
   return (
     <DashboardBox title={"Transfer Ticker"}>
-      {transfers.map(transfer => (
+      {transfers.map((transfer, index) => (
         <TransferItem
-          key={transfer._id}
+          key={transfer._id || `${transfer.from}-${transfer.to}-${transfer.timestamp || transfer.date || index}`}
           from={transfer.from}
           to={transfer.to}
           amount={Number(transfer.amount)}

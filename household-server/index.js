@@ -148,6 +148,7 @@ app.get("/sensor-stats", async (req, res) => {
  */
 app.get("/transfers", async (req, res) => {
   try {
+    await transferHandler.collectTransfers(config);
     const { from, to } = req.query;
     const fromQuery = from ? { timestamp: { $gte: parseInt(from) } } : {};
     const toQuery = to ? { timestamp: { $lte: parseInt(to) } } : {};
@@ -217,13 +218,13 @@ app.put("/sensor-stats", async (req, res) => {
 
     if (!nettingActive) {
       nettingActive = true;
-      await energyHandler.putMeterReading(
-        config,
-        web3,
-        utilityContract,
-        meterDelta
-      );
     }
+    await energyHandler.putMeterReading(
+      config,
+      web3,
+      utilityContract,
+      meterDelta
+    );
 
     await db.writeToDB(
       config.dbUrl,

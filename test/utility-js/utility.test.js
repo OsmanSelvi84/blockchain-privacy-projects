@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-unused-expressions */
-const Utility = require("../../utility-js/Utility");
+const Utility = require("../../netting-entity/utility");
 
 const expect = require("chai").expect;
 

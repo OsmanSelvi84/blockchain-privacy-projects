@@ -3,7 +3,7 @@
       // IP on which the ned server should run
       host: "127.0.0.1",
       // Port on which the ned server should listen
-      port: 3005,
+      port: 4005,
       // Ethereum address of NED node
       address: "0x00bd138abd70e2f00903268f3db08f2d25677c9e",
       // Password to unlock NED node

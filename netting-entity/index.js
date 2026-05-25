@@ -76,14 +76,34 @@ async function init() {
     Object.setPrototypeOf(utilityBeforeNetting, Utility.prototype);
     utilityAfterNetting = { ...utility };
     Object.setPrototypeOf(utilityAfterNetting, Utility.prototype);
+    utilityAfterNetting.transfers = [];
     utilityAfterNetting.settle();
+    // Expose only this netting round (avoid stale transfers from shared array refs)
+    utility.transfers = utilityAfterNetting.transfers.slice();
+    utility.renewableEnergy = utilityAfterNetting.renewableEnergy;
+    utility.nonRenewableEnergy = utilityAfterNetting.nonRenewableEnergy;
     console.log("Utility before Netting: ", utilityBeforeNetting)
     console.log("Utility after Netting: ", utilityAfterNetting)
-    let hhAddresses = zkHandler.generateProof(
-      utilityBeforeNetting,
-      utilityAfterNetting,
-      "production_mode"
-    );
+
+    const scheduleNextNetting = () => {
+      console.log(`Sleep for ${config.nettingInterval}ms ...`);
+      setTimeout(() => {
+        runZokrates();
+      }, config.nettingInterval);
+    };
+
+    let hhAddresses = [];
+    try {
+      hhAddresses = zkHandler.generateProof(
+        utilityBeforeNetting,
+        utilityAfterNetting,
+        "production_mode"
+      );
+    } catch (err) {
+      console.error("ZoKrates failed (off-chain transfers still saved):", err.message);
+      scheduleNextNetting();
+      return;
+    }
 
     let rawdata = fs.readFileSync("../zokrates-code/proof.json");
     let data = JSON.parse(rawdata);
@@ -101,22 +121,17 @@ async function init() {
           data.proof.c,
           data.inputs
         )
-        .send({ from: config.address, gas: 60000000 }, (error, txHash) => {
+        .send({ from: config.address, gas: 25000000 }, (error, txHash) => {
           if (error) {
-            console.error(error.message);
-            throw error;
+            console.error("checkNetting tx failed:", error.message);
+          } else {
+            console.log("checkNetting txHash", txHash);
           }
-          console.log(`Sleep for ${config.nettingInterval}ms ...`);
-          setTimeout(() => {
-            runZokrates();
-          }, config.nettingInterval);
+          scheduleNextNetting();
         });
     } else {
       console.log("No households to hash.");
-      console.log(`Sleep for ${config.nettingInterval}ms ...`);
-      setTimeout(() => {
-        runZokrates();
-      }, config.nettingInterval);
+      scheduleNextNetting();
     }
   }
 
