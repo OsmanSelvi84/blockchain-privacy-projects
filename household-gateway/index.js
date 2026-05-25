@@ -1,7 +1,6 @@
 const express = require("express");
 const cors = require("cors");
 const commander = require("commander");
-const request = require("request-promise");
 const defaultConfig = require("../gateway-config");
 const households = require("../lib/households");
 const store = require("./storage/mongo-store");
@@ -206,6 +205,13 @@ app.put("/sensor-stats", async (req, res) => {
   }
 
   try {
+    if (!chainReady || !web3 || !utilityContract) {
+      return res.status(503).json({
+        error:
+          "Gateway not connected to chain. Start parity-authority, run yarn migrate-contracts-authority (nvm use 10), restart gateway."
+      });
+    }
+
     if (!nettingActive) {
       nettingActive = true;
     }

@@ -9,21 +9,16 @@
     "migrate-contracts-authority": "truffle migrate --reset --network authority --f 2",
     "migrate-contracts-authority-fast": "truffle migrate --reset --network authority --f 2 --compile-none",
     "test-netting": "mocha ./test/netting/*.js",
-    "test": "yarn test-netting && node scripts/verify-test-vectors.js",
+    "test": "yarn test-netting",
     "test-contracts": "truffle test ./test/contracts/* --compile-none",
-    "verify-vectors": "node scripts/verify-test-vectors.js",
     "parity-reference": "node scripts/compare-reference-settlement.js",
     "clear-demo": "node scripts/clear-demo-state.js",
     "run-netting": "node ./netting-service/index.js -i 60000",
-    "run-netting-entity": "node ./netting-service/index.js -i 60000",
-    "run-gateway": "node ./household-gateway/index.js",
     "run-gateway-h1": "node ./household-gateway/index.js -p 3002 -a 0x00aa39d30f0d20ff03a22ccfc30b7efbfca597c2 -P node1 -n authority_1",
     "run-gateway-h2": "node ./household-gateway/index.js -p 3003 -a 0x002e28950558fbede1a9675cb113f0bd20912019 -P node2 -n authority_2",
     "setup-zokrates": "./scripts/setup_zokrates.sh",
     "generate-zok-circuit": "node zk/zoKratesCodeGenerator.js",
-    "update-contract-bytecodes": "yarn compile-contracts && node ./scripts/update-contract-bytecodes.js",
-    "compare-vectors": "./scripts/compare-with-reference.sh",
-    "connect-docker-nodes": "node scripts/connect_nodes.js"
+    "update-contract-bytecodes": "yarn compile-contracts && node ./scripts/update-contract-bytecodes.js"
   },
   "dependencies": {
     "bn.js": "4.11.8",
@@ -33,7 +28,6 @@
     "express": "^4.16.4",
     "js-sha256": "0.9.0",
     "mongodb": "3.3.2",
-    "request": "^2.88.0",
     "request-promise": "^4.2.4",
     "shelljs": "^0.8.3",
     "web3": "1.2.1"

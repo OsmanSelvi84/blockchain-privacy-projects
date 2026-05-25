@@ -40,7 +40,7 @@ diff <(curl -s "http://127.0.0.1:3005/transfers/${H1}?from=0" | jq -S '[.[].amou
 
 ## Runtime mode (aligned with reference)
 
-- NED netting every **60 s** (`yarn run-netting` / `run-netting-entity`)
+- NED netting every **60 s** (`yarn run-netting`)
 - `PUT /sensor-stats` only forwards to NED — **no instant UI transfer**
 - Transfers accumulate in **Mongo**; UI polls every **10 s**
 - Dashboard **Network Overview**: meter reading, community balance, meter change (referans `household-ui` ile aynı alanlar)

@@ -4,7 +4,7 @@ const commander = require("commander");
 const web3Utils = require("web3-utils");
 const fs = require("fs");
 const SettlementEngine = require("./settlement-engine");
-const { cloneEngine } = require("./instant-settle");
+const cloneEngine = SettlementEngine.cloneEngine;
 const memberValidator = require("./member-validator");
 const proofRunner = require("./proof-runner");
 const web3Client = require("../lib/web3-client");
@@ -36,6 +36,7 @@ let engineAfterNetting;
 let ownedSetContract;
 let utilityContract;
 let latestBlockNumber;
+let chainReady = false;
 
 async function bootstrap() {
   web3 = web3Client.connect(config.network);
@@ -73,7 +74,19 @@ async function bootstrap() {
       "ZoKrates yok — off-chain settle yine çalışır; zincir kanıtı için: yarn setup-zokrates"
     );
   }
+  chainReady = true;
   scheduleNettingCycle();
+}
+
+function ensureChainReady(res) {
+  if (chainReady && web3 && ownedSetContract && utilityContract && engine) {
+    return true;
+  }
+  res.status(503).json({
+    error:
+      "NED not ready (Parity or contracts). Start parity-authority, then: nvm use 10 && yarn migrate-contracts-authority, restart NED."
+  });
+  return false;
 }
 
 function scheduleNettingCycle() {
@@ -156,13 +169,19 @@ async function runNettingCycle() {
   }
 }
 
-bootstrap();
+bootstrap().catch(err => {
+  console.error("NED bootstrap failed:", err.message);
+  console.error(
+    "Fix: parity-authority docker-compose up -d, then yarn migrate-contracts-authority (Node 10)."
+  );
+});
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
 app.put("/energy/:householdAddress", async (req, res) => {
+  if (!ensureChainReady(res)) return;
   try {
     const householdAddress = web3Utils.toChecksumAddress(
       req.params.householdAddress
@@ -214,6 +233,7 @@ app.get("/network", (req, res) => {
 });
 
 app.get("/meterdelta", async (req, res) => {
+  if (!ensureChainReady(res)) return;
   try {
     const { signature, hash } = req.query;
     const recovered = await web3Client.recoverSigner(web3, hash, signature);
@@ -229,6 +249,7 @@ app.get("/meterdelta", async (req, res) => {
 });
 
 app.get("/transfers/:householdAddress", (req, res) => {
+  if (!ensureChainReady(res)) return;
   try {
     const { from = 0 } = req.query;
     const addr = web3Utils.toChecksumAddress(req.params.householdAddress);

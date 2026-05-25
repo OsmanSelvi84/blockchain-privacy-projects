@@ -90,8 +90,11 @@ class SettlementEngine {
       sides.surplusOnSupplySide
     );
 
-    // Tur bitti — sonraki 60 sn döngüsünde eski delta ile tekrar transfer olmasın.
-    this._clearMeterDeltasForNextRound();
+    // Sadece bir transfer gerçekten yapıldıysa delta'ları sıfırla; aksi
+    // halde tek-hane PUT sonrası eşleşmeyi beklerken delta kaybolur.
+    if (this.ledger.length > 0) {
+      this._clearMeterDeltasForNextRound();
+    }
 
     return this.members;
   }
@@ -255,20 +258,8 @@ class SettlementEngine {
     return this.ledger;
   }
 
-  addHousehold(addr) {
-    return this.registerMember(addr);
-  }
-  updateMeterDelta(addr, delta, ts) {
-    return this.applyMeterDelta(addr, delta, ts);
-  }
   getTransfers(addr, from) {
     return this.listTransfersFor(addr, from);
-  }
-  getHousehold(addr) {
-    return this.getMember(addr);
-  }
-  settle() {
-    return this.runSettlement();
   }
   getHouseholdAddressesProducers() {
     return this.listProducerAddresses();
@@ -278,4 +269,11 @@ class SettlementEngine {
   }
 }
 
+function cloneEngine(src) {
+  const copy = JSON.parse(JSON.stringify(src));
+  Object.setPrototypeOf(copy, SettlementEngine.prototype);
+  return copy;
+}
+
 module.exports = SettlementEngine;
+module.exports.cloneEngine = cloneEngine;

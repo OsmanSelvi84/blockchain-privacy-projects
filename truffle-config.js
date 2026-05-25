@@ -27,7 +27,8 @@ module.exports = {
   },
   compilers: {
     solc: {
-      version: require("solc/package.json").version,
+      version: "0.5.2",
+      docker: true,
       settings: {
         optimizer: {
           enabled: true,

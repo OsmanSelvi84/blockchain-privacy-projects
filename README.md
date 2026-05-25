@@ -88,7 +88,8 @@ curl -s "http://127.0.0.1:3005/transfers/0x00aa39d30f0d20ff03a22ccfc30b7efbfca59
 ```bash
 nvm use 10
 yarn install --ignore-engines
-yarn test-netting          # settlement math (3 vectors)
+yarn test                  # settlement math (3 course vectors)
+yarn parity-reference      # compare amounts with reference Utility (offline)
 yarn compile-contracts
 yarn test-contracts        # dUtility + mock verifier
 ```
