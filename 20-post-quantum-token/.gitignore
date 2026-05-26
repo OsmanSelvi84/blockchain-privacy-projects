@@ -1,0 +1,13 @@
+node_modules/
+.env
+artifacts/
+cache/
+coverage/
+coverage.json
+gas-report.txt
+deployment.json
+typechain-types/
+
+# CRITICAL — Lamport private key files. Never commit these.
+lamport-keys-*.json
+lamport-key.json

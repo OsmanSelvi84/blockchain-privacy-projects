@@ -1,0 +1,28 @@
+{
+  "name": "20-post-quantum-token",
+  "version": "1.0.0",
+  "description": "Post-quantum ERC20 token using Lamport one-time signatures on Ethereum (Solidity / Hardhat)",
+  "keywords": ["blockchain", "ethereum", "solidity", "post-quantum", "lamport", "erc20"],
+  "scripts": {
+    "compile":        "hardhat compile",
+    "test":           "hardhat test",
+    "test:gas":       "REPORT_GAS=true hardhat test",
+    "test:verbose":   "hardhat test --verbose",
+    "coverage":       "hardhat coverage",
+    "clean":          "hardhat clean",
+    "node":           "hardhat node",
+    "deploy:local":   "hardhat run scripts/deploy.js --network localhost",
+    "deploy:sepolia": "hardhat run scripts/deploy.js --network sepolia",
+    "compare":        "hardhat run scripts/compare.js --network localhost",
+    "generate-keys":  "node scripts/generateKeys.js"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "hardhat": "^2.22.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.0",
+    "ethers": "^6.13.0"
+  },
+  "engines": { "node": ">=18.0.0" }
+}
