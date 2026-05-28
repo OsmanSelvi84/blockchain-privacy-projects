@@ -1,0 +1,18 @@
+{
+  "name": "mimblewimble-ct",
+  "version": "1.0.0",
+  "description": "MimbleWimble Confidential Transactions simulation using Pedersen Commitments on Ethereum",
+  "scripts": {
+    "test": "npx hardhat test",
+    "compile": "npx hardhat compile",
+    "deploy:local": "npx hardhat run scripts/deploy.js --network localhost",
+    "node": "npx hardhat node"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "hardhat": "^2.19.0"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.0"
+  }
+}
