@@ -4,13 +4,36 @@ COMP4052 — Introduction to Blockchain and DLT — Final Project
 Student: Ege Deniz (220304118)
 Branch: `students/220304118-ege-deniz`
 
-This project is an original Python implementation of the MimbleWimble protocol's
-Confidential Transactions (CT) primitives — Pedersen commitments, kernel
-signatures, and bit-commitment range proofs — wired together as a verifiable
-CLI demo.
+This is the **original solution** for the *MimbleWimble Confidential
+Transactions* topic. Per the course guidance — "present an existing
+implementation (any language); propose your own solution, Solidity preferred" —
+it has two original parts:
 
-A separate reference implementation (`grinventions/mimblewimble-py`) is used
-to cross-validate functional behavior on the same scenarios.
+1. **A Solidity on-chain verifier** (`solidity/`) — the proposed own solution.
+   It verifies a CT transaction on Ethereum: the kernel Schnorr signature
+   (proves ownership) and the Pedersen commitment balance (proves no value was
+   inflated). See §3.5.
+2. **A from-scratch Python implementation of the full CT protocol** (`ct/`) —
+   Pedersen commitments, bit-commitment range proofs, and the Schnorr kernel.
+   It is the prover that builds transactions and the layer that cross-validates
+   against the reference. See §4.
+
+The **existing/reference implementation** is
+[`grinventions/mimblewimble-py`](https://github.com/grinventions/mimblewimble-py)
+(the Grin community's Python implementation). The reference and the original
+are run on the same inputs for the output-matching evaluation — see §3.
+
+---
+
+## 0. How this maps to the evaluation
+
+| Course requirement | Where it lives |
+|---|---|
+| Existing/reference implementation (any language) | `grinventions/mimblewimble-py` (Grin, Python) — §3 |
+| Own proposed solution (**Solidity preferred**) | `solidity/MimbleWimbleVerifier.sol` on-chain verifier — §3.5 |
+| Original from-scratch implementation | Full CT protocol in `ct/` (Python) — prover + cross-validation — §4 |
+| Output-matching on the instructor's 5 inputs (50 pts) | `scripts/compare_with_reference.py [--scenarios FILE]` runs both impls and compares — §3 |
+| Runnable by the instructor end-to-end | `bash scripts/dry_run.sh` runs every step and prints a pass/fail summary |
 
 ---
 
@@ -76,7 +99,9 @@ Expected output of `verify`:
 ├── examples/                       # sample transaction JSON files
 ├── scripts/
 │   ├── compare_with_reference.py   # differential test vs reference impl
-│   └── generate_solidity_vectors.py # produce test vectors for the on-chain verifier
+│   ├── reference_driver.py         # reference-side balance check (runs in reference venv)
+│   ├── generate_solidity_vectors.py # produce test vectors for the on-chain verifier
+│   └── dry_run.sh                  # one-command pre-presentation sanity check
 └── solidity/                       # on-chain verifier (Hardhat project)
     ├── contracts/
     │   └── MimbleWimbleVerifier.sol
@@ -95,6 +120,18 @@ This project's reference is **[grinventions/mimblewimble-py](https://github.com/
 
 ### Install the reference
 
+The reference depends on `secp256k1-zkp-mw`, a native binding that **compiles
+the libsecp256k1-zkp C library from source**, so a C toolchain and the autotools
+must be present *before* `pip install`:
+
+```bash
+# Build prerequisites for the native secp256k1-zkp extension:
+#   macOS:        brew install autoconf automake libtool pkg-config
+#   Debian/Ubuntu: sudo apt-get install build-essential autoconf automake libtool pkg-config
+```
+
+Then build the reference in its own virtualenv:
+
 ```bash
 cd <some-sibling-dir>
 git clone https://github.com/grinventions/mimblewimble-py.git
@@ -111,20 +148,60 @@ Sanity-check (should print a Grin slatepack address):
 python -c "from mimblewimble.wallet import Wallet; w=Wallet.initialize(); print(w.getSlatepackAddress(path='m/0/1/0'))"
 ```
 
+If the native build cannot be completed on your machine, the differential
+script below still runs the original implementation alone and says so, and the
+Solidity suite (§3.5) independently demonstrates the same accept/reject
+behavior — so the project remains fully runnable without the reference.
+
 ### Run the differential comparison
+
+The reference needs its own native dependencies, so it lives in its own
+virtualenv. `scripts/compare_with_reference.py` runs in *this* project's venv
+and shells out to the reference's venv (via `scripts/reference_driver.py`) — the
+two environments never mix. Point at the reference with `MW_REFERENCE_PATH`
+(it is also auto-detected in a sibling directory):
 
 ```bash
 # from this project's directory, with its venv active
-PYTHONPATH=. python scripts/compare_with_reference.py
+MW_REFERENCE_PATH=/path/to/mimblewimble-py \
+    PYTHONPATH=. python scripts/compare_with_reference.py
 ```
 
 This runs five scenarios through both impls and prints a comparison table.
-The instructor can vary the scenarios in `SCENARIOS` to test additional inputs.
+Each scenario is built and verified by both implementations; the script exits
+non-zero unless every verdict agrees. The comparison is at the Pedersen
+commitment-balance level (the no-inflation check both impls share): the
+reference uses the audited libsecp256k1-zkp commitments, this project uses the
+pure-Python `ecdsa` curve. If the reference is not found, the script runs the
+original implementation alone and says so.
+
+**Supplying your own test inputs (Part A — output matching).** No code editing
+is needed: pass a JSON file of inputs with `--scenarios`:
+
+```bash
+MW_REFERENCE_PATH=/path/to/mimblewimble-py \
+    PYTHONPATH=. python scripts/compare_with_reference.py --scenarios inputs.json
+```
+
+```json
+[
+  {"name": "case1", "inputs": [[100, 161]], "outputs": [[95, 177]], "fee": 5, "should_be_valid": true},
+  {"name": "case2", "inputs": [[50, 7], [75, 9]], "outputs": [[120, 13]], "fee": 5, "should_be_valid": true},
+  {"name": "case3", "inputs": [[100, 5]], "outputs": [[200, 6]], "fee": 0, "should_be_valid": false}
+]
+```
+
+`inputs`/`outputs` are `[value, blinding]` pairs; `should_be_valid` is optional
+(omit it if the expected verdict is unknown — the script still checks that the
+two implementations agree). The script exits non-zero on any disagreement. A
+ready-to-edit template lives at `examples/scenarios_template.json` (running it
+reproduces the default table).
 
 ---
 
-## 3.5. Solidity on-chain verifier
+## 3.5. Original solution: Solidity on-chain verifier (preferred)
 
+This is the proposed own solution (Solidity preferred per the course guidance).
 A Hardhat project under `solidity/` deploys a smart contract that verifies
 MimbleWimble transactions on Ethereum. It validates two things:
 
@@ -208,92 +285,12 @@ each line maps to a textbook formula.
 
 ---
 
-## 3.5. Solidity on-chain verifier
+## 4. Original implementation: the CT protocol in Python
 
-A Hardhat project under `solidity/` deploys a smart contract that verifies
-MimbleWimble transactions on Ethereum. It validates two things:
-
-1. **Kernel Schnorr signature** — that the spender knows the kernel excess
-   scalar (proves ownership of input blinding factors).
-2. **Commitment balance** — that `Σ C_in − Σ C_out − fee·H == kernelExcess`,
-   proving no value was inflated.
-
-Range proofs stay off-chain: the classical bit-commitment construction would
-cost tens of millions of gas per output to verify on EVM, since secp256k1
-has no native elliptic-curve precompile on Ethereum (only `ecrecover`).
-
-### Install and test
-
-```bash
-cd solidity
-npm install            # installs Hardhat + ethers + chai
-
-# Generate fresh test vectors from the Python prover (one-time):
-cd ..
-source .venv/bin/activate
-PYTHONPATH=. python scripts/generate_solidity_vectors.py
-
-# Compile + test the contract:
-cd solidity
-npx hardhat compile
-npx hardhat test
-```
-
-Expected output:
-
-```
-  MimbleWimbleVerifier
-    verifyKernelSignature
-      ✔ accepts a valid Schnorr signature [simple_message]
-      ✔ accepts a valid Schnorr signature [empty_message]
-      ✔ accepts a valid Schnorr signature [fee_8_bytes]
-      ✔ rejects a tampered signature
-      ✔ rejects a tampered message
-    verifyBalance
-      ✔ accepts a balanced transaction [one_in_one_out]
-      ✔ accepts a balanced transaction [split]
-      ✔ accepts a balanced transaction [combine]
-      ✔ accepts a balanced transaction [zero_fee]
-      ✔ rejects an unbalanced transaction (wrong fee)
-
-  10 passing
-```
-
-### Contract interface
-
-```solidity
-function verifyKernelSignature(
-    uint256 px, uint256 py,   // kernel excess point P
-    uint256 rx, uint256 ry,   // signature nonce point R
-    uint256 s,                // signature scalar
-    bytes calldata message    // signed message (e.g. the fee)
-) external view returns (bool);
-
-function verifyBalance(
-    uint256[] calldata inX, uint256[] calldata inY,
-    uint256[] calldata outX, uint256[] calldata outY,
-    uint256 fee,
-    uint256 kernelExcessX, uint256 kernelExcessY
-) external view returns (bool);
-```
-
-The two generators `G` and `H` are hardcoded as `internal constant` values
-in the contract. `H` is derived from the public seed
-`"MimbleWimble-CT/H/v1"` via try-and-increment in `ct/curve.py`; the
-on-chain constant must match the off-chain derivation byte-for-byte.
-
-### Gas characteristics
-
-Each `verifyKernelSignature` call runs two `ecMul` plus an `ecAdd`. With
-secp256k1 EC arithmetic implemented in pure Solidity (no native precompile),
-this is in the millions of gas — fine for a demo on a local node or a
-testnet, prohibitive on mainnet without optimizations. The contract is
-deliberately straightforward (affine coordinates, no Jacobian, no wNAF) so
-each line maps to a textbook formula.
-
----
-
-## 4. What the implementation does
+The `ct/` package is a from-scratch implementation of the full MimbleWimble CT
+protocol. It is the prover (it builds the transactions whose points feed the
+Solidity verifier and the differential comparison) and verifies the range
+proofs that stay off-chain.
 
 ### Pedersen commitment
 
@@ -454,8 +451,9 @@ The five scenarios used in `scripts/compare_with_reference.py` are:
 | 4 | Zero-fee | `(100, r₁)` | `(100, r₂)` | 0 | Yes |
 | 5 | Inflating tx | `(100, r₁)` | `(200, r₂)` | 0 | No (rejected) |
 
-Additional scenarios can be added by editing `SCENARIOS` in
-`scripts/compare_with_reference.py`.
+These are the defaults. The instructor supplies the 5 evaluation inputs at
+grading time — pass them with `--scenarios inputs.json` (see §3, "Supplying
+your own test inputs") so no code editing is required.
 
 ---
 

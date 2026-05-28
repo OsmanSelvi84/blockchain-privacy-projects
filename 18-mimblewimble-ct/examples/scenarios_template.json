@@ -1,0 +1,7 @@
+[
+  {"name": "01_simple",     "inputs": [[100, 161]],            "outputs": [[95, 177]],            "fee": 5, "should_be_valid": true},
+  {"name": "02_split",      "inputs": [[100, 162]],            "outputs": [[60, 178], [35, 194]], "fee": 5, "should_be_valid": true},
+  {"name": "03_combine",    "inputs": [[50, 163], [75, 179]],  "outputs": [[120, 195]],           "fee": 5, "should_be_valid": true},
+  {"name": "04_zero_fee",   "inputs": [[100, 164]],            "outputs": [[100, 180]],           "fee": 0, "should_be_valid": true},
+  {"name": "05_inflate",    "inputs": [[100, 165]],            "outputs": [[200, 181]],           "fee": 0, "should_be_valid": false}
+]
