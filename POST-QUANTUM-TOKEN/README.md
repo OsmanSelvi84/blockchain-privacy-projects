@@ -45,7 +45,7 @@ commitment = hash(receiver + amount + secret)
 ```
 
 # Folder Structure
-``
+```text
 contracts/
 test/
 scripts/
@@ -54,8 +54,9 @@ reference/
 comparison/
 README.md
 ```
+# Branch Information
 
-*Branch:20-post-quantum-token
+20-post-quantum-token
 
 # Installation
 Clone repository:
