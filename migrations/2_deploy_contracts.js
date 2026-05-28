@@ -1,6 +1,5 @@
 const chalk = require("chalk");
-const request = require("request-promise");
-const fs = require('fs');
+const fs = require("fs");
 const Utility = artifacts.require("dUtility");
 const OwnedSet = artifacts.require("OwnedSet");
 const dUtilityBenchmark = artifacts.require("dUtilityBenchmark");
@@ -22,7 +21,6 @@ const {
   TESTS_FAKE_ADDRESS,
   VERIFIER_ADDRESS
 } = require("../lib/chain-constants");
-const options = { resolveWithFullResponse: true };
 
 async function addValidator(validator, ownedSetInstance, web3) {
   process.stdout.write(`  Adding ${validator} to OwnedSet contract ... `);
@@ -40,19 +38,18 @@ async function finalizeChange(ownedSetInstance, web3) {
   process.stdout.write(chalk.green("done\n"));
 }
 
-async function callRPC(methodSignature, port, params = []) {
-  const { statusCode, body } = await request(`http://localhost:${port}`, {
-    method: "POST",
-    json: {
-      jsonrpc: "2.0",
-      method: methodSignature,
-      params: params,
-      id: 0
-    },
-    ...options
+function sendEtherAndWait(web3, toAddr) {
+  return new Promise((resolve, reject) => {
+    web3.eth
+      .sendTransaction({
+        from: AUTHORITY_ADDRESS,
+        to: toAddr,
+        value: web3.utils.toWei("1", "ether"),
+        gas: 21000
+      })
+      .on("receipt", resolve)
+      .on("error", reject);
   });
-
-  return { statusCode, body };
 }
 
 module.exports = async (deployer, network, [authority]) => {
@@ -67,6 +64,7 @@ module.exports = async (deployer, network, [authority]) => {
       const utilityInstanceInAuthority = await Utility.at(UTILITY_ADDRESS);
       const ownedSetInstanceInAuthority = await OwnedSet.at(OWNED_SET_ADDRESS);
       const web3 = web3Helper.connect("authority");
+      await web3Helper.waitUntilReady(web3);
 
       process.stdout.write("  Set verifier contract address ... ");
       await web3.eth.personal.unlockAccount(address, password, null);
@@ -97,15 +95,7 @@ module.exports = async (deployer, network, [authority]) => {
         process.stdout.write(
           `Sending ether from ${AUTHORITY_ADDRESS} to ${validatorAddr} ...`
         );
-        const params = [
-          {
-            from: AUTHORITY_ADDRESS,
-            to: validatorAddr,
-            value: "0xde0b6b3a7640000"
-          },
-          "node0"
-        ];
-        await callRPC("personal_sendTransaction", 8545, params).body;
+        await sendEtherAndWait(web3, validatorAddr);
         process.stdout.write(chalk.green("done\n"));
       });
 
