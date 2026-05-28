@@ -3,42 +3,42 @@
     {
       "label": "simple_message",
       "P": {
-        "x": "0x23ab470885152f738d9e1f41ec7db3d6400876ca6a8eb21504d24f4afb1d2eb",
-        "y": "0x2fe7426168a29740216ceaec01219e424cb2036fff543a5656dc6db463a11073"
+        "x": "0xbc3488c3740eaf7a92317a409347e39f192b27d97b1f6fc38b1fda69fe10355a",
+        "y": "0xec8b04589ed468842ba413830548fd02eb878c0d404be213b959abb304b99a2"
       },
       "R": {
-        "x": "0xac89ac0b3102dd124a2f0080d3fcd429c1f035199cebce5d4d2280ba4228d37e",
-        "y": "0xd5e59ecf700cd1b3059393a9f649a07729d86c36774cc736e73aa7108c75574a"
+        "x": "0x42f9f347e0d72f6dc3fdc7c841db4ed9bbfe96b30871a3d0bcf540ed46dac9bd",
+        "y": "0x5a388ae0da8988e43baea8c74e27f1be9720c7a30c016363fc7ae54946e67531"
       },
-      "s": "0x325ca185afd4fa9f793bedd0d6b1703da92d4f97b1b42464e8ed36d5b88d7d33",
+      "s": "0x50cc67fbe7c480c71c59420761d2d343b0af88fa318d67e3e76a28c62f37008b",
       "message": "0x68656c6c6f20736f6c6964697479",
       "should_verify": true
     },
     {
       "label": "empty_message",
       "P": {
-        "x": "0x1239a6059b5782ac38b8de88de22894587b099222bb0cf656b835311bc6db23f",
-        "y": "0x2952e8234bc30b53818b7ef189ecbfa4f829511f8447bff2ddd92c1da6a6cb79"
+        "x": "0xab64aed8ab55023c6afd26fecfd3c2af2e0b843d857904da45607bb7e599f2e6",
+        "y": "0x1f2cba41659bfeb80dbe710754708ad899e0845410e0605744825d6ea43d82c4"
       },
       "R": {
-        "x": "0xc90e24f37864775089790c7ddab898351cd513165c31f03210c29bf4b7762853",
-        "y": "0xd426caa6227c6f9f9778c7990f89f5365b69e9defd0cef8def7e33b7e2070d4e"
+        "x": "0x96690f0ec9844838e801d752d5b24c50742d3a6deed315d80ea824c47216ac47",
+        "y": "0x231d3c350c70c7181f260b302ebdde6705f1c4d23a38f9045e51f12022815ad9"
       },
-      "s": "0xd6c2faa717cb8fe557cfef79cc546968ca5ba554fac11e0ce89418e9698ffc17",
+      "s": "0x779f81cffce8fd07ec22e114391715de18dffff82705bdc106f19f6552324051",
       "message": "0x",
       "should_verify": true
     },
     {
       "label": "fee_8_bytes",
       "P": {
-        "x": "0xb3e3f9d7af55c3db3b13bc7005ac90937a039281d6b0b2ba033f06a26b8b36f6",
-        "y": "0x2cb5f5691d33993a81e8635b07d6ed46867bf432926a207a8a184047fe1f38a4"
+        "x": "0x39021b38687b4ddfdfd33b77aa08610595146416ad3076bf9ff7adf3dec08901",
+        "y": "0xfef34ae49216d18dfbf2d125381df04e45ecb293a08a7112b1485df8a7a07b68"
       },
       "R": {
-        "x": "0x30b2b86ae929f2e17fd47d668fcbff42c2a3c10b73800287cfd2cf5cfdc119f3",
-        "y": "0x85ac26e0f09f757466cfcbddd96901ec63a6ce8f3852746869c104ab94c0ec3e"
+        "x": "0xfbb41b0785401bc8f9301e46cd47ce379fda8d52e6764489b1916e2fd6be45e8",
+        "y": "0xf384b539dde2c6470224330f9f7e2e88e6d1254ec49939e929eb92a9caddb636"
       },
-      "s": "0x959e30260893477943a5d36385ff22ef66c8ba6b15616896e33d2057832df33",
+      "s": "0x1971c3805369a5e0a33507fd458f20f8d47f8898528291411cdbead619176ae7",
       "message": "0x0000000000000005",
       "should_verify": true
     }

@@ -422,6 +422,14 @@ Exit code `0` if valid, `1` otherwise.
 PYTHONPATH=. pytest tests/ -v
 ```
 
+For a comprehensive pre-presentation sanity check that runs the Python tests,
+the CLI round-trip, all committed examples, a tamper test, and the Hardhat
+Solidity suite:
+
+```bash
+bash scripts/dry_run.sh
+```
+
 Test suite covers:
 
 | File | Coverage |
