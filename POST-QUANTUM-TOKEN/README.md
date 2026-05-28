@@ -59,14 +59,28 @@ README.md
 20-post-quantum-token
 
 # Installation
+
 Clone repository:
-git clone <repository-link>
+
+```bash
+git clone https://github.com/OsmanSelvi84/blockchain-privacy-projects.git
+```
+
+Checkout project branch:
+
+```bash
+git checkout students/210304037-efe-ozturk
+```
 
 project folder:
+```bash
 cd post-quantum-token
+```
 
 Install dependencies:
+```bash
 npm install
+```
 
 Compile Smart Contract
 npx hardhat compile
