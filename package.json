@@ -13,6 +13,8 @@
     "test-contracts": "truffle test ./test/contracts/* --compile-none",
     "parity-reference": "node scripts/compare-reference-settlement.js",
     "debug-settlement": "node scripts/debug-settlement.js",
+    "check-ned": "node scripts/check-ned-prereqs.js",
+    "check-validators": "node scripts/check-validators.js",
     "clear-demo": "node scripts/clear-demo-state.js",
     "run-netting": "node ./netting-service/index.js -i 60000",
     "run-gateway-h1": "node ./household-gateway/index.js -p 3002 -a 0x00aa39d30f0d20ff03a22ccfc30b7efbfca597c2 -P node1 -n authority_1",
