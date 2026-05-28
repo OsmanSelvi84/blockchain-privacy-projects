@@ -126,12 +126,12 @@ privacy mechanism explanations
 
 Demo Flow
 
-Compile smart contract
-Run tests
-Start local blockchain
-Deploy smart contract
-Open frontend demo
-Generate commitment hash
+1.Compile smart contract
+2.Run tests
+3.Start local blockchain
+4.Deploy smart contract
+5.Open frontend demo
+6.Generate commitment hash
 
 Notes
 
