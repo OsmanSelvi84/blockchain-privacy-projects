@@ -1,0 +1,17 @@
+
+=== CoinShuffle Demo ===
+
+Participants:
+User1 -> wallet_A
+User2 -> wallet_B
+User3 -> wallet_C
+User4 -> wallet_D
+
+Shuffled outputs:
+private_output_D
+private_output_B
+private_output_C
+private_output_A
+
+Privacy:
+Sender and receiver cannot be directly linked
