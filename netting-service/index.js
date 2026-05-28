@@ -40,6 +40,7 @@ let chainReady = false;
 
 async function bootstrap() {
   web3 = web3Client.connect(config.network);
+  await web3Client.waitUntilReady(web3);
   latestBlockNumber = await web3.eth.getBlockNumber();
   engine = new SettlementEngine();
 
@@ -171,9 +172,15 @@ async function runNettingCycle() {
 
 bootstrap().catch(err => {
   console.error("NED bootstrap failed:", err.message);
-  console.error(
-    "Fix: parity-authority docker-compose up -d, then yarn migrate-contracts-authority (Node 10)."
-  );
+  if (/Cannot find module.*build\/contracts/i.test(String(err))) {
+    console.error(
+      "Missing build/ — run: nvm use 10 && yarn compile-contracts && yarn migrate-contracts-authority-fast"
+    );
+  } else {
+    console.error(
+      "Fix: yarn check-ned  (Parity ws://127.0.0.1:8546 + compile + migrate, Node 10)"
+    );
+  }
 });
 
 const app = express();
