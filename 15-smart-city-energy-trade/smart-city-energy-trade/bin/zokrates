@@ -1,0 +1,9 @@
+#!/bin/bash
+# Wrapper: run ZoKrates 0.5.0 via Docker when not installed natively.
+set -e
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+exec docker run --rm \
+  -v "$ROOT/zokrates-code:/work" \
+  -w /work \
+  zokrates/zokrates:0.5.0 \
+  /home/zokrates/zokrates "$@"

@@ -23,17 +23,22 @@ module.exports = {
       port: 8566,
       network_id: "8995",
       websockets: true
+    },
+    benchmark: {
+      host: "127.0.0.1",
+      port: 8546,
+      network_id: "8995",
+      websockets: true,
+      from: "0x00Bd138aBD70e2F00903268F3Db08f2D25677C9e"
     }
   },
   compilers: {
     solc: {
       version: "0.5.2",
       docker: true,
-      settings: {
-        optimizer: {
-          enabled: true,
-          runs: 200
-        }
+      optimizer: {
+        enabled: true,
+        runs: 200
       }
     }
   }

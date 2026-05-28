@@ -9,11 +9,15 @@ Execute `yarn install` followed by `yarn test-contracts` without running a local
 
 Our contracts of **milestone one** are structured in the following way:
 
+![here](../documentation/StructureContractsMilestoneOne.png)
+
 - `Mortal.sol` inherites from `openzeppelin-solidity/contracts/ownership/Ownable.sol` defining ownership of the utility contract and has the authority to permanently deactivate it.
 - `UtilityBase.sol` implements the core logic of our utility `./interfaces/IUtilityBase.sol`.
 - `Utility.sol` inherits from `./UtilityBase.sol` and implements settlement (netting) `./interfaces/IUtility.sol` to fairly distribute renewable energy.
 
 Our contracts of **milestone two** are structured in the following way:
+
+![here](../documentation/StructureContractsMilestoneTwo.png)
 
 - `dUtility.sol` implements the logic to validate energy tracking on-chain `./interfaces/IUtilityBase.sol` and depends on ZoKrates implementation generated contract `Verifier.sol` for verification of consistent and fair netting results.
 
@@ -46,4 +50,6 @@ Due to rounding errors, `hh2` is not quiet `0` because we use integer numbers.
 In the opposite case, where more is demanded than supplied, we do the almost the same but with a
 negative amount in `transfer()`, which can be interpreted as claiming energy from another household instead of giving.
 
-Below is another example (read from up to down, each row is one step).
+Below is another example, but visualized (read from up to down, each row is one step).
+
+![here](../documentation/SettlementExampleMilestoneOne.png)
