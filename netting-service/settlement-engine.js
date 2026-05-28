@@ -8,20 +8,20 @@ class SettlementEngine {
   constructor() {
     this.gridRenewableTotal = 0;
     this.gridImportTotal = 0;
-    this.members = {
-      [PLACEHOLDER_ADDR]: { meterDelta: 0, lastUpdate: Date.now() }
-    };
+    this.members = {};
     this.ledger = [];
     this.roundSettled = false;
   }
 
   registerMember(address) {
-    if (this._hasMember(address)) return false;
+    if (!address || address === PLACEHOLDER_ADDR) return false;
+    if (this._hasMember(address)) return true;
     this.members[address] = { meterDelta: 0, lastUpdate: Date.now() };
     return true;
   }
 
   applyMeterDelta(address, deltaWs, updatedAt) {
+    if (!address || address === PLACEHOLDER_ADDR) return false;
     if (!this._hasMember(address)) return false;
     this.members[address].meterDelta = Number(deltaWs);
     this.members[address].lastUpdate = updatedAt;
@@ -127,6 +127,7 @@ class SettlementEngine {
     let consumerSum = 0;
 
     for (const [addr, state] of Object.entries(this.members)) {
+      if (addr === PLACEHOLDER_ADDR) continue;
       const d = Number(state.meterDelta);
       if (d > 0) {
         producers.push(addr);

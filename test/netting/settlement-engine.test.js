@@ -7,10 +7,10 @@ const H2 = HOUSEHOLD_TWO;
 
 function runTwoHouseholdCase(m1, m2) {
   const engine = new SettlementEngine();
-  engine.registerMember(H1);
-  engine.registerMember(H2);
-  engine.applyMeterDelta(H1, m1, Date.now());
-  engine.applyMeterDelta(H2, m2, Date.now());
+  expect(engine.registerMember(H1), `register ${H1}`).to.equal(true);
+  expect(engine.registerMember(H2), `register ${H2}`).to.equal(true);
+  expect(engine.applyMeterDelta(H1, m1, Date.now())).to.equal(true);
+  expect(engine.applyMeterDelta(H2, m2, Date.now())).to.equal(true);
   engine.runSettlement();
   return engine.ledger;
 }
