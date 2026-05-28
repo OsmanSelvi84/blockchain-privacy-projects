@@ -1,0 +1,28 @@
+
+[
+  {
+    "receiver": "alice",
+    "amount": 10,
+    "secret": "privacy1"
+  },
+  {
+    "receiver": "bob",
+    "amount": 25,
+    "secret": "hidden2"
+  },
+  {
+    "receiver": "charlie",
+    "amount": 50,
+    "secret": "secure3"
+  },
+  {
+    "receiver": "david",
+    "amount": 75,
+    "secret": "token4"
+  },
+  {
+    "receiver": "eve",
+    "amount": 100,
+    "secret": "quantum5"
+  }
+]

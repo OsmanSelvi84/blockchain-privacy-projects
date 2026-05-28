@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Privacy Token Demo</h1>
+
+<input id="receiver" placeholder="Receiver address"><br><br>
+<input id="amount" placeholder="Amount"><br><br>
+<input id="secret" placeholder="Secret"><br><br>
+
+<button onclick="createCommitment()">Create Commitment</button>
+
+<p id="result"></p>
+
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.2/dist/ethers.umd.min.js"></script>
+
+<script>
+function createCommitment() {
+  const receiver = document.getElementById("receiver").value;
+  const amount = document.getElementById("amount").value;
+  const secret = document.getElementById("secret").value;
+
+  const commitment = ethers.solidityPackedKeccak256(
+    ["string", "uint256", "string"],
+    [receiver, amount, secret]
+  );
+
+  document.getElementById("result").innerText =
+    "Commitment hash: " + commitment;
+}
+</script>
+
+</body>
+</html>
