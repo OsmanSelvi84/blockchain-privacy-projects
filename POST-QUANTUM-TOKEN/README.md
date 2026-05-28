@@ -42,9 +42,10 @@ Example:
 
 ```text
 commitment = hash(receiver + amount + secret)
-
+```
 
 # Folder Structure
+``
 contracts/
 test/
 scripts/
@@ -52,10 +53,11 @@ frontend/
 reference/
 comparison/
 README.md
+```
 
 *Branch:20-post-quantum-token
 
-# Installation:
+# Installation
 Clone repository:
 git clone <repository-link>
 
