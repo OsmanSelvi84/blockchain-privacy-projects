@@ -84,7 +84,7 @@ module.exports = async (deployer, network, [authority]) => {
       process.stdout.write(chalk.green("done\n"));
 
       process.stdout.write("  Adding authority addresses ...\n");
-      await asyncUtils.asyncForEach(OTHER_AUTHORITY_ADDRESSES, async a => {
+      await asyncUtils.forEach(OTHER_AUTHORITY_ADDRESSES, async a => {
         await addValidator(a, ownedSetInstanceInAuthority, web3);
         await web3.eth.personal.unlockAccount(address, password, null);
         process.stdout.write(
