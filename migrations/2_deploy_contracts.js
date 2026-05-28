@@ -5,8 +5,14 @@ const Utility = artifacts.require("dUtility");
 const OwnedSet = artifacts.require("OwnedSet");
 const dUtilityBenchmark = artifacts.require("dUtilityBenchmark");
 
+const web3Utils = require("web3-utils");
 const web3Helper = require("../lib/web3-client");
 const asyncUtils = require("../lib/async-loop");
+
+function toChecksumAddress(addr) {
+  const hex = String(addr).replace(/^0x/i, "");
+  return web3Utils.toChecksumAddress(`0x${hex}`);
+}
 const { address, password } = require("../ned-config");
 const {
   UTILITY_ADDRESS,
@@ -85,15 +91,16 @@ module.exports = async (deployer, network, [authority]) => {
 
       process.stdout.write("  Adding authority addresses ...\n");
       await asyncUtils.forEach(OTHER_AUTHORITY_ADDRESSES, async a => {
-        await addValidator(a, ownedSetInstanceInAuthority, web3);
+        const validatorAddr = toChecksumAddress(a);
+        await addValidator(validatorAddr, ownedSetInstanceInAuthority, web3);
         await web3.eth.personal.unlockAccount(address, password, null);
         process.stdout.write(
-          `Sending ether from ${AUTHORITY_ADDRESS} to ${a} ...`
+          `Sending ether from ${AUTHORITY_ADDRESS} to ${validatorAddr} ...`
         );
         const params = [
           {
             from: AUTHORITY_ADDRESS,
-            to: "0x" + a,
+            to: validatorAddr,
             value: "0xde0b6b3a7640000"
           },
           "node0"
