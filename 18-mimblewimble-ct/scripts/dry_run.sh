@@ -72,6 +72,12 @@ examples_verify() {
     local any_failed=0
     for f in examples/*.json; do
         [ -f "$f" ] || continue
+        # Only verify transaction files; skip non-tx JSON like the
+        # scenarios template (an input list, not a built transaction).
+        if ! python3 -c "import json,sys; d=json.load(open('$f')); sys.exit(0 if isinstance(d,dict) and 'kernel' in d else 1)" 2>/dev/null; then
+            echo "--- $f (skipped: not a transaction) ---"
+            continue
+        fi
         echo "--- $f ---"
         if ! PYTHONPATH=. python -m ct.cli verify "$f"; then
             any_failed=1
@@ -121,18 +127,50 @@ hardhat_test() {
     npx hardhat test
 }
 
+# Resolve the reference repo: $MW_REFERENCE_PATH, else a sibling directory.
+resolve_reference() {
+    if [ -n "${MW_REFERENCE_PATH:-}" ] && [ -d "$MW_REFERENCE_PATH" ]; then
+        ( cd "$MW_REFERENCE_PATH" && pwd ); return 0
+    fi
+    local base name
+    for base in "$PROJECT/.." "$PROJECT/../.."; do
+        for name in "reference-mimblewimble-py" "mimblewimble-py"; do
+            if [ -d "$base/$name" ]; then
+                ( cd "$base/$name" && pwd ); return 0
+            fi
+        done
+    done
+    return 1
+}
+
 # ----- 8. Reference impl sanity check -----
 reference_check() {
-    local ref="/Users/egedeniz/Documents/GitHub/reference-mimblewimble-py"
-    if [ ! -d "$ref" ]; then
-        echo "reference impl not installed at $ref — skipping (not required for tests but expected for the prof)"
+    local ref
+    if ! ref="$(resolve_reference)"; then
+        echo "reference impl not found (set MW_REFERENCE_PATH) — skipping (expected for the prof, not required for tests)"
         return 0
     fi
+    echo "using reference: $ref"
+    # Run in a subshell so activating the reference venv does not leak into
+    # later steps, which need this project's venv.
+    (
+        if [ -f "$ref/.venv/bin/activate" ]; then
+            # shellcheck disable=SC1091
+            source "$ref/.venv/bin/activate"
+        fi
+        PYTHONPATH="$ref" python3 -c "from mimblewimble.wallet import Wallet; w = Wallet.initialize(); print('slatepack:', w.getSlatepackAddress(path='m/0/1/0'))"
+    )
+}
+
+# ----- 9. Differential comparison vs reference (the matching-output check) -----
+differential_compare() {
+    cd "$PROJECT"
     # shellcheck disable=SC1091
-    source "$ref/.venv/bin/activate"
-    # Use PYTHONPATH so we don't depend on `pip install .` having been run in
-    # the reference repo; only requires its requirements.txt to be installed.
-    PYTHONPATH="$ref" python3 -c "from mimblewimble.wallet import Wallet; w = Wallet.initialize(); print('slatepack:', w.getSlatepackAddress(path='m/0/1/0'))"
+    source .venv/bin/activate
+    # compare_with_reference.py locates the reference itself and shells out to
+    # its venv. It exits 0 if every verdict agrees, or if no reference is found
+    # (original-only run); it exits non-zero only on a genuine mismatch.
+    PYTHONPATH=. python3 scripts/compare_with_reference.py
 }
 
 # ===== run all steps =====
@@ -144,6 +182,7 @@ run_step "5. Tamper test (must reject)" tamper_test
 run_step "6. Generate Solidity test vectors" solidity_vectors
 run_step "7. Hardhat compile + test" hardhat_test
 run_step "8. Reference implementation sanity check" reference_check
+run_step "9. Differential comparison vs reference" differential_compare
 
 # ===== summary =====
 echo
