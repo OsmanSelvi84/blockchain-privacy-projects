@@ -46,4 +46,5 @@ diff <(curl -s "http://127.0.0.1:3005/transfers/${H1}?from=0" | jq -S '[.[].amou
 - Dashboard **Network Overview**: meter reading, community balance, meter change (referans `household-ui` ile aynı alanlar)
 - Ledger yönü: bu projede **fiziksel akış** (üretici → tüketici); referans defter etiketini ters kaydedebilir — **Ws miktarları aynı**
 - Between full demos: `yarn clear-demo` (Mongo + NED sıfır) — eski yanlış yönlü transferler kalmasın
-- **Aynı anda iki NED çalıştırmayın** (referans ve 15smart-city ikisi de :3005 ister); karşılaştırma için biri, ödev demo için `15smart-city` NED + gateway
+- **İki NED yan yana:** ödev `:3005`, referans `:4005` — bkz. [UBUNTU_DUAL_STACK.md](./UBUNTU_DUAL_STACK.md)
+- Paylaşılan **tek Parity**; migrate zincir başına **bir kez** (`smart-city-energy-trade`)
