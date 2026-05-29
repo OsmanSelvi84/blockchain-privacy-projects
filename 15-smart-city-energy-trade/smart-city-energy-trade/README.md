@@ -1,414 +1,411 @@
-# Smart City Energy Trading (P2P Energy Exchange Simulation)
+# Smart City Energy Trade
 
-Privacy-preserving P2P energy netting in local grids (reference implementation). Based on [decentralized-energy-trading](https://github.com/cp-ss2019/decentralized-energy-trading).
+Privacy-preserving **peer-to-peer energy netting** for a smart-city microgrid. Households with surplus renewable energy (e.g. solar) transfer energy to neighbours with deficit; meter readings are hashed and signed off-chain, with optional ZoKrates proofs verified on-chain via `dUtility.checkNetting`.
 
-## Project Overview
+> **Presentation line:** “Neighbourhood energy sharing; meter data is not stored in plain text on-chain — hash + signature (+ zk proof).”
 
-This project is a simulation of a **peer-to-peer (P2P) energy trading system** designed for smart city environments. It enables energy production and consumption data exchange between two households and performs **off-chain netting + on-chain settlement**.
+## Project overview
 
-The system integrates:
+This project demonstrates a full **energy trading pipeline**:
 
-- Parity Proof-of-Authority (PoA) blockchain
-- Netting Engine (NED — off-chain computation)
-- Household servers (H1 and H2)
-- MongoDB databases
-- Smart contracts (Truffle + Solidity)
-- Optional UI dashboard (not required for testing)
+- Smart meters (production / consumption in **Ws**)
+- Household **gateway** APIs (H1 / H2)
+- Off-chain **netting engine** (NED)
+- **Parity authority** blockchain (course network id `8995`)
+- **MongoDB** for sensor and transfer history
 
----
+IoT simulation → Gateway → NED (settlement) → Blockchain validation → MongoDB persistence.
 
-## System Architecture
+## Architecture
 
 ```
-H1 (4002) ----\
-                ---> NED (4005) ---> Parity PoA Blockchain
-H2 (4003) ----/
-
-MongoDB:
-- H1 database: 27011
-- H2 database: 27012
-
-Parity nodes:
-- authority0 (RPC 8545)
-- authority1 (WS 8556)
-- authority2 (WS 8566)
+IoT / curl (sensor-stats)
+        ↓
+Gateway API (H1 :3002 / H2 :3003)
+        ↓
+Netting Engine — NED (off-chain, :3005)
+        ↓
+Parity Authority chain (validators, dUtility)
+        ↓
+MongoDB (:27017)
 ```
 
-**Energy units:** API values use **watt-seconds (Ws)**. Convert: `kWh × 3_600_000 = Ws`.
-
----
+Optional: React **dashboard** on **3000** (H1) and **3010** (H2).
 
 ## Requirements
 
-### System
+| Tool | Version / notes |
+|------|-----------------|
+| OS | **Ubuntu 20.04/22.04** (or Linux VM) recommended |
+| Docker | Engine + **Compose** (`docker compose` or `docker-compose`) |
+| Node.js | **10.x** for install, migrate, NED, gateways (`nvm use 10`) |
+| Yarn | 1.x |
+| Parity | Course `parity-authority` compose (reference repo) |
+| solc | **0.5.2** via Truffle `docker: true` on Linux |
+| ZoKrates | 0.6.4 optional (on-chain proof; off-chain demo works without) |
 
-- Ubuntu 20+ recommended (macOS also works)
-- Node.js **v10.24.1** (mandatory — use nvm)
-- Yarn v1.22+
-- Docker and Docker Compose
-- Python 3.10 (for `node-gyp` when running `yarn install` on Ubuntu)
+**Ports (this project):**
 
-### Node setup
+| Service | Port |
+|---------|------|
+| H1 UI (dashboard) | 3000 |
+| H1 gateway API | 3002 |
+| H2 gateway API | 3003 |
+| NED | 3005 |
+| H2 UI (dashboard) | 3010 |
+| MongoDB | 27017 |
+| Parity RPC (HTTP) | 8545 |
+| Parity WS (Truffle/NED) | 8546 |
+
+Running **reference** `decentralized-energy-trading` on the same machine: use **4000-series** ports — see [docs/UBUNTU_DUAL_STACK.md](docs/UBUNTU_DUAL_STACK.md).
+
+## Project layout
+
+```
+contracts/           Solidity (dUtility, OwnedSet, verifier)
+netting-service/     NED (port 3005)
+household-gateway/   REST API (3002 / 3003)
+dashboard/           React UI (3000 / 3010)
+zk/                  settlement-check.zok
+docs/                TEST_VECTORS.md, REFERENCE.md, UBUNTU_DUAL_STACK.md
+scripts/             check-ned, check-validators, reference-4000-patch, …
+```
+
+---
+
+# Installation & setup (instructor / first-time)
+
+Follow these steps **in order** on a clean Ubuntu VM. Use **Node 10** for all commands below unless noted.
+
+## 1. System packages
 
 ```bash
+sudo apt update
+sudo apt install -y git curl build-essential docker.io
+# Compose plugin (Ubuntu package name may vary):
+sudo apt install -y docker-compose-plugin || sudo apt install -y docker-compose
+sudo usermod -aG docker $USER
+```
+
+Log out and back in (or `newgrp docker`), then:
+
+```bash
+docker --version
+docker compose version   # or: docker-compose --version
+```
+
+## 2. Node 10 + Yarn
+
+```bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+source ~/.bashrc
+
 nvm install 10.24.1
 nvm use 10
+node -v    # v10.24.1
+
 npm install -g yarn@1.22.22
 ```
 
-On Ubuntu, if `yarn install` fails on native modules:
+## 3. Clone this repository
 
 ```bash
-sudo apt install -y build-essential python3.10 python3.10-dev
-npm config set python /usr/bin/python3.10
-```
-
-### Dependencies
-
-```bash
-cd <project-root>
+cd ~
+git clone -b 15-smart-city-energy-trade https://github.com/azraksk/smart-city-energy-trade.git
+cd smart-city-energy-trade
 yarn install
-yarn --cwd household-ui install   # optional, only if using UI
+cd dashboard && yarn install && cd ..
 ```
 
-### ZoKrates (optional — full on-chain zk verification)
+## 4. Compile contracts (Linux: Docker solc)
 
 ```bash
-chmod +x scripts/*.sh
-yarn setup-zokrates
-yarn update-contract-bytecodes
+cd ~/smart-city-energy-trade
+nvm use 10
+docker pull ethereum/solc:0.5.2
+yarn compile-contracts
 ```
 
-If `contracts/verifier.sol` is missing before migrate, copy from backup:
+`truffle-config.js` must have `compilers.solc.docker: true`.
+
+## 5. Parity authority network
+
+This repo does **not** ship Parity; use the course reference:
 
 ```bash
-cp zokrates-code/verifier.sol.backup contracts/verifier.sol
+# Example path — adjust if you cloned elsewhere:
+cd ~/refolabilecekler/decentralized-energy-trading/parity-authority
+# Or: cd ~/decentralized-energy-trading/parity-authority
+
+docker compose down -v    # only on FIRST setup or after a broken migrate
+docker compose up -d
+sleep 20
 ```
 
----
-
-## Full Project Setup
-
-### 1. Enter project directory
+Check RPC (HTTP on **8545**):
 
 ```bash
-cd ~/refolabilecekler/decentralized-energy-trading
-```
-
-Adjust the path if you cloned elsewhere.
-
----
-
-### 2. Start MongoDB
-
-```bash
-docker compose -f mongo/docker-compose.yml up -d
-docker ps | grep mongo
-```
-
-Mongo ports:
-
-- H1 → `27011`
-- H2 → `27012`
-
-Verify:
-
-```bash
-ss -tlnp | grep 27011
-```
-
----
-
-### 3. Start Parity blockchain
-
-```bash
-cd parity-authority
-docker compose up -d authority0 authority1 authority2
-cd ..
-```
-
-Check status:
-
-```bash
-docker ps
 curl -s -X POST http://127.0.0.1:8545 \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}'
 ```
 
----
+Expected: `"result":"0x..."` (not “WebSocket only” — that message is for port **8546**).
 
-### 4. Deploy smart contracts (migration)
-
-First-time or after a clean chain reset:
+## 6. Deploy smart contracts (Node 10)
 
 ```bash
-cd parity-authority
-docker compose down -v
-docker compose up -d authority0 authority1 authority2
-cd ..
-sleep 15
-
+cd ~/smart-city-energy-trade
 nvm use 10
-yarn migrate-contracts-authority
+yarn migrate-contracts-authority-fast
 ```
 
-If successful:
+Expected end of migration:
 
+```text
+Adding 0x00Aa39... to OwnedSet contract ... done
+Adding 0x002E28... to OwnedSet contract ... done
+Finalizing changes to OwnedSet contract ... done
 ```
-Set verifier contract address ... done
-```
 
-If migrate fails on `setVerifier`, the chain was partially configured — run `docker compose down -v` in `parity-authority` and migrate again.
-
----
-
-## Running the System (terminal only)
-
-### Terminal 1 — NED (netting engine)
+Verify validators:
 
 ```bash
+yarn check-validators
+```
+
+Expected:
+
+```text
+H1 registered: true
+H2 registered: true
+```
+
+If migrate fails halfway, reset chain and retry:
+
+```bash
+cd ~/refolabilecekler/decentralized-energy-trading/parity-authority
+docker compose down -v && docker compose up -d && sleep 20
+cd ~/smart-city-energy-trade && nvm use 10 && yarn migrate-contracts-authority-fast
+```
+
+## 7. MongoDB
+
+From project root:
+
+```bash
+cd ~/smart-city-energy-trade
+docker compose -f docker/mongo/docker-compose.yml up -d
+docker ps | grep mongo
+```
+
+## 8. Start services (five terminals)
+
+In **each** terminal:
+
+```bash
+cd ~/smart-city-energy-trade
 nvm use 10
-yarn run-netting-entity -i 60000
 ```
 
-Runs netting every 60 seconds.
+| Terminal | Command | URL |
+|----------|---------|-----|
+| **1 – NED** | `yarn run-netting` | http://127.0.0.1:3005/ |
+| **2 – H1 gateway** | `yarn run-gateway-h1` | http://127.0.0.1:3002/ |
+| **3 – H2 gateway** | `yarn run-gateway-h2` | http://127.0.0.1:3003/ |
+| **4 – H1 UI** (optional) | `cd dashboard && yarn start:h1` | http://localhost:3000 |
+| **5 – H2 UI** (optional) | `cd dashboard && yarn start:h2` | http://localhost:3010 |
 
----
+**NED** expected log:
 
-### Terminal 2 — Household 1
-
-```bash
-nvm use 10
-yarn run-server -p 4002 \
-  -a 0x00aa39d30f0d20ff03a22ccfc30b7efbfca597c2 \
-  -P node1 -n authority_1 \
-  -d mongodb://127.0.0.1:27011 \
-  -h 127.0.0.1
+```text
+Netting service listening on http://127.0.0.1:3005/
+Netting cycle every 60000ms ...
+Next netting cycle in 60000ms
 ```
 
-Expected log: `Household Server running at http://127.0.0.1:4002/`
+**Gateway** expected log:
 
----
-
-### Terminal 3 — Household 2
-
-```bash
-nvm use 10
-yarn run-server -p 4003 \
-  -a 0x002e28950558fbede1a9675cb113f0bd20912019 \
-  -P node2 -n authority_2 \
-  -d mongodb://127.0.0.1:27012 \
-  -h 127.0.0.1 \
-  -N http://127.0.0.1:4005
+```text
+Parity connected, chain ready.
+Collection ready: sensor_readings
 ```
 
----
+If `Port 3005 in use`, NED is already running — use it or run `lsof -ti:3005 | xargs kill` before restart.
 
-### Optional — UI dashboard
+Quick health checks:
 
 ```bash
-yarn run-ui-h1    # http://localhost:4000
-yarn run-ui-h2    # http://localhost:4010
+yarn check-ned
+curl -s http://127.0.0.1:3005/
 ```
 
 ---
 
-## Test Scenario
+# End-to-end test (Test 1 — ~300 kWh)
 
-### Before each new test round
+**Units:** API uses **Ws** (`kWh × 3_600_000 = Ws`). See [docs/TEST_VECTORS.md](docs/TEST_VECTORS.md).
 
-Netting sends meter data to NED only on the **first** `PUT` after each household server start. Restart H1 and H2 servers between rounds:
+Before each demo round, **restart both gateways** (keeps netting state clean).
 
-```bash
-kill $(lsof -ti:4002,4003) 2>/dev/null
-# then start Terminal 2 and 3 again
-```
-
----
-
-### 1. Send household energy data
-
-Example: H1 produces 500 kWh and consumes 300 kWh; H2 produces 200 kWh and consumes 600 kWh.
+## Step 1 — Send sensor data
 
 ```bash
-# Household 1 (surplus +200 kWh)
-curl -X PUT http://127.0.0.1:4002/sensor-stats \
+curl -X PUT http://127.0.0.1:3002/sensor-stats \
   -H "Content-Type: application/json" \
-  -d '{"produce":1800000000,"consume":1080000000,"meterDelta":720000000}'
-```
+  -d '{"produce":1800000000,"consume":720000000,"meterDelta":1080000000}'
 
-```bash
-# Household 2 (deficit -400 kWh)
-curl -X PUT http://127.0.0.1:4003/sensor-stats \
+curl -X PUT http://127.0.0.1:3003/sensor-stats \
   -H "Content-Type: application/json" \
   -d '{"produce":720000000,"consume":2160000000,"meterDelta":-1440000000}'
 ```
 
----
+Gateway should log `Sent to NED: meterDelta=...`. NED should log `Meter delta ... from 0x00aa...` and `0x002e...`.
 
-### 2. Wait for netting cycle
-
-```bash
-sleep 65
-```
-
-Watch NED logs for `Incoming meter delta` / `Off-chain netting recorded`.
-
----
-
-### 3. Check settlement results
+## Step 2 — Wait for netting cycle
 
 ```bash
-curl -s "http://127.0.0.1:4005/transfers/0x00aa39d30f0d20ff03a22ccfc30b7efbfca597c2?from=0" | python3 -m json.tool
+sleep 60
 ```
+
+NED interval is **60 s** (`yarn run-netting -i 60000`).
+
+## Step 3 — Check transfers
 
 ```bash
-curl -s "http://127.0.0.1:4002/transfers?from=0" | python3 -m json.tool
+curl -s "http://127.0.0.1:3002/transfers?from=0"
 ```
 
----
+Or NED directly:
 
-## Expected Result
-
-- Household 1 has excess production
-- Household 2 consumes more than it produces
-- NED computes netting off-chain
-- Transfer from H2 → H1 (typical direction)
-
-For the scenario above:
-
-```
-amount: 720000000   (≈ 200 kWh in Ws)
+```bash
+curl -s "http://127.0.0.1:3005/transfers/0x00aa39d30f0d20ff03a22ccfc30b7efbfca597c2?from=0"
 ```
 
-Convert Ws to kWh: `amount / 3600000`
+## Expected output
 
----
+```json
+[
+  {
+    "from": "0x00aa39d30f0d20ff03a22ccfc30b7efbfca597c2",
+    "to": "0x002e28950558fbede1a9675cb113f0bd20912019",
+    "amount": 1080000000
+  }
+]
+```
 
-## Additional test vectors
+`1080000000` Ws ≈ **300 kWh**. Physical flow: **H1 (producer) → H2 (consumer)**.
 
-| Test | H1 (produce, consume, meterDelta) | H2 (produce, consume, meterDelta) | Expected amount (Ws) | kWh |
-|------|-----------------------------------|-----------------------------------|----------------------|-----|
-| 1 | 1800000000, 720000000, 1080000000 | 720000000, 2160000000, -1440000000 | 1080000000 | 300 |
-| 2 | 1440000000, 540000000, 900000000 | 540000000, 1800000000, -1260000000 | 900000000 | 250 |
-| 3 | 2160000000, 720000000, 1440000000 | 360000000, 2520000000, -2160000000 | 1440000000 | 400 |
+## What happens internally
+
+1. Gateways sign a privacy hash of `meterDelta` and `PUT` to NED `/energy/:address`.
+2. NED checks the address is an **OwnedSet validator** (after migrate).
+3. Every 60 s, NED runs off-chain **settlement** (same math as course reference).
+4. Gateway may send `updateRenewableEnergy` to the chain; transfers are stored in **Mongo**.
+5. Optional: ZoKrates + `checkNetting` on-chain (not required for amount demo).
 
 ---
 
-## System Reset
-
-### Reset Parity network
+# Tests (no Parity required)
 
 ```bash
-cd parity-authority
-docker compose down -v
-docker compose up -d authority0 authority1 authority2
-cd ..
-yarn migrate-contracts-authority
-```
-
-### Reset MongoDB (optional)
-
-```bash
-docker compose -f mongo/docker-compose.yml down -v
-docker compose -f mongo/docker-compose.yml up -d
-```
-
----
-
-## Known Issues
-
-### MongoDB connection failure (`reject is not defined` or ECONNREFUSED)
-
-Mongo is not running on the expected port.
-
-```bash
-docker compose -f mongo/docker-compose.yml up -d
-docker ps | grep mongo
-ss -tlnp | grep 27011
-```
-
-### `node-gyp` build error on Ubuntu
-
-Use Python 3.10:
-
-```bash
-npm config set python /usr/bin/python3.10
-rm -rf node_modules
-yarn install
-```
-
-### Missing `verifier.sol`
-
-```bash
-cp zokrates-code/verifier.sol.backup contracts/verifier.sol
-# or: yarn setup-zokrates
-```
-
-### H2 Parity `connection not open`
-
-Start authority1 and authority2:
-
-```bash
-cd parity-authority
-docker compose up -d authority1 authority2
-```
-
-### Port already in use
-
-```bash
-kill $(lsof -ti:4002,4003,4005) 2>/dev/null
-```
-
----
-
-## Minimal Run Summary
-
-```bash
+cd ~/smart-city-energy-trade
 nvm use 10
-yarn install
-docker compose -f mongo/docker-compose.yml up -d
-cd parity-authority && docker compose up -d authority0 authority1 authority2 && cd ..
-yarn migrate-contracts-authority
+yarn test
+yarn debug-settlement
+```
 
-# 3 terminals:
-yarn run-netting-entity -i 60000
-yarn run-server -p 4002 -a 0x00aa39d30f0d20ff03a22ccfc30b7efbfca597c2 -P node1 -n authority_1 -d mongodb://127.0.0.1:27011 -h 127.0.0.1
-yarn run-server -p 4003 -a 0x002e28950558fbede1a9675cb113f0bd20912019 -P node2 -n authority_2 -d mongodb://127.0.0.1:27012 -h 127.0.0.1 -N http://127.0.0.1:4005
+Expected: **9 passing**.
+
+Offline comparison with reference `Utility.js`:
+
+```bash
+yarn parity-reference
+```
+
+Contract tests (Parity + migrate):
+
+```bash
+yarn compile-contracts
+yarn test-contracts
 ```
 
 ---
 
-## Academic Notes
+# Examiner checklist
 
-This project demonstrates:
+| # | Step |
+|---|------|
+| 1 | Parity + Mongo + migrate + `yarn check-validators` |
+| 2 | NED + both gateways running (`nvm use 10`) |
+| 3 | Restart gateways before each test |
+| 4 | `PUT /sensor-stats` on **3002** and **3003** |
+| 5 | Wait **~60 s**; check `amount` (Ws) |
 
-- Peer-to-peer energy trading logic
-- Off-chain netting computation
-- On-chain settlement via a PoA blockchain
-- Hybrid architecture (off-chain computation + blockchain integration)
+| Test | Expected `amount` (Ws) | kWh |
+|------|------------------------|-----|
+| 1 | 1080000000 | 300 |
+| 2 | 900000000 | 250 |
+| 3 | 1440000000 | 400 |
 
 ---
 
-## Tests
+# Common issues
 
-- `yarn test-contracts` — smart contract tests
-- `yarn test-parity-docker` — Docker Parity authority setup
-- `yarn test-helpers` — helper functions
-- `yarn test-utility-js` — off-chain utility (`settle`)
+| Problem | Fix |
+|---------|-----|
+| `Port 3005 in use` | `lsof -ti:3005 \| xargs kill` — or keep existing NED |
+| `NED bootstrap failed` / `connection not open` | Wait for Parity; `yarn check-ned`; retry `yarn run-netting` |
+| `Address is not a validator household` | `yarn check-validators`; if false: `docker compose down -v` in parity-authority, `up -d`, `yarn migrate-contracts-authority-fast` |
+| `ECONNREFUSED 127.0.0.1:27017` | `docker compose -f docker/mongo/docker-compose.yml up -d` |
+| Migrate `asyncForEach` / `0x` address errors | `git pull` latest `15-smart-city-energy-trade` |
+| Migrate nonce / gas price | `git pull`; reset chain `down -v`; migrate again |
+| `docker-compose: command not found` | Use `docker compose` (space) |
+| Wrong netting amounts | Use **Ws** in JSON, not kWh integers |
+| Only one household PUT | Both H1 and H2 must send before cycle |
+| Node 18 with gateway/web3 | Use **`nvm use 10`** |
+| Compare with reference repo | [docs/UBUNTU_DUAL_STACK.md](docs/UBUNTU_DUAL_STACK.md) — ports **400x** vs **300x** |
 
-## Benchmarks
+Clear demo state:
 
-- `yarn utility-benchmark` — benchmark `settle` on the utility contract
+```bash
+yarn clear-demo
+```
 
-## Development
+---
 
-- `yarn update-contract-bytecodes` — update contract bytecode in `chain.json`
-- `yarn setup-zokrates` — regenerate `Verifier` contract
-- `yarn format-all` — lint and format
-- `yarn generate-prooving-files [# Prod] [# Cons]` — ZoKrates files for N producers / M consumers
+# ZoKrates (optional)
 
-## Legacy ports (3000 series)
+```bash
+yarn setup-zokrates
+yarn update-contract-bytecodes
+yarn migrate-contracts-authority
+```
 
-If configs still use ports 3002 / 3003 / 3005 and UI 3000 / 3010, replace `4002` → `3002`, `4003` → `3003`, `4005` → `3005` in all commands above.
+If `checkNetting` reverts, off-chain transfers and Mongo history still work.
+
+---
+
+# Instructor demo — minimal order
+
+```text
+1. docker compose up -d          (parity-authority)
+2. docker compose up -d          (mongo — project docker/mongo)
+3. nvm use 10 && yarn migrate-contracts-authority-fast && yarn check-validators
+4. yarn run-netting              (terminal 1)
+5. yarn run-gateway-h1 / h2      (terminals 2–3)
+6. curl Test 1 → sleep 60 → curl transfers
+7. yarn test                     (optional quick proof)
+```
+
+---
+
+# Reference project
+
+See [docs/REFERENCE.md](docs/REFERENCE.md) and [docs/UBUNTU_DUAL_STACK.md](docs/UBUNTU_DUAL_STACK.md). Run reference on **4000-series** ports alongside this repo on **3000-series**; **one Parity**, **one migrate** per fresh chain.
+
+---
+
+## License
+
+Course project — Blockchain Privacy Projects.

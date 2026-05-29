@@ -1,0 +1,183 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(165deg, #dfe8f0 0%, #e8eef3 40%, #f0f4f8 100%);
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.app-shell {
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
+.app-shell--pad {
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+/* —— Header —— */
+.topbar {
+  background: linear-gradient(135deg, #064e52 0%, #0a6b6f 50%, #12a37f 100%);
+  padding: 20px 0;
+}
+
+.topbar__main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 24px;
+  align-items: center;
+}
+
+.topbar__brand {
+  min-width: 0;
+}
+
+.topbar__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.topbar__title {
+  line-height: 1.2 !important;
+  margin-bottom: 4px !important;
+}
+
+.topbar__tagline {
+  opacity: 0.88;
+  line-height: 1.4;
+}
+
+.topbar__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+  align-items: stretch;
+  flex-shrink: 0;
+}
+
+.topbar-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-width: 88px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-sizing: border-box;
+}
+
+.topbar-pill--solid {
+  flex-direction: row;
+  align-items: baseline;
+  gap: 2px;
+  background: #fff;
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.topbar-pill--solid .topbar-pill__value {
+  color: #0a6b6f;
+  font-size: 18px;
+}
+
+.topbar-pill--solid .topbar-pill__meta {
+  color: #6b7c93;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.topbar-pill--status {
+  flex-direction: row;
+  gap: 6px;
+  min-width: auto;
+  padding: 10px 12px;
+}
+
+.topbar-pill--status.is-online {
+  background: rgba(209, 250, 229, 0.22);
+}
+
+.topbar-pill--status.is-offline {
+  background: rgba(254, 226, 226, 0.22);
+}
+
+.topbar-pill__label {
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  white-space: nowrap;
+}
+
+.topbar-pill__value {
+  font-size: 17px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.topbar-pill__unit {
+  font-size: 12px;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+.topbar__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.topbar__address {
+  flex: 1 1 auto;
+  min-width: 0;
+  word-break: break-all;
+}
+
+.topbar__refresh {
+  flex: 0 0 auto;
+  opacity: 0.7;
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .topbar__main {
+    grid-template-columns: 1fr;
+  }
+
+  .topbar__stats {
+    justify-content: flex-start;
+  }
+}
+
+input[type="number"] {
+  font-variant-numeric: tabular-nums;
+}
+
+.mono {
+  font-family: ui-monospace, "SF Mono", Menlo, Monaco, Consolas, monospace;
+  font-size: 0.85em;
+  letter-spacing: -0.02em;
+}
