@@ -24,11 +24,11 @@ contract dUtilityBenchmark is dUtility {
       "Households have to be the same length as energy delta hashes."
     );
 
-    _setVerifier(_verifier);
+    _assignVerifier(_verifier);
 
     for (uint i = 0; i < _households.length; ++i) {
-      _addHousehold(_households[i]);
-      _updateEnergy(_households[i], _energyDeltaHashes[i], true);
+      _registerMember(_households[i]);
+      _applyRenewableHash(_households[i], _energyDeltaHashes[i]);
     }
 
     return true;

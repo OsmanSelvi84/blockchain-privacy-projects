@@ -20,7 +20,7 @@
     "run-gateway-h1": "node ./household-gateway/index.js -p 3002 -a 0x00aa39d30f0d20ff03a22ccfc30b7efbfca597c2 -P node1 -n authority_1",
     "run-gateway-h2": "node ./household-gateway/index.js -p 3003 -a 0x002e28950558fbede1a9675cb113f0bd20912019 -P node2 -n authority_2",
     "setup-zokrates": "./scripts/setup_zokrates.sh",
-    "generate-zok-circuit": "node zk/zoKratesCodeGenerator.js",
+    "generate-zok-circuit": "node zk/generate-zk-stack.js 1 1",
     "update-contract-bytecodes": "yarn compile-contracts && node ./scripts/update-contract-bytecodes.js"
   },
   "dependencies": {
