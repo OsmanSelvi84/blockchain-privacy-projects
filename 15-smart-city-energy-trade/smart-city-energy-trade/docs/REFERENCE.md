@@ -2,13 +2,9 @@
 
 | Item | Value |
 |------|--------|
-| Repository | [decentralized-energy-trading](https://github.com/cp-ss2019/decentralized-energy-trading) |
+| Repository | (https://github.com/JacobEberhardt/decentralized-energy-trading) |
 | Local path (read-only) | `/Users/yusra/Desktop/refolabilecekler/decentralized-energy-trading` |
 | Pin commit | `476ddd07a50cb901b8bd0a7d4bab95fa466cf3b9` |
-
-## Design intent (ödev)
-
-Bu repo **sizin** `15smart-city` ödevinizdir. [decentralized-energy-trading](https://github.com/cp-ss2019/decentralized-energy-trading) yalnızca **davranış referansı**dır: aynı netting kuralları, aynı test vektörleri (300/250/400 kWh), aynı UI metrikleri — **kaynak kod kopyası değil** (farklı dosya adları, sınıflar ve React bileşenleri).
 
 Offline doğrulama (referans `Utility` vs bizim `SettlementEngine`):
 
@@ -37,14 +33,13 @@ H1=0x00aa39d30f0d20ff03a22ccfc30b7efbfca597c2
 diff <(curl -s "http://127.0.0.1:3005/transfers/${H1}?from=0" | jq -S '[.[].amount] | sort') \
      <(curl -s "http://127.0.0.1:3005/transfers/${H1}?from=0" | jq -S '[.[].amount] | sort')
 ```
-
 ## Runtime mode (aligned with reference)
 
-- NED netting every **60 s** (`yarn run-netting`)
+- NED netting every **60 seconds** (`yarn run-netting`)
 - `PUT /sensor-stats` only forwards to NED — **no instant UI transfer**
-- Transfers accumulate in **Mongo**; UI polls every **10 s**
-- Dashboard **Network Overview**: meter reading, community balance, meter change (referans `household-ui` ile aynı alanlar)
-- Ledger yönü: bu projede **fiziksel akış** (üretici → tüketici); referans defter etiketini ters kaydedebilir — **Ws miktarları aynı**
-- Between full demos: `yarn clear-demo` (Mongo + NED sıfır) — eski yanlış yönlü transferler kalmasın
-- **İki NED yan yana:** ödev `:3005`, referans `:4005` — bkz. [UBUNTU_DUAL_STACK.md](./UBUNTU_DUAL_STACK.md)
-- Paylaşılan **tek Parity**; migrate zincir başına **bir kez** (`smart-city-energy-trade`)
+- Transfers accumulate in **Mongo**; UI polls every **10 seconds**
+- Dashboard **Network Overview**: meter reading, community balance, meter change (same fields as reference `household-ui`)
+- Ledger direction: **physical flow** in this project (producer → consumer); can record the reference ledger tag in reverse — **WS amounts are the same**
+- Between full demos: `yarn clear-demo` (Mongo + NED zero) — prevent old, incorrectly oriented transfers from remaining
+- **Two NEDs side-by-side:** assignment `:3005`, reference `:4005` — see [UBUNTU_DUAL_STACK.md](./UBUNTU_DUAL_STACK.md)
+- Shared **single Parity**; migrate **once** per chain (`smart-city-energy-trade`)
