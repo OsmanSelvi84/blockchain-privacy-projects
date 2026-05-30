@@ -91,6 +91,15 @@ cp zokrates-code/verifier.sol.backup contracts/verifier.sol
 
 ### 1. Enter project directory
 
+From the course monorepo ([blockchain-privacy-projects](https://github.com/OsmanSelvi84/blockchain-privacy-projects)):
+
+```bash
+git clone https://github.com/OsmanSelvi84/blockchain-privacy-projects.git
+cd blockchain-privacy-projects/15-smart-city-energy-trade/referans/decentralized-energy-trading
+```
+
+Local development copy (this machine):
+
 ```bash
 cd ~/refolabilecekler/decentralized-energy-trading
 ```
