@@ -2,8 +2,6 @@
 
 Privacy-preserving **peer-to-peer energy netting** for a smart-city microgrid. Households with surplus renewable energy (e.g. solar) transfer energy to neighbours with deficit; meter readings are hashed and signed off-chain, with optional ZoKrates proofs verified on-chain via `dUtility.checkNetting`.
 
-> **Presentation line:** “Neighbourhood energy sharing; meter data is not stored in plain text on-chain — hash + signature (+ zk proof).”
-
 ## Project overview
 
 This project demonstrates a full **energy trading pipeline**:
