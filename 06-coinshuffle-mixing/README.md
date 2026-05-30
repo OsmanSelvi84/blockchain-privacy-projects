@@ -16,23 +16,6 @@ CoinShuffle improves privacy by collecting output addresses from multiple users 
 
 This process makes it difficult to determine which sender corresponds to which receiver.
 
-Privacy properties provided by the project:
-
-* Transaction Unlinkability
-* Sender-Receiver Privacy
-* Output Address Mixing
-
----
-
-## Features
-
-* Simulates CoinShuffle participant registration
-* Collects output addresses from users
-* Randomly shuffles outputs
-* Demonstrates transaction unlinkability
-* Includes automated unit tests
-* Provides sample execution output
-
 ---
 
 ## Project Structure
@@ -56,24 +39,26 @@ Privacy properties provided by the project:
 
 ---
 
-## Sample Output
+## Demo Result
 
-A sample execution output is provided in:
+Example output:
 
 ```txt
-demo/sample_output.txt
+User1 -> wallet_A
+User2 -> wallet_B
+User3 -> wallet_C
+User4 -> wallet_D
+User5 -> wallet_E
+
+Shuffled Outputs:
+wallet_output_C_private
+wallet_output_A_private
+wallet_output_E_private
+wallet_output_B_private
+wallet_output_D_private
+
+Privacy Goal:
+Break the direct link between input addresses and output addresses.
 ```
-
-The output demonstrates participant registration, shuffled output addresses, and the privacy-preserving mixing process.
-
----
-
-## Reference vs Original Comparison
-
-The reference implementation demonstrates a CoinShuffle-style approach with additional protocol details.
-
-The original implementation developed for this project focuses on the core privacy mechanism of output shuffling and transaction unlinkability.
-
-Compared to the reference implementation, this project is intentionally simplified for educational purposes while preserving the fundamental privacy concept.
 
 ---
