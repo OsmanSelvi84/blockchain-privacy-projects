@@ -73,10 +73,13 @@ Distributed trust model. No single party holds the full secret. The shares are s
 - python3 main.py
 
 
-# 6. Reference Implementation 🔃
+# 6. Reference Implementation and Compareson 🔃
 - Repository: https://github.com/shea256/secret-sharing
 - ⚠️ Note: Reference library requires Python 3.12 or lower
-- Install: pip3 install secretsharing --break-system-packages
+### If on Python 3.13+ (run compare.py in venv)
+- python3.12 -m venv venv
+- source venv/bin/activate
+- pip3 install secretsharing --break-system-packages
 - Compare: python3 compare.py
 
 
@@ -108,8 +111,47 @@ Distributed trust model. No single party holds the full secret. The shares are s
 - **Test 5**: Unauthorized user tries to delete shares, action rejected (only the deployer/owner can delete)
 
 
-# 9. References 📃
+# 9. Troubleshooting 🔧
+
+### Reference library fails with `long is not defined`
+This happens on Python 3.13+. Fix:
+```bash
+python3.12 -m venv venv
+source venv/bin/activate
+pip install secretsharing web3
+find venv/lib/python3.12/site-packages/secretsharing/ -name "*.py" -exec sed -i 's/long(/int(/g' {} \;
+find venv/lib/python3.12/site-packages/secretsharing/ -name "*.py" -exec sed -i 's/isinstance(\(.*\), (int, long))/isinstance(\1, int)/g' {} \;
+```
+
+### `No such file or directory: artifacts/...`
+The contract hasn't been compiled yet. Fix:
+```bash
+npx hardhat compile
+```
+
+### `Connection failed` when running scripts
+The Hardhat node is not running. Fix:
+```bash
+npx hardhat node
+```
+Keep that terminal open and use a new terminal for scripts.
+
+### `contract_address.txt not found`
+The contract hasn't been deployed yet. Fix:
+```bash
+python3 scripts/deploy.py
+```
+
+### `web3` or `secretsharing` not found
+Dependencies not installed. Fix:
+```bash
+pip install web3 secretsharing
+```
+
+
+# 10. References 📃
 - Shamir Secret Sharing: https://en.wikipedia.org/wiki/Shamir%27s_secret_sharing
+- Bernal Bernabe, J. et al. (2019). Privacy-Preserving Solutions for Blockchain: Review and Challenges. IEEE Access, 7, 164908-164940. DOI: 10.1109/ACCESS.2019.2950872
 - Reference Implementation: https://github.com/shea256/secret-sharing
 - Solidity Documentation: https://docs.soliditylang.org
 - Web3.py Documentation: https://web3py.readthedocs.io
