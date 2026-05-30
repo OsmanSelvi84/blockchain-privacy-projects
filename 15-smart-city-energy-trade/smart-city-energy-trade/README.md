@@ -132,7 +132,7 @@ This repo does **not** ship Parity; use the course reference:
 
 ```bash
 # Example path — adjust if you cloned elsewhere:
-cd ~/refolabilecekler/decentralized-energy-trading/parity-authority
+cd ~/decentralized-energy-trading/parity-authority
 # Or: cd ~/decentralized-energy-trading/parity-authority
 
 docker compose down -v    # only on FIRST setup or after a broken migrate
@@ -182,7 +182,7 @@ H2 registered: true
 If migrate fails halfway, reset chain and retry:
 
 ```bash
-cd ~/refolabilecekler/decentralized-energy-trading/parity-authority
+cd ~/decentralized-energy-trading/parity-authority
 docker compose down -v && docker compose up -d && sleep 20
 cd ~/smart-city-energy-trade && nvm use 10 && yarn migrate-contracts-authority-fast
 ```
