@@ -1,6 +1,6 @@
 # Smart City Energy Trading (P2P Energy Exchange Simulation)
 
-Privacy-preserving P2P energy netting in local grids (reference implementation). Based on [decentralized-energy-trading](https://github.com/cp-ss2019/decentralized-energy-trading).
+Privacy-preserving P2P energy netting in local grids. Based on [decentralized-energy-trading]([https://github.com/cp-ss2019/decentralized-energy-trading](https://github.com/JacobEberhardt/decentralized-energy-trading)).
 
 ## Project Overview
 
@@ -389,17 +389,6 @@ yarn run-server -p 4003 -a 0x002e28950558fbede1a9675cb113f0bd20912019 -P node2 -
 
 ---
 
-## Academic Notes
-
-This project demonstrates:
-
-- Peer-to-peer energy trading logic
-- Off-chain netting computation
-- On-chain settlement via a PoA blockchain
-- Hybrid architecture (off-chain computation + blockchain integration)
-
----
-
 ## Tests
 
 - `yarn test-contracts` — smart contract tests
@@ -416,8 +405,4 @@ This project demonstrates:
 - `yarn update-contract-bytecodes` — update contract bytecode in `chain.json`
 - `yarn setup-zokrates` — regenerate `Verifier` contract
 - `yarn format-all` — lint and format
-- `yarn generate-prooving-files [# Prod] [# Cons]` — ZoKrates files for N producers / M consumers
-
-## Legacy ports (3000 series)
-
-If configs still use ports 3002 / 3003 / 3005 and UI 3000 / 3010, replace `4002` → `3002`, `4003` → `3003`, `4005` → `3005` in all commands above.
+- `yarn generate-prooving-files [# Prod] [# Cons]` — ZoKrates files for N producers / M consumer
