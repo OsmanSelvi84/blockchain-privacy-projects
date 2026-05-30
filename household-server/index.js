@@ -84,6 +84,16 @@ async function init() {
 
 init();
 
+const TRANSFER_SYNC_INTERVAL_MS = 10000;
+
+function syncTransfersFromNed() {
+  transferHandler.collectTransfers(config).catch(err => {
+    console.error("Background transfer sync:", err.message);
+  });
+}
+
+setInterval(syncTransfersFromNed, TRANSFER_SYNC_INTERVAL_MS);
+
 /**
  * function for retrieving meterDelta from ned-server and checks if it's the correct preimage for meterDelta. Needed for households to validate netting
  */

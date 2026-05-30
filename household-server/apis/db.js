@@ -12,8 +12,12 @@ module.exports = {
    * @returns {boolean} if operation was successful
    */
   createDB: (dbUrl, dbName, collectionList) => {
+    return new Promise((resolve, reject) => {
     MongoClient.connect(dbUrl, { useNewUrlParser: true }, (err, db) => {
-      if (err) reject(err);
+      if (err) {
+        console.error("MongoDB connection failed:", err.message);
+        return reject(err);
+      }
       console.log("Database created!");
       const dbo = db.db(dbName);
       let createPromises = collectionList.map(collection => {
@@ -27,11 +31,14 @@ module.exports = {
       }) 
       return Promise.all(createPromises)
       .then(() => {
-        initializeMeterReading(dbUrl, dbName, "sensor_data", "meter_reading")
+        return initializeMeterReading(dbUrl, dbName, "sensor_data", "meter_reading");
       })
+      .then(() => resolve())
       .catch(err => {
         console.log(err);
+        reject(err);
       });
+    });
     });
   },
 

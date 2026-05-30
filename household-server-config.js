@@ -6,7 +6,7 @@ module.exports = {
   // IP on which the household server should run
   host: "127.0.0.1",
   // Port on which the household server should listen (400x: avoid 3000–3010 / other editor)
-  port: 4003,
+  port: 4002,
   // Name of the DB
   dbName: "decentralized_energy",
   // Name of the Collection where the sensor data is saved

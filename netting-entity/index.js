@@ -78,8 +78,8 @@ async function init() {
     Object.setPrototypeOf(utilityAfterNetting, Utility.prototype);
     utilityAfterNetting.transfers = [];
     utilityAfterNetting.settle();
-    // Expose only this netting round (avoid stale transfers from shared array refs)
-    utility.transfers = utilityAfterNetting.transfers.slice();
+    // Append this round's transfers so household servers can sync later
+    utility.transfers.push(...utilityAfterNetting.transfers);
     utility.renewableEnergy = utilityAfterNetting.renewableEnergy;
     utility.nonRenewableEnergy = utilityAfterNetting.nonRenewableEnergy;
     console.log("Utility before Netting: ", utilityBeforeNetting)
