@@ -3,7 +3,7 @@
 | Item | Value |
 |------|--------|
 | Repository | (https://github.com/JacobEberhardt/decentralized-energy-trading) |
-| Local path (read-only) | `/Users/yusra/Desktop/refolabilecekler/decentralized-energy-trading` |
+| Local path (read-only) | `/Users/yusra/Desktop/decentralized-energy-trading` |
 | Pin commit | `476ddd07a50cb901b8bd0a7d4bab95fa466cf3b9` |
 
 Offline doğrulama (referans `Utility` vs bizim `SettlementEngine`):
