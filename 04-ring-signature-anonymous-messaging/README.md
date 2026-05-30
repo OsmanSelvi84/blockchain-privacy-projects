@@ -1,13 +1,174 @@
 # Ring Signature Anonymous Messaging
 
-## 🎯 Goal
-Anonymous message signing using ring signatures.
+## Project Overview
 
-## 📌 Requirements
-- Implement ring signature scheme
-- Allow group-based anonymous signing
-- Verify signature without revealing signer
+This project focuses on anonymous message signing using ring signatures.
 
-## 🔐 Privacy Concept
-Signer anonymity within a group.
+Ring signatures are commonly used in privacy-focused blockchain systems such as Monero. The main idea is that a message can be signed by one member of a group while keeping the actual signer anonymous.
+
+To better understand this concept, I first examined the open-source `pyring` project and then developed my own application using the same ring signature algorithm.
+
+The project also demonstrates message integrity. If a signed message is modified, the original signature can no longer be verified successfully.
+
+## Privacy Concept
+
+The privacy feature used in this project is signer anonymity.
+
+Unlike traditional digital signatures, ring signatures allow verification without revealing which member of the group created the signature.
+
+The verifier can confirm that a valid member signed the message, but cannot determine the exact signer.
+
+## Project Structure
+
+```text
+04-ring-signature-anonymous-messaging/
+│
+├── original_implementation/
+│   ├── main.py
+│   ├── ring_app.py
+│   ├── requirements.txt
+│   └── README.md
+│
+├── reference_implementation/
+│   └── pyring/
+│
+├── contracts/
+│   └── AnonymousMessageRegistry.sol
+│
+├── .gitignore
+└── README.md
+```
+
+## Reference Implementation
+
+Reference project:
+
+https://github.com/bartvm/pyring
+
+The reference implementation provides a working one-time ring signature system and was used to study the signing and verification process.
+
+### Running the Reference Implementation
+
+```bash
+cd reference_implementation/pyring
+
+python3 setup.py build
+sudo python3 setup.py develop
+
+echo "This is a test message." > message.txt
+
+ring-keygen
+
+ring-sign --password 1234 message.txt ringkey ringkey.pub bobkey.pub > ring.sig
+
+ring-verify message.txt - < ring.sig
+```
+
+Expected output:
+
+```text
+Valid ring signature.
+```
+
+## Original Implementation
+
+The original implementation is a Python-based anonymous messaging application.
+
+To make testing easier, I created a simple menu-based interface for signing and verifying messages.
+
+The application uses the same ring signature algorithm as the reference implementation and demonstrates:
+
+* anonymous signing,
+* signature verification,
+* signer anonymity,
+* message integrity verification.
+
+### Features
+
+* Anonymous message signing
+* One-time ring signature generation using `pyring`
+* Ring signature verification using `pyring`
+* SHA-256 message hashing
+* Message integrity verification
+* Ring member information display
+* Signature metadata generation
+* Menu-based terminal interface
+* Blockchain integration through a Solidity smart contract
+
+### Running the Original Implementation
+
+```bash
+cd original_implementation
+
+python3 main.py
+```
+
+Menu:
+
+```text
+1. Send anonymous message
+2. Verify signature
+3. Show ring information
+4. Exit
+```
+
+Generated files:
+
+```text
+signature.pem
+signature_metadata.json
+```
+
+## Solidity Integration
+
+The project includes a simple Solidity smart contract:
+
+```text
+contracts/AnonymousMessageRegistry.sol
+```
+
+The contract stores:
+
+* message hash
+* verification status
+* timestamp
+
+The signer identity is not stored on-chain.
+
+## Test Scenario
+
+1. Create a signature for a message.
+2. Verify the signature.
+3. Modify the original message.
+4. Verify the signature again.
+
+Expected result:
+
+```text
+Invalid ring signature.
+```
+
+The modified message cannot be verified because its hash value differs from the original signed message.
+
+## Original vs Reference Implementation
+
+The `pyring` project was used as a reference and learning resource.
+
+The original implementation was developed separately and provides a simpler interface for demonstrating the same ring signature functionality.
+
+Both implementations support:
+
+* anonymous signing
+* signature verification
+* signer anonymity
+* message integrity verification
+
+## References
+
+* https://github.com/bartvm/pyring
+* https://cryptonote.org/whitepaper.pdf
+* https://ed25519.cr.yp.to/
+* https://docs.soliditylang.org/
+* https://medium.com/@mehmethayirli0/monero-ve-ring-signature-halka-i%CC%87mza-18e19cc5fd5a
+* https://www.gate.com/learn/articles/what-are-ring-signatures/7497
 
