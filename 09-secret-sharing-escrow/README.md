@@ -29,7 +29,7 @@ Distributed trust model. No single party holds the full secret. The shares are s
 
 
 # 3. Requirements (software/tools) 💻
-- Python 3.12+
+- Python 3.12 (exact version required, reference library not compatible with 3.13+) ⚠️⚠️
 - Node.js v24+
 - npm
 - WSL (Ubuntu 24)
@@ -45,6 +45,9 @@ Distributed trust model. No single party holds the full secret. The shares are s
 ### Install node dependencies
 - npm install
 
+### Compile the smart contract
+- npx hardhat compile
+
 ### Install python dependencies
 - pip3 install web3 --break-system-packages
 
@@ -55,25 +58,24 @@ Distributed trust model. No single party holds the full secret. The shares are s
 
 ### Step 2: Open a new terminal and deploy the contract
 - python3 scripts/deploy.py
+
 (Enter your desired N and K when it asks for it)
 
 ### Step 3: Run the demo
 - python3 scripts/demo.py
+
 (Enter a secret, the script will split it, save all shares to the blockchain, then reconstruct)
 
 ### Step 4: Run the tests
 - python3 tests/test.py
 
-### Step 5: Run the comparison with reference
-- pip3 install secretsharing --break-system-packages
-- python3 compare.py
-
-### Step 6: Run interactive Shamir demo (no blockchain needed)
+### Step 5: Run interactive Shamir demo (no blockchain needed)
 - python3 main.py
 
 
 # 6. Reference Implementation 🔃
 - Repository: https://github.com/shea256/secret-sharing
+- ⚠️ Note: Reference library requires Python 3.12 or lower
 - Install: pip3 install secretsharing --break-system-packages
 - Compare: python3 compare.py
 
