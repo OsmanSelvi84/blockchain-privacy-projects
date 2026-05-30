@@ -62,3 +62,13 @@ Break the direct link between input addresses and output addresses.
 ```
 
 ---
+## Requirements
+
+This project was developed using Python.
+
+For running the tests, pytest is required.
+
+Install dependencies:
+
+```bash
+pip install -r original/requirements.txt
