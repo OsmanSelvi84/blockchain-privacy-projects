@@ -1,8 +1,6 @@
 const chalk = require("chalk");
-const fs = require("fs");
 const Utility = artifacts.require("dUtility");
 const OwnedSet = artifacts.require("OwnedSet");
-const dUtilityBenchmark = artifacts.require("dUtilityBenchmark");
 
 const web3Utils = require("web3-utils");
 const web3Helper = require("../lib/web3-client");
@@ -110,28 +108,6 @@ module.exports = async (deployer, network, [authority]) => {
       process.stdout.write(chalk.green("done\n"));
       await finalizeChange(ownedSetInstanceInAuthority, web3);
       await web3.eth.personal.unlockAccount(address, password, null);
-      break;
-    }
-    case "benchmark": {
-      const verifier = artifacts.require("verifier.sol");
-      const web3 = web3Helper.connect("benchmark");
-      await web3.eth.personal.unlockAccount(address, password, null);
-      const contractAddress = await deployer.deploy(dUtilityBenchmark)
-        .then(inst => {
-          return inst.address;
-        });
-
-      await web3.eth.personal.unlockAccount(address, password, null);
-      const verifierAddress = await deployer.deploy(verifier, { gas: 20000000})
-        .then(inst => {
-          return inst.address;
-        });
-      await web3.eth.personal.unlockAccount(address, password, null);
-      fs.writeFile('tmp/addresses.txt', JSON.stringify({contract: contractAddress, verifier: verifierAddress}),
-        function (err) {
-          if (err) throw err;
-        }
-      );
       break;
     }
     default: {

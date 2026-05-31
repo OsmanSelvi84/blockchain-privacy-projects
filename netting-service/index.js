@@ -130,8 +130,7 @@ async function runNettingCycle() {
   try {
     const hhAddresses = proofRunner.generateProof(
       snapshotBefore,
-      snapshotAfter,
-      "production_mode"
+      snapshotAfter
     );
 
     if (hhAddresses.length === 0) {

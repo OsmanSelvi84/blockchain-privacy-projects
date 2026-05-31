@@ -28,20 +28,6 @@ class SettlementEngine {
     return true;
   }
 
-  /** Yeni demo turu — transfer geçmişi kalır, yeni netting yapılabilir. */
-  beginNewRound() {
-    this.roundSettled = false;
-    for (const [addr, state] of Object.entries(this.members)) {
-      if (addr !== PLACEHOLDER_ADDR) {
-        state.meterDelta = 0;
-      }
-    }
-  }
-
-  getMember(address) {
-    return this._hasMember(address) ? this.members[address] : {};
-  }
-
   listTransfersFor(address, sinceMs = 0) {
     const me = String(address || "").toLowerCase();
     return this.ledger.filter(row => {
