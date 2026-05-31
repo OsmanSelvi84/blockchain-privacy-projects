@@ -101,7 +101,8 @@ Expected output of `verify`:
 │   ├── compare_with_reference.py   # differential test vs reference impl
 │   ├── reference_driver.py         # reference-side balance check (runs in reference venv)
 │   ├── generate_solidity_vectors.py # produce test vectors for the on-chain verifier
-│   └── dry_run.sh                  # one-command pre-presentation sanity check
+│   ├── dry_run.sh                  # one-command pre-presentation sanity check
+│   └── demo.sh                     # guided live presentation walkthrough
 └── solidity/                       # on-chain verifier (Hardhat project)
     ├── contracts/
     │   └── MimbleWimbleVerifier.sol
@@ -425,6 +426,14 @@ Solidity suite:
 
 ```bash
 bash scripts/dry_run.sh
+```
+
+For a guided live walkthrough that pauses between steps — the Part A
+comparison, a transaction verify, a tamper test, and the on-chain verifier:
+
+```bash
+bash scripts/demo.sh                  # built-in scenarios
+bash scripts/demo.sh inputs.json      # the instructor's 5 test inputs
 ```
 
 Test suite covers:
