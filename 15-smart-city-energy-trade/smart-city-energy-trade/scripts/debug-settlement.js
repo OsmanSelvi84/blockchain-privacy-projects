@@ -3,17 +3,12 @@
  * Quick check: constants, member registration, and Test 1 netting.
  * Run: nvm use 10 && node scripts/debug-settlement.js
  */
-const fs = require("fs");
-const path = require("path");
 const SettlementEngine = require("../netting-service/settlement-engine");
 const {
   HOUSEHOLD_ONE,
   HOUSEHOLD_TWO,
   PLACEHOLDER_ADDR
 } = require("../lib/chain-constants");
-
-const enginePath = path.join(__dirname, "../netting-service/settlement-engine.js");
-const engineSrc = fs.readFileSync(enginePath, "utf8");
 
 console.log("=== chain-constants ===");
 console.log("HOUSEHOLD_ONE:", HOUSEHOLD_ONE);
@@ -22,14 +17,6 @@ console.log("PLACEHOLDER_ADDR:", PLACEHOLDER_ADDR);
 console.log("H1 === PLACEHOLDER:", HOUSEHOLD_ONE === PLACEHOLDER_ADDR);
 console.log("H2 === PLACEHOLDER:", HOUSEHOLD_TWO === PLACEHOLDER_ADDR);
 console.log("H1 === H2:", HOUSEHOLD_ONE === HOUSEHOLD_TWO);
-
-console.log("\n=== settlement-engine.js (sanity) ===");
-console.log("file:", enginePath);
-console.log("has runSettlement:", /runSettlement\s*\(/.test(engineSrc));
-console.log(
-  "BUG beginNewRound at start of runSettlement:",
-  /runSettlement\s*\([^)]*\)\s*\{[^}]*beginNewRound/.test(engineSrc)
-);
 
 console.log("\n=== Test 1 flow ===");
 const e = new SettlementEngine();

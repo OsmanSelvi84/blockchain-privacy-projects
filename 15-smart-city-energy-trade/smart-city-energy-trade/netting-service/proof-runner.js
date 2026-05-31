@@ -1,10 +1,8 @@
 const shell = require("shelljs");
 const chalk = require("chalk");
 const fs = require("fs");
-const { performance } = require("perf_hooks");
-
 module.exports = {
-  generateProof(beforeEngine, afterEngine, mode = "production_mode") {
+  generateProof(beforeEngine, afterEngine) {
     const producerAddrs = beforeEngine.getHouseholdAddressesProducers();
     const consumerAddrs = beforeEngine.getHouseholdAddressesConsumers();
     const hhAddresses = [...producerAddrs, ...consumerAddrs];
@@ -24,7 +22,6 @@ module.exports = {
       .join(" ");
 
     process.stdout.write("Computing witness...");
-    const witnessStart = performance.now();
     const witnessResult = shell.exec(
       `zokrates compute-witness -a ${deltasProducersBeforeNet} ${deltasConsumersBeforeNet} ${deltasProducersAfterNet} ${deltasConsumersAfterNet} > /dev/null`
     );
@@ -34,13 +31,6 @@ module.exports = {
       throw new Error("zokrates compute-witness failed");
     }
     process.stdout.write(chalk.green("done\n"));
-
-    if (mode === "benchmark_mode") {
-      console.log(
-        "Witness ms:",
-        performance.now() - witnessStart
-      );
-    }
 
     process.stdout.write("Generating proof...");
     const proofResult = shell.exec("zokrates generate-proof > /dev/null");

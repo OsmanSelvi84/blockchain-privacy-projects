@@ -1,6 +1,8 @@
 # Smart City Energy Trade
 
-A privacy-preserving peer-to-peer energy netting system for a smart-city microgrid. Households that generate excess renewable energy (such as solar) can share it with neighbors who have a deficit. Meter readings are hashed and signed off-chain, while optional ZoKrates proofs can be verified on-chain through 'dUtility.checkNetting'.
+Privacy-preserving **peer-to-peer energy netting** for a smart-city microgrid. Households with surplus renewable energy (e.g. solar) transfer energy to neighbours with deficit; meter readings are hashed and signed off-chain, with optional ZoKrates proofs verified on-chain via `dUtility.checkNetting`.
+
+> **Presentation line:** “Neighbourhood energy sharing; meter data is not stored in plain text on-chain — hash + signature (+ zk proof).”
 
 ## Project overview
 
@@ -132,7 +134,7 @@ This repo does **not** ship Parity; use the course reference:
 
 ```bash
 # Example path — adjust if you cloned elsewhere:
-cd ~/decentralized-energy-trading/parity-authority
+cd ~/refolabilecekler/decentralized-energy-trading/parity-authority
 # Or: cd ~/decentralized-energy-trading/parity-authority
 
 docker compose down -v    # only on FIRST setup or after a broken migrate
@@ -182,7 +184,7 @@ H2 registered: true
 If migrate fails halfway, reset chain and retry:
 
 ```bash
-cd ~/decentralized-energy-trading/parity-authority
+cd ~/refolabilecekler/decentralized-energy-trading/parity-authority
 docker compose down -v && docker compose up -d && sleep 20
 cd ~/smart-city-energy-trade && nvm use 10 && yarn migrate-contracts-authority-fast
 ```

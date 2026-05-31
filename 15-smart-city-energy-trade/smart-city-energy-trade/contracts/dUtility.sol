@@ -194,19 +194,4 @@ contract dUtility is Mortal, IdUtility {
     }
   }
 
-  /** @dev Used by dUtilityBenchmark only. */
-  function _assignVerifier(address verifier) internal {
-    proofVerifier = IVerifier(verifier);
-  }
-
-  function _registerMember(address household) internal {
-    require(!members[household].active, "Household already exists");
-    MemberState storage row = members[household];
-    row.active = true;
-    emit NewHousehold(household);
-  }
-
-  function _applyRenewableHash(address household, bytes32 deltaHash) internal {
-    _storeEnergyHash(household, deltaHash, true);
-  }
 }

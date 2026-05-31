@@ -15,9 +15,5 @@ module.exports = {
 
   packAndHash(meterDeltaWs) {
     return module.exports.hashMeterReading(meterDeltaWs);
-  },
-
-  padPackParams256(meterDeltaWs) {
-    return module.exports.padMeterReading(meterDeltaWs);
   }
 };

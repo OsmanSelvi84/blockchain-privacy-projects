@@ -8,14 +8,6 @@ module.exports = {
     });
   },
 
-  getLedger(nedUrl) {
-    return request({
-      uri: `${nedUrl}/ledger`,
-      json: true,
-      timeout: 10000
-    });
-  },
-
   submitSignedReading(nedUrl, householdAddress, payload) {
     return request({
       uri: `${nedUrl}/energy/${householdAddress}`,
