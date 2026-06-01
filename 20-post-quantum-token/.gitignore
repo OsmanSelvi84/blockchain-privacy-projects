@@ -1,0 +1,10 @@
+node_modules/
+venv/
+keys/
+ledger.json
+ref_ledger.json
+__pycache__/
+*.pyc
+cache/
+artifacts/
+ignition/deployments/
