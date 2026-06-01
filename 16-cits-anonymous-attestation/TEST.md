@@ -156,11 +156,13 @@ isCredentialValid("CRED001") → true
 
 ## ❌ Test 7: Unauthorized Credential Issuance
 
+**Scenario:** A non-RSU account attempts to issue an attestation credential.
+
 ```solidity
 issueAttestationCredential("CRED002")
 ```
 
-**Expected:**
+**Expected Result:**
 
 ```text
 revert: Not RSU
