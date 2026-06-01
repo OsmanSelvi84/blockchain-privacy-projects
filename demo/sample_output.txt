@@ -1,0 +1,19 @@
+
+=== CoinShuffle Mixing Protocol Demo ===
+
+Hashed Inputs:
+User1 -> 87bd4e05af0087d95a05ce716abdb6d9b24591ec687142769408e23b3c4f54dc | amount: 1.0
+User2 -> 1741511a438990dc0de410c481d288871837f30549c4dcd4452dfdf9f1a1f5ec | amount: 1.0
+User3 -> b33b8eb96d61ae0ea9199d00f2be8097e5aed54be6fbbcb6d21216500548762a | amount: 1.0
+User4 -> 7cbed1f46af70c11185b70f0f07630e94ac3e4558fb1ceab118a42293dfde431 | amount: 1.0
+User5 -> 396bc2d2b9aa6e9f8765f1cc30385a9967fdaa6bf32bfb9e48457c6b077f36db | amount: 1.0
+
+Shuffled Outputs:
+wallet_output_C_private | amount after fee: 0.999
+wallet_output_A_private | amount after fee: 0.999
+wallet_output_B_private | amount after fee: 0.999
+wallet_output_D_private | amount after fee: 0.999
+wallet_output_E_private | amount after fee: 0.999
+
+Privacy Goal:
+Break the direct link between input addresses and output addresses.
