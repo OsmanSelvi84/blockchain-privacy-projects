@@ -40,17 +40,20 @@ Before executing the build setup, ensure your local environment contains the fol
 
 2. **Switch to Student Evaluation Branch:**
 
-   ```bash git checkout students/210304001-ayse-irem-colak ```
+   ```bash git checkout students/210304001-ayse-irem-colak
+   ```
 
-3. **Install Core Project Dependencies:**
-   ```bash npm install ```
+4. **Install Core Project Dependencies:**
+   ```bash npm install
+   ```
    
 
 ## 🛠️ Build & Compilation Commands
 
 To compile the underlying Solidity smart contract architecture and generate the necessary artifacts/ABIs, execute the local hardhat compiler tool:
 
-```bash npx hardhat compile```
+```bash npx hardhat compile
+```
 
 Expected Output: Upon execution, the terminal will download the compiler layer and return:
 Compiled 1 Solidity file successfully (or up to date)
@@ -58,7 +61,8 @@ Compiled 1 Solidity file successfully (or up to date)
 ## 🏃 Run & Deployment Instructions
 To simulate network provisioning and boot up a local temporary ledger network node to deploy the live contract address instance, invoke the migration script:
 
-```bash npx hardhat run scripts/deploy.js ```
+```bash npx hardhat run scripts/deploy.js 
+```
 Expected Output Structure:
 Deploying original ABE contract with authority account: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
 Original Implementation successfully deployed to: 0x5FbDB2315678afecb367f032d93F642f64180aa3
@@ -67,7 +71,8 @@ Original Implementation successfully deployed to: 0x5FbDB2315678afecb367f032d93F
 The verification layer evaluates the cryptographic engine against a precise matrix of 5 distinct evaluation test inputs. The automated framework generates a mock blockchain infrastructure in-memory, provisions structural attributes, hashes authorization passphrases via Keccak-256, and validates compliance behaviors.
 
 To initiate the fully automated evaluation test harness and verify outputs, run:
-```bash npx hardhat test ```
+```bash npx hardhat test 
+```
 
 
 ### 📊 Sample Inputs & Expected Outputs Matrix (Instructor Evaluation Verification)
