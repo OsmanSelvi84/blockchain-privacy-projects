@@ -21,7 +21,7 @@ const {
 const options = { resolveWithFullResponse: true };
 
 async function unlockAuthority(web3) {
-  await web3.eth.personal.unlockAccount(AUTHORITY_ADDRESS, password, 3600);
+  await web3.eth.personal.unlockAccount(AUTHORITY_ADDRESS, password, null);
 }
 
 async function addValidator(validator, ownedSet, web3) {

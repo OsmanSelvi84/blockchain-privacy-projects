@@ -35,7 +35,7 @@ function loadArtifact(name) {
 }
 
 async function unlockAuthority(web3) {
-  await web3.eth.personal.unlockAccount(AUTHORITY_ADDRESS, password, 3600);
+  await web3.eth.personal.unlockAccount(AUTHORITY_ADDRESS, password, null);
 }
 
 async function callRPC(methodSignature, port, params = []) {
