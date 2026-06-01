@@ -69,26 +69,45 @@ How to Run the Project
 
 This project is a Social Recovery Wallet implementation written in Solidity and tested with Foundry.
 
-How to Run the Project
-
-This project is a Social Recovery Wallet implementation written in Solidity and tested with Foundry.
-
 1. Clone the repository
+```bash
 git clone https://github.com/OsmanSelvi84/blockchain-privacy-projects.git
+```
+
 2. Enter the repository
-cd blockchain-privacy-projects
+```bash
+cd blockchain-privacy-privacy-projects
+```
+
 3. Switch to the correct branch
+```bash
 git checkout students/220304016-begum-gunaydin
+```
+
 4. Enter the project folder
+```bash
 cd social-recovery-wallet
+```
+
 5. Install dependencies
+```bash
 forge install
+```
+
 6. Build the project
+```bash
 forge build
+```
+
 7. Run tests
-forge test
+```bash
+forge test -v
+```
+
 8. Run tests with detailed output
-forge test -vvv
+```bash
+forge test -vvvv
+```
 
 <img width="748" height="161" alt="image" src="https://github.com/user-attachments/assets/04d271a4-1c35-439c-b929-6c9bf687ae35" />
 
