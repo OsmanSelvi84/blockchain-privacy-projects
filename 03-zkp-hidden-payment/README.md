@@ -73,10 +73,10 @@ npm run deposit
 
 ![Deposit Example](deposit.png)
 
-- Generates fresh `(secret, randomness)`
-- Computes Poseidon commitment
-- Sends `0.1 ETH`
-- Prints the encrypted note in the console.
+> Generates fresh `(secret, randomness)`\
+> Computes Poseidon commitment\
+> Sends `0.1 ETH`\
+> Prints the encrypted note in the console.
 
 ### 4. Withdraw
 
@@ -86,10 +86,10 @@ npm run withdraw
 
 ![Withdraw Example](withdraw.png)
 
-- Prompts for the encrypted note string and the encryption passphrase
-- Rebuilds the Merkle tree from past `Deposit` events
-- Computes Groth16 proof
-- Calls `ZKPPayment.withdraw` → sends `0.1 ETH` to `RECIPIENT`.
+> Prompts for the encrypted note string and the encryption passphrase\
+> Rebuilds the Merkle tree from past `Deposit` events\
+> Computes Groth16 proof\
+> Calls `ZKPPayment.withdraw` → sends `0.1 ETH` to `RECIPIENT`.
 
 ### 5. Tests
 
@@ -98,11 +98,11 @@ npm run test
 ```
 
 Covers:
-- Successful deposit
-- Reject duplicate commitments
-- Reject any denomination ≠ 0.1 ETH
-- Reject double-spent nullifier
-- Invalid Merkle tree
+> Successful deposit\
+> Reject duplicate commitments\
+> Reject any denomination ≠ 0.1 ETH\
+> Reject double-spent nullifier\
+> Invalid Merkle tree
 
 ![Passes Test Cases](tests.png)
 
@@ -142,10 +142,10 @@ npm install
 npm run build
 ```
 
-- Compiles `circuits/withdraw.circom`
-- Generates `contracts/Verifier.sol`
-- Copies `withdraw.wasm`.
-- Produces `withdraw_final.zkey`, `verification_key.json`, `circuits/withdraw.wasm`.
+> Compiles `circuits/withdraw.circom`\
+> Generates `contracts/Verifier.sol`\
+> Copies `withdraw.wasm`.\
+> Produces `withdraw_final.zkey`, `verification_key.json`, `circuits/withdraw.wasm`.
 
 ### 5. Run a local chain
 
@@ -169,10 +169,10 @@ npm run deposit
 
 ![Deposit Example](deposit.png)
 
-- Generates fresh `(secret, randomness)`
-- Computes Poseidon commitment
-- Sends `0.1 ETH`
-- Prints the encrypted note in the console.
+> Generates fresh `(secret, randomness)`\
+> Computes Poseidon commitment\
+> Sends `0.1 ETH`\
+> Prints the encrypted note in the console.
 
 ### 8. Withdraw
 
@@ -182,10 +182,10 @@ npm run withdraw
 
 ![Withdraw Example](withdraw.png)
 
-- Prompts for the encrypted note string and the encryption passphrase
-- Rebuilds the Merkle tree from past `Deposit` events
-- Computes Groth16 proof
-- Calls `ZKPPayment.withdraw` → sends `0.1 ETH` to `RECIPIENT`.
+> Prompts for the encrypted note string and the encryption passphrase\
+> Rebuilds the Merkle tree from past `Deposit` events\
+> Computes Groth16 proof\
+> Calls `ZKPPayment.withdraw` → sends `0.1 ETH` to `RECIPIENT`.
 
 ### 9. Tests
 
@@ -194,11 +194,11 @@ npm run test
 ```
 
 Covers:
-- Successful deposit
-- Reject duplicate commitments
-- Reject any denomination ≠ 0.1 ETH
-- Reject double-spent nullifier
-- Invalid Merkle tree
+> Successful deposit\
+> Reject duplicate commitments\
+> Reject any denomination ≠ 0.1 ETH\
+> Reject double-spent nullifier\
+> Invalid Merkle tree
 
 ![Passes Test Cases](tests.png)
 
