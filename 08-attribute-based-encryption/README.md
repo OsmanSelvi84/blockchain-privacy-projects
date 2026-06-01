@@ -13,11 +13,11 @@ The core privacy engine enforces a multi-attribute cryptographic validation sequ
 
 ## 📂 Repository Branch Information
 * **Main Production Branch:** `main`
-* **Student Evaluation Branch:** `student-irem-branch`
+* **Student Evaluation Branch:** `students/210304001-ayse-irem-colak`
 
 > ⚠️ **CRITICAL NOTE FOR THE INSTRUCTOR:** All development code, dependencies, and testing automation material reside inside the student branch. Please switch branches immediately after cloning by running:
 > ```bash
-> git checkout student-irem-branch
+> git checkout students/210304001-ayse-irem-colak
 > ```
 
 ---
@@ -34,7 +34,7 @@ Before executing the build setup, ensure your local environment contains the fol
 
 1. **Clone the Repository:**
    ```bash
-   git clone [INSERT_YOUR_GITHUB_REPOSITORY_URL_HERE]
+   git clone [GITHUB_REPOSITORY_URL_HERE]
    cd Agency-ABE-Project 
    ```
 
