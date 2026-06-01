@@ -32,9 +32,26 @@ This project implements a `(k, n)` threshold model with `n=5` trustees and `k=3`
 
 ---
 
-## 🚀 How to Run the Reference Implementation (Off-Chain)
+## 📁 Project Structure
 
-> Tests the cryptographic Shamir Secret Sharing logic locally.
+```
+09-secret-sharing-escrow/
+├── escrow.js          # Off-chain Shamir Secret Sharing (original implementation)
+├── reference.js       # Reference implementation from secrets.js-grempe examples
+├── Escrow.sol         # On-chain Solidity smart contract
+├── package.json       # Node.js dependencies
+└── README.md          # This file
+```
+
+## Dependencies
+
+| Package | Version | Purpose |
+|---------|---------|---------|
+| `secrets.js-grempe` | latest | Shamir's Secret Sharing over GF(2^8) |
+
+---
+
+## 🚀 How to Run — Original Implementation (Off-Chain)
 
 ### Prerequisites
 
@@ -55,9 +72,14 @@ cd 09-secret-sharing-escrow
 npm install
 ```
 
-**3. Run the simulation:**
+**3. Run with default secret:**
 ```bash
 node escrow.js
+```
+
+**4. Run with custom secret:**
+```bash
+node escrow.js "YourSecretHere"
 ```
 
 ### Expected Output
@@ -71,7 +93,6 @@ node escrow.js
   Threshold: 3 parties required for reconstruction
   Any 3 of 5 trustees can reconstruct.
   Fewer than 3 reveal ZERO information.
-
 ------------------------------------------------------------
  PHASE 1: Splitting secret into shares
 ------------------------------------------------------------
@@ -82,7 +103,6 @@ node escrow.js
   [Share 4] Polat : 804xxxxxxxxxxxxxxxxx...
   [Share 5] Esref : 805xxxxxxxxxxxxxxxxx...
   Individual shares are mathematically meaningless alone.
-
 ------------------------------------------------------------
  PHASE 2: Blockchain Escrow (Escrow.sol)
 ------------------------------------------------------------
@@ -92,7 +112,6 @@ node escrow.js
   3. Each trustee calls approveRecovery() -- recorded on-chain.
   4. When approvalCount >= 3, contract emits RecoverySuccess().
   5. Off-chain: approved trustees combine shares to reconstruct the secret.
-
 ------------------------------------------------------------
  PHASE 3: Reconstruction Scenarios
 ------------------------------------------------------------
@@ -100,7 +119,6 @@ node escrow.js
   Parties: Aytunc, Selin | Shares: 2 | Required: 3
   Result: FAILED (expected)
   Reason: Shamir produces cryptographic garbage with insufficient shares.
-  Garbage output: "..."
   On-chain: approvalCount=2 < threshold(3). Contract rejects.
 
   [SCENARIO B] 3 trustees reconstruct (meets threshold)
@@ -114,7 +132,6 @@ node escrow.js
   Result: SUCCESS
   Recovered: 0xABC123Def456Ghi789PrivateWalletKeyBBSSE
   Extra shares do not change result -- threshold already met.
-
 ------------------------------------------------------------
  SUMMARY
 ------------------------------------------------------------
@@ -133,9 +150,61 @@ node escrow.js
 
 ---
 
-## 🔗 How to Test the Smart Contract (On-Chain)
+## 📎 Reference Implementation
 
-> Tests the on-chain trustee management and recovery approval flow in Remix IDE.
+**Library:** `secrets.js-grempe`
+**Repository:** https://github.com/grempe/secrets.js
+**npm:** https://www.npmjs.com/package/secrets.js-grempe
+
+The `reference.js` file runs the official examples from the `secrets.js-grempe` library for direct comparison with the original implementation.
+
+### Run the Reference Implementation
+
+```bash
+node reference.js
+```
+
+**With custom input:**
+```bash
+node reference.js "YourSecretHere"
+```
+
+### Expected Output
+
+```
+=== REFERENCE IMPLEMENTATION ===
+Source: https://github.com/grempe/secrets.js
+
+[TEST 1] Split a password with threshold 3-of-5
+Original : <<PassWord123>>
+Shares   : 5
+2 shares match: false
+3 shares match: true
+
+[TEST 2] Split a 512-bit random key with threshold 5-of-10
+4 shares match: false
+5 shares match: true
+
+=== END REFERENCE ===
+```
+
+### Comparison: Reference vs Original
+
+| Feature | Reference (reference.js) | Original (escrow.js) |
+|---------|--------------------------|----------------------|
+| Algorithm | Shamir's Secret Sharing | Shamir's Secret Sharing |
+| Threshold | Configurable (k,n) | Fixed (3,5) |
+| Custom input | Yes (process.argv) | Yes (process.argv) |
+| Below threshold | Returns false | Detects and reports garbage |
+| At threshold | Returns true | Full recovery + verification |
+| Blockchain | None | Escrow.sol on-chain enforcement |
+| Scenarios | 2 test cases | 3 scenarios (A, B, C) |
+
+Both implementations use the same underlying cryptographic algorithm and produce equivalent results for the same inputs.
+
+---
+
+## 🔗 How to Test the Smart Contract (On-Chain)
 
 ### Step 1 — Open Remix IDE
 
@@ -148,25 +217,21 @@ Go to [https://remix.ethereum.org](https://remix.ethereum.org)
 
 ### Step 3 — Compile
 
-- Go to the **Solidity Compiler** tab (left sidebar)
+- Go to the **Solidity Compiler** tab
 - Set compiler version to `0.8.0`
 - Click **Compile Escrow.sol**
 
 ### Step 4 — Deploy
 
-- Go to the **Deploy & Run Transactions** tab
 - Set **Environment** to `Remix VM (Osaka)`
-- Fill in the constructor parameters:
-  - `_threshold`: `3`
-  - `_initialTrustees`: paste 5 wallet addresses from the Remix accounts list, comma-separated in brackets, e.g.:
-    ```
-    ["0x5B38Da6a701c568545dCfcB03FcB875f56beddC4","0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2","0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db","0x78731D3Ca6b7E34aC0F824c42a7cC18A495cabaB","0x617F2E2fD72FD9D5503197092aC168c91465E7f2"]
-    ```
+- `_threshold`: `3`
+- `_initialTrustees`:
+```
+["0x5B38Da6a701c568545dCfcB03FcB875f56beddC4","0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2","0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db","0x78731D3Ca6b7E34aC0F824c42a7cC18A495cabaB","0x617F2E2fD72FD9D5503197092aC168c91465E7f2"]
+```
 - Click **Deploy**
 
 ### Step 5 — Test the Contract Functions
-
-Expand the deployed contract under **Deployed Contracts** and test in this order:
 
 | Step | Function | Who calls it | Expected Result |
 |------|----------|-------------|-----------------|
@@ -178,26 +243,9 @@ Expand the deployed contract under **Deployed Contracts** and test in this order
 
 ---
 
-## 📁 Project Structure
-
-```
-09-secret-sharing-escrow/
-├── escrow.js          # Off-chain Shamir Secret Sharing simulation
-├── Escrow.sol         # On-chain Solidity smart contract
-├── package.json       # Node.js dependencies
-└── README.md          # This file
-```
-
-## Dependencies
-
-| Package | Version | Purpose |
-|---------|---------|---------|
-| `secrets.js-grempe` | latest | Shamir's Secret Sharing over GF(2^8) |
-
----
-
 ## 📚 References
 
 - [Shamir's Secret Sharing — Wikipedia](https://en.wikipedia.org/wiki/Shamir%27s_secret_sharing)
-- [secrets.js-grempe npm package](https://www.npmjs.com/package/secrets.js-grempe)
+- [secrets.js-grempe GitHub](https://github.com/grempe/secrets.js)
+- [secrets.js-grempe npm](https://www.npmjs.com/package/secrets.js-grempe)
 - [Remix IDE Documentation](https://remix-ide.readthedocs.io/)
