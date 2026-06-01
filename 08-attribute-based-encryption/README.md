@@ -128,3 +128,32 @@ The terminal will first prompt you to mint and encrypt a completely new corporat
 * Set token lifetime status: Type yes to grant an active, valid Unix time-lock window, or no to instantly seed an expired epoch.
 
 * Provide cryptographic passphrase token: Type the passphrase to attempt decryption.
+
+### 📈 Successful Execution 
+==================================================
+🔒 PHASE 1: DYNAMIC ON-CHAIN ASSET LOCKING (ENCRYPTION)
+==================================================
+Enter a unique Asset ID to lock (e.g., 202 or 999): 202
+Set the department policy constraint for this asset (e.g., 'tasarim' or 'finans'): finans
+Set the cryptographic passphrase for this asset: irem_secret_key
+Enter the secure resource pointer/URI (e.g., ipfs://my-private-data): ipfs://my-private-data
+
+[Cryptographic Minter]: Hashing the passphrase via Keccak-256...
+[EVM State Transition]: Executing lockAssetWithPolicy for Asset ID 202...
+🟢 SUCCESS: Asset 202 is now cryptographically locked on-chain under the 'finans' policy!
+
+==================================================
+🔑 PHASE 2: DYNAMIC USER PROVISIONING & DECRYPTION
+==================================================
+1. Assign a department attribute token to the user (To PASS use 'finans', to FAIL use something else): finans
+2. Set attribute token lifetime status. Should it be valid? (yes / no): yes
+
+[Ledger Report]: Dynamic attributes successfully mined on-chain for 'Juri_User'.
+3. Provide the cryptographic passphrase token to unlock Asset 202: irem_secret_key
+
+[Cryptographic Processing]: Contract evaluating state transitions on the EVM...
+
+=================== LIVE EVALUATION VERDICT ===================
+🟢 DECRYPTION GRANTED (ALLOWED: TRUE)
+📂 Unlocked IPFS Secure Varlık Pointer: DECRYPTION GRANTED. Payload: ipfs://my-private-data
+===============================================================
