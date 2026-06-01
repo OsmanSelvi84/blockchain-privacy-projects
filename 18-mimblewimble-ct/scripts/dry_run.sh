@@ -7,7 +7,9 @@
 
 set -u
 
-# Never let Hardhat's first-run telemetry question block the dry run.
+# Run Hardhat non-interactively so its first-run prompts (telemetry AND the
+# VS Code extension one) never block the dry run. CI=true skips both.
+export CI=true
 export HARDHAT_DISABLE_TELEMETRY_PROMPT=true
 
 # Resolve paths relative to this script's location.

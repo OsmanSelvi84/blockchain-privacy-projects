@@ -15,7 +15,10 @@
 # DEMO_NOPAUSE=1 to run straight through.
 
 set -u
-# Never let Hardhat's first-run telemetry question interrupt the live demo.
+# Run Hardhat non-interactively so its first-run prompts (telemetry AND the
+# "install the VS Code extension?" one) never interrupt the live demo.
+# CI=true skips both; HARDHAT_DISABLE_TELEMETRY_PROMPT is belt-and-suspenders.
+export CI=true
 export HARDHAT_DISABLE_TELEMETRY_PROMPT=true
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT="$(cd "$SCRIPT_DIR/.." && pwd)"
