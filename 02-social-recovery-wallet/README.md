@@ -99,6 +99,37 @@ The Social Recovery Wallet improves security and privacy by distributing recover
 
 This project demonstrates how blockchain technology can be used to implement a secure and privacy-preserving wallet recovery system. Through the use of trusted guardians and threshold approvals, the risk associated with private key loss is significantly reduced while maintaining user control and decentralization.
 
+## Reference Implementation
+
+For comparison and learning purposes, I studied the following open-source social recovery wallet implementation:
+
+Reference Repository:
+https://github.com/alymurtazamemon/guardian-social-recovery-wallet-solidity
+
+### Why This Reference Was Selected
+
+This repository was selected because it is directly related to the Social Recovery Wallet concept and includes guardian-based wallet recovery using Solidity.
+
+### Comparison With My Implementation
+
+Similarities:
+
+- Both projects use guardian-based recovery.
+- Both projects use Solidity smart contracts.
+- Both projects focus on wallet ownership recovery.
+
+Differences:
+
+- My implementation uses a simplified threshold-based recovery mechanism.
+- My implementation demonstrates a 2-of-3 guardian recovery model.
+- My implementation includes a custom Hardhat demo script for ownership transfer demonstration.
+
+### Reference Setup
+
+```bash
+git clone https://github.com/alymurtazamemon/guardian-social-recovery-wallet-solidity.git
+cd guardian-social-recovery-wallet-solidity
+npm install
 
 ## Author
 
