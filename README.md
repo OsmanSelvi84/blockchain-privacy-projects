@@ -142,33 +142,27 @@ This project was developed by studying the following reference implementation:
 
 **Setup instructions for reference project:**
 
-```bash
+Setup instructions for reference project:
+
 git clone https://github.com/verumlotus/social-recovery-wallet.git
 cd social-recovery-wallet
 forge install
 mkdir -p src/test/utils
-touch src/test/utils/console.sol
-```
 
-After you should write into `src/test/utils/console.sol` file :
-
-```solidity
+cat > src/test/utils/console.sol << 'EOF'
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity >=0.4.22 <0.9.0;
+
 library console {
     function log(string memory) internal pure {}
-    function log(uint256) internal pure {}
-    function log(address) internal pure {}
+    function log(uint) internal pure {}
     function log(bool) internal pure {}
+    function log(address) internal pure {}
 }
-```
+EOF
 
-after execute:
-
-```bash
 forge build
 forge test -v
-```
 **Expected output after `forge test -v`:**
 
 <img width="726" height="214" alt="image" src="https://github.com/user-attachments/assets/5cd1caf0-1873-48f0-9a37-3d10dc4bc98d" />
