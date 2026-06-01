@@ -1,13 +1,32 @@
+const path = require("path");
 const shell = require("shelljs");
 const chalk = require("chalk");
 const fs = require("fs");
 const { performance } = require("perf_hooks");
 
+const ZOKRATES_CLI = path.join(__dirname, "..", "scripts", "zokrates-cli.sh");
+
+function zokratesCmd() {
+  if (shell.which("zokrates")) {
+    return "zokrates";
+  }
+  if (fs.existsSync(ZOKRATES_CLI)) {
+    return `bash ${ZOKRATES_CLI}`;
+  }
+  return null;
+}
+
 /**
  * This handler manages the communication of the NED Server and the ZoKrates environment
  */
 module.exports = {
+  isAvailable: () => zokratesCmd() !== null,
+
   generateProof: (utilityBeforeNetting, utilityAfterNetting, mode) => {
+    const zokrates = zokratesCmd();
+    if (!zokrates) {
+      throw new Error("ZoKrates not installed (run: bash scripts/install_zokrates.sh && yarn setup-zokrates)");
+    }
     let cW_t0 = 0;
     let cW_t1 = 0;
     let cW_time = 0;
@@ -36,7 +55,7 @@ module.exports = {
 
     const witnessShellStr = shell
       .exec(
-        `zokrates compute-witness -a ${deltasProducersBeforeNet} ${deltasConsumersBeforeNet} ${deltasProducersAfterNet} ${deltasConsumersAfterNet} > /dev/null`
+        `${zokrates} compute-witness -a ${deltasProducersBeforeNet} ${deltasConsumersBeforeNet} ${deltasProducersAfterNet} ${deltasConsumersAfterNet} > /dev/null`
       )
       .grep("--", "^~out_*", "witness");
 
@@ -57,7 +76,7 @@ module.exports = {
     process.stdout.write("Generating proof...");
 
     gP_t0 = performance.now();
-    const proofShellStr = shell.exec("zokrates generate-proof  > /dev/null");
+    const proofShellStr = shell.exec(`${zokrates} generate-proof  > /dev/null`);
     gP_t1 = performance.now();
 
     if (proofShellStr.code !== 0) {

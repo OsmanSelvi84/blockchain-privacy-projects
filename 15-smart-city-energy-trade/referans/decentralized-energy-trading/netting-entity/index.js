@@ -96,15 +96,32 @@ async function init() {
       console.log(`Off-chain netting recorded ${newTransfers} new transfer(s).`);
     }
 
-    let hhAddresses = zkHandler.generateProof(
-      utilityBeforeNetting,
-      utilityAfterNetting,
-      "production_mode"
-    );
+    let hhAddresses = [];
+    let data = null;
+    if (!zkHandler.isAvailable()) {
+      console.log(
+        "ZoKrates not installed — off-chain netting only (install: bash scripts/install_zokrates.sh && yarn setup-zokrates)"
+      );
+    } else {
+      try {
+        hhAddresses = zkHandler.generateProof(
+          utilityBeforeNetting,
+          utilityAfterNetting,
+          "production_mode"
+        );
+        const rawdata = fs.readFileSync("../zokrates-code/proof.json");
+        data = JSON.parse(rawdata);
+      } catch (err) {
+        console.error(
+          "ZoKrates failed (off-chain transfers kept):",
+          err.message
+        );
+        scheduleNextNetting();
+        return;
+      }
+    }
 
-    let rawdata = fs.readFileSync("../zokrates-code/proof.json");
-    let data = JSON.parse(rawdata);
-    if (hhAddresses.length > 0) {
+    if (hhAddresses.length > 0 && data) {
       await web3.eth.personal.unlockAccount(
         config.address,
         config.password,
@@ -138,7 +155,10 @@ async function init() {
   }, config.nettingInterval);
 }
 
-init();
+init().catch(err => {
+  console.error("NED init failed:", err.message || err);
+  process.exit(1);
+});
 
 const app = express();
 
