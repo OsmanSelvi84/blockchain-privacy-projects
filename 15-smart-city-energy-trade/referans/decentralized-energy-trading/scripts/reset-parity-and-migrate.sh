@@ -22,7 +22,7 @@ curl -sf -X POST http://127.0.0.1:8545 \
   || { echo "FAIL: Parity not on 8545"; exit 1; }
 echo ""
 
-echo "=== Migrate ==="
+echo "=== Compile + migrate (HTTP, no truffle migrate) ==="
 yarn migrate-contracts-authority
 
 echo "=== Done ==="

@@ -30,7 +30,7 @@
     "check-env": "node scripts/check-node.js && bash scripts/ubuntu-check.sh",
     "ubuntu-setup": "bash scripts/ubuntu-setup.sh",
     "clean-contracts": "bash scripts/clean-verifier-from-contracts.sh",
-    "migrate-contracts-authority": "yarn clean-contracts && truffle migrate --reset hard --network authority --f 2",
+    "migrate-contracts-authority": "yarn clean-contracts && truffle compile && node scripts/migrate-authority-http.js",
     "migrate-contracts:benchmark": "truffle migrate --reset hard --network benchmark",
     "test-parity-docker": "./scripts/run_docker_parity_tests.sh",
     "test-helpers": "mocha ./test/helpers/*.js",

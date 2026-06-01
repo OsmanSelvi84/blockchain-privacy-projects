@@ -10,6 +10,9 @@ module.exports = {
       port: 8545,
       network_id: "8995",
       websockets: false,
+      gas: 7000000,
+      networkCheckTimeout: 120000,
+      timeoutBlocks: 400,
       from: "0x00Bd138aBD70e2F00903268F3Db08f2D25677C9e"
     },
     authority_1: {
