@@ -1,0 +1,12 @@
+{
+  "name": "solidity-ringsignature",
+  "version": "1.0.0",
+  "devDependencies": {
+    "hardhat": "^2.22.3",
+    "@nomiclabs/hardhat-ethers": "^2.2.3",
+    "ethers": "^5.7.2",
+    "chai": "^4.3.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.0.0"
+  }
+}
