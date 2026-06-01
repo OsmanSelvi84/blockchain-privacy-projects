@@ -4,7 +4,6 @@ const fs = require('fs');
 const Utility = artifacts.require("dUtility");
 const OwnedSet = artifacts.require("OwnedSet");
 const dUtilityBenchmark = artifacts.require("dUtilityBenchmark");
-const verifier = artifacts.require("verifier.sol")
 
 const web3Helper = require("../helpers/web3");
 const asyncUtils = require("../helpers/async-utils");
@@ -117,6 +116,7 @@ module.exports = async (deployer, network, [authority]) => {
       break;
     }
     case "benchmark": {
+      const verifier = artifacts.require("verifier.sol");
       const web3 = web3Helper.initWeb3("benchmark");
       await web3.eth.personal.unlockAccount(address, password, null);
       const contractAddress = await deployer.deploy(dUtilityBenchmark)

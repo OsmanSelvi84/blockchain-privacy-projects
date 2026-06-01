@@ -29,8 +29,8 @@ def deltaConsumers(field[1] hh) -> (field):
 // @param {field[m]} consumersBeforeNet
 // @returns {field} totalEnergy
 def calculateTotalDelta(field[1] producersBeforeNet, field[1] consumersBeforeNet) -> (field):
-  producerDelta = deltaProducers(producersBeforeNet)
-  consumerDelta = deltaConsumers(consumersBeforeNet)
+  field producerDelta = deltaProducers(producersBeforeNet)
+  field consumerDelta = deltaConsumers(consumersBeforeNet)
   field totalDelta = if (producerDelta > consumerDelta) then (producerDelta - consumerDelta) else (consumerDelta - producerDelta) fi
   return totalDelta
 
@@ -136,12 +136,12 @@ def sumConsumers(field[1] hh) -> (field):
 // Index represents household and consumersAfterNet[index] := produce-consume < 0
 // @returns (field[2], field[2], field[2], field[2], field[2],...) sha256packed hashes of producersBeforeNetPacked and consumersBeforeNetPacked and sha256packed hash that depends on inputs
 def main(private field[1] producersBeforeNet, private field[1] consumersBeforeNet, private field[1] producersAfterNet, private field[1] consumersAfterNet) -> (field[2],field[2],field[2],field[2]):
-  totalDelta = calculateTotalDelta(producersBeforeNet, consumersBeforeNet)
-  totalDeltaNet = calculateTotalDelta(producersAfterNet, consumersAfterNet)
-  totalDelta == totalDeltaNet
+  field totalDelta = calculateTotalDelta(producersBeforeNet, consumersBeforeNet)
+  field totalDeltaNet = calculateTotalDelta(producersAfterNet, consumersAfterNet)
+  assert(totalDelta == totalDeltaNet)
 
-  0 == validateFairnessProducers(producersBeforeNet, producersAfterNet)
-  0 == validateFairnessConsumers(consumersBeforeNet, consumersAfterNet)
+  assert(0 == validateFairnessProducers(producersBeforeNet, producersAfterNet))
+  assert(0 == validateFairnessConsumers(consumersBeforeNet, consumersAfterNet))
 
   field sumProducers = sumProducers(producersAfterNet)
   field sumConsumers = sumConsumers(consumersAfterNet)
@@ -149,7 +149,7 @@ def main(private field[1] producersBeforeNet, private field[1] consumersBeforeNe
   field[1] zeroNetPartyProducers = producersAfterNet
   field[1] zeroNetPartyConsumers = consumersAfterNet
 
-  0 == if sumProducers <= sumConsumers then validateZeroNetProducers(zeroNetPartyProducers, 1) else validateZeroNetConsumers(zeroNetPartyConsumers, 1) fi// Can make epsilon more accurate in the future
+  assert(0 == if sumProducers <= sumConsumers then validateZeroNetProducers(zeroNetPartyProducers, 1) else validateZeroNetConsumers(zeroNetPartyConsumers, 1) fi) // Can make epsilon more accurate in the future
   field[2] hh1ProducersBeforeNetHash = if producersBeforeNet[0] == 0 then [0, 0] else sha256packed([0, 0, 0, producersBeforeNet[0]]) fi
   field[2] hh1ProducersAfterNetHash = if producersAfterNet[0] == 0 then [0, 0] else sha256packed([0, 0, 0, producersAfterNet[0]]) fi
   field[2] hh1ConsumersBeforeNetHash = if consumersBeforeNet[0] == 0 then [0, 0] else sha256packed([0, 0, 0, consumersBeforeNet[0]]) fi

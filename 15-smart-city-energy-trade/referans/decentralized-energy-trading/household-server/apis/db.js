@@ -117,7 +117,7 @@ module.exports = {
         dbo.collection(collection).insertMany(
           data.map(entry => ({
             ...entry,
-            timestamp: entry.date || entry.timestamp || Date.now()
+            timestamp: new Date().getTime()
           })),
           err => {
             if (err) {

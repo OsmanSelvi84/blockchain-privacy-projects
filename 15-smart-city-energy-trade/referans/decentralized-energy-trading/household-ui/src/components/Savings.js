@@ -20,21 +20,17 @@ const convertToEur = cents => {
   return (cents / 100).toFixed(2);
 };
 
-const normalizeAddress = addr =>
-  addr && typeof addr === "string" ? addr.toLowerCase().trim() : "";
-
-const Savings = React.memo(({ address = "", transfers = [] }) => {
-  const householdAddress = normalizeAddress(address);
-  const totalReceivedEnergy = transfers
-    .filter(transfer => {
-      const to = transfer && transfer.to;
-      return (
-        householdAddress &&
-        to &&
-        normalizeAddress(to) === householdAddress
-      );
-    })
-    .reduce((acc, transfer) => acc + Number(transfer.amount || 0), 0);
+const Savings = React.memo(({ address, transfers = [] }) => {
+  const normalizedAddress = address ? address.toLowerCase().trim() : "";
+  const totalReceivedEnergy = normalizedAddress
+    ? transfers
+        .filter(
+          transfer =>
+            transfer.to &&
+            transfer.to.toLowerCase().trim() === normalizedAddress
+        )
+        .reduce((acc, transfer) => acc + Number(transfer.amount), 0)
+    : 0;
   const costsWithUmlage = ENERGY_COSTS * totalReceivedEnergy;
   const costsWithoutUmlage = (ENERGY_COSTS - EEG_UMLAGE) * totalReceivedEnergy;
   const savings = EEG_UMLAGE * totalReceivedEnergy;
@@ -120,11 +116,6 @@ const Savings = React.memo(({ address = "", transfers = [] }) => {
 Savings.propTypes = {
   address: PropTypes.string,
   transfers: PropTypes.arrayOf(PropTypes.object)
-};
-
-Savings.defaultProps = {
-  address: "",
-  transfers: []
 };
 
 export default Savings;

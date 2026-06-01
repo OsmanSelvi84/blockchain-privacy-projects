@@ -71,39 +71,36 @@ async function init() {
     }
   );
 
+  const scheduleNextNetting = () => {
+    console.log(`Sleep for ${config.nettingInterval}ms ...`);
+    setTimeout(() => {
+      runZokrates();
+    }, config.nettingInterval);
+  };
+
   async function runZokrates() {
+    const transfersBefore = utility.transfers.length;
     let utilityBeforeNetting = JSON.parse(JSON.stringify(utility)); // dirty hack for obtaining deep copy of utility
     Object.setPrototypeOf(utilityBeforeNetting, Utility.prototype);
-    utilityAfterNetting = { ...utility };
+    utilityAfterNetting = JSON.parse(JSON.stringify(utility));
     Object.setPrototypeOf(utilityAfterNetting, Utility.prototype);
-    utilityAfterNetting.transfers = [];
     utilityAfterNetting.settle();
-    // Append this round's transfers so household servers can sync later
-    utility.transfers.push(...utilityAfterNetting.transfers);
-    utility.renewableEnergy = utilityAfterNetting.renewableEnergy;
-    utility.nonRenewableEnergy = utilityAfterNetting.nonRenewableEnergy;
-    console.log("Utility before Netting: ", utilityBeforeNetting)
-    console.log("Utility after Netting: ", utilityAfterNetting)
+    console.log("Utility before Netting: ", utilityBeforeNetting);
+    console.log("Utility after Netting: ", utilityAfterNetting);
 
-    const scheduleNextNetting = () => {
-      console.log(`Sleep for ${config.nettingInterval}ms ...`);
-      setTimeout(() => {
-        runZokrates();
-      }, config.nettingInterval);
-    };
-
-    let hhAddresses = [];
-    try {
-      hhAddresses = zkHandler.generateProof(
-        utilityBeforeNetting,
-        utilityAfterNetting,
-        "production_mode"
-      );
-    } catch (err) {
-      console.error("ZoKrates failed (off-chain transfers still saved):", err.message);
-      scheduleNextNetting();
-      return;
+    // Publish off-chain transfers for dashboards (household-server sync).
+    utility = utilityAfterNetting;
+    Object.setPrototypeOf(utility, Utility.prototype);
+    const newTransfers = utility.transfers.length - transfersBefore;
+    if (newTransfers > 0) {
+      console.log(`Off-chain netting recorded ${newTransfers} new transfer(s).`);
     }
+
+    let hhAddresses = zkHandler.generateProof(
+      utilityBeforeNetting,
+      utilityAfterNetting,
+      "production_mode"
+    );
 
     let rawdata = fs.readFileSync("../zokrates-code/proof.json");
     let data = JSON.parse(rawdata);
@@ -121,12 +118,13 @@ async function init() {
           data.proof.c,
           data.inputs
         )
-        .send({ from: config.address, gas: 25000000 }, (error, txHash) => {
+        .send({ from: config.address, gas: 60000000 }, (error, txHash) => {
           if (error) {
-            console.error("checkNetting tx failed:", error.message);
-          } else {
-            console.log("checkNetting txHash", txHash);
+            console.error("checkNetting failed (off-chain transfers still saved):", error.message);
+            scheduleNextNetting();
+            return;
           }
+          console.log("checkNetting txHash", txHash);
           scheduleNextNetting();
         });
     } else {
@@ -257,11 +255,19 @@ app.get("/transfers/:householdAddress", (req, res) => {
 });
 
 /**
- * GET request not supported
+ * GET / — API info (no web UI on this port)
  */
-app.get("/", function(req, res, next) {
-  res.status(400);
-  res.end(req.method + " is not supported.\n");
+app.get("/", function(req, res) {
+  res.status(200).json({
+    service: "netting-entity",
+    message: "REST API only. Household dashboards: http://localhost:3000 and http://localhost:3010",
+    endpoints: {
+      "GET /network": "Renewable / non-renewable energy totals",
+      "GET /meterdelta?hash=&signature=": "Meter delta for signed household",
+      "GET /transfers/:address?from=": "Transfers for a household",
+      "PUT /energy/:householdAddress": "Submit signed meter reading"
+    }
+  });
 });
 
 /**

@@ -30,42 +30,52 @@ function App() {
     };
 
     const fetchData = async () => {
-      const fetchedData = await Promise.all([
-        fetchFromEndpoint(`/household-stats`),
-        fetchFromEndpoint(`/network-stats`),
-        fetchSensorData(),
-        fetchTransfers()
-      ])
-      .then(data => {
-        const latestSensor = data[2][0];
-        const meterChangeKWh = latestSensor
-          ? wsToKWh(latestSensor.produce - latestSensor.consume)
+      const safe = (promise, fallback) =>
+        promise.catch(err => {
+          console.error(err);
+          return fallback;
+        });
+
+      const [household, network, sensor, transferList] = await Promise.all([
+        safe(fetchFromEndpoint(`/household-stats`), {}),
+        safe(fetchFromEndpoint(`/network-stats`), {
+          renewableEnergy: 0,
+          nonRenewableEnergy: 0
+        }),
+        safe(fetchSensorData(), []),
+        safe(fetchTransfers(), [])
+      ]);
+
+      const householdObj =
+        household && typeof household === "object" ? household : {};
+      const meterChange =
+        sensor.length > 0
+          ? wsToKWh(Number(sensor[0].produce) - Number(sensor[0].consume))
           : 0;
 
-        return [
-          { ...data[0], value: wsToKWh(data[0].value) },
-          {
-            ...data[1],
-            renewableEnergy: wsToKWh(data[1].renewableEnergy),
-            nonRenewableEnergy: wsToKWh(data[1].nonRenewableEnergy)
-          },
-          data[2].map(entry => ({
-            ...entry,
-            produce: wsToKWh(entry.produce),
-            consume: wsToKWh(entry.consume)
-          })),
-          data[3].map(entry => ({
-            ...entry,
-            amount: wsToKWh(entry.amount)
-          })),
-          meterChangeKWh
-        ];
-      })
-      setHouseholdStats(fetchedData[0]);
-      setNetworkStats(fetchedData[1]);
-      setSensorData(fetchedData[2]);
-      setTransfers(fetchedData[3]);
-      setMeterChange(fetchedData[4])
+      setHouseholdStats({
+        ...householdObj,
+        value: wsToKWh(Number(householdObj.value) || 0)
+      });
+      setNetworkStats({
+        ...network,
+        renewableEnergy: wsToKWh(Number(network.renewableEnergy) || 0),
+        nonRenewableEnergy: wsToKWh(Number(network.nonRenewableEnergy) || 0)
+      });
+      setSensorData(
+        sensor.map(entry => ({
+          ...entry,
+          produce: wsToKWh(Number(entry.produce)),
+          consume: wsToKWh(Number(entry.consume))
+        }))
+      );
+      setTransfers(
+        (Array.isArray(transferList) ? transferList : []).map(entry => ({
+          ...entry,
+          amount: wsToKWh(Number(entry.amount))
+        }))
+      );
+      setMeterChange(meterChange);
     };
 
     fetchData();

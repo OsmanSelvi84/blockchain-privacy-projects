@@ -84,16 +84,6 @@ async function init() {
 
 init();
 
-const TRANSFER_SYNC_INTERVAL_MS = 10000;
-
-function syncTransfersFromNed() {
-  transferHandler.collectTransfers(config).catch(err => {
-    console.error("Background transfer sync:", err.message);
-  });
-}
-
-setInterval(syncTransfersFromNed, TRANSFER_SYNC_INTERVAL_MS);
-
 /**
  * function for retrieving meterDelta from ned-server and checks if it's the correct preimage for meterDelta. Needed for households to validate netting
  */
@@ -158,7 +148,6 @@ app.get("/sensor-stats", async (req, res) => {
  */
 app.get("/transfers", async (req, res) => {
   try {
-    await transferHandler.collectTransfers(config);
     const { from, to } = req.query;
     const fromQuery = from ? { timestamp: { $gte: parseInt(from) } } : {};
     const toQuery = to ? { timestamp: { $lte: parseInt(to) } } : {};
@@ -228,13 +217,13 @@ app.put("/sensor-stats", async (req, res) => {
 
     if (!nettingActive) {
       nettingActive = true;
+      await energyHandler.putMeterReading(
+        config,
+        web3,
+        utilityContract,
+        meterDelta
+      );
     }
-    await energyHandler.putMeterReading(
-      config,
-      web3,
-      utilityContract,
-      meterDelta
-    );
 
     await db.writeToDB(
       config.dbUrl,
@@ -256,6 +245,23 @@ app.put("/sensor-stats", async (req, res) => {
     res.status(500);
     res.send(err);
   }
+});
+
+/**
+ * GET / — API info (no web UI on this port)
+ */
+app.get("/", function(req, res) {
+  res.status(200).json({
+    service: "household-server",
+    message: "REST API only. Open the dashboard at http://localhost:3000 or http://localhost:3010",
+    endpoints: {
+      "GET /household-stats": "Current meter reading for this household",
+      "GET /sensor-stats?from=&to=": "Sensor history (optional unix ms)",
+      "GET /transfers?from=&to=": "Transfer history",
+      "GET /network-stats": "Network energy totals from netting entity",
+      "PUT /sensor-stats": "Sensor payload (used by mock-sensor)"
+    }
+  });
 });
 
 /**
@@ -288,4 +294,10 @@ app.listen(config.port, () => {
     `Household Server running at http://${config.host}:${config.port}/`
   );
   console.log(`I am authority node ${config.address}.`);
+
+  setInterval(() => {
+    transferHandler.collectTransfers(config).catch(err => {
+      console.error("sync transfers from NED:", err.message);
+    });
+  }, 25000);
 });

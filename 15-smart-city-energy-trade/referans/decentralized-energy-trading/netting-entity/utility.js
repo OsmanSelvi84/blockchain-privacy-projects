@@ -44,7 +44,7 @@ class Utility {
   getTransfers(hhAddress, fromDate = 0) {
     return this._householdExists(hhAddress)
       ? this.transfers
-          .filter(transfer => transfer.date > fromDate || fromDate === 0)
+          .filter(transfer => transfer.date >= fromDate)
           .filter(transfer => transfer.from === hhAddress || transfer.to === hhAddress)
       : [];
   }
@@ -99,7 +99,7 @@ class Utility {
       households.eFrom,
       households.hTo,
       households.eTo,
-      !households.isMoreAvailableThanDemanded
+      false
     );
 
     // updating data for transfer of remaining deltas
