@@ -29,13 +29,30 @@ Distributed trust model. No single party holds the full secret. The shares are s
 
 
 # 3. Requirements (software/tools) 💻
-- Python 3.12 (exact version required, reference library not compatible with 3.13+) ⚠️⚠️
+- Python 3.12 (exact version required, reference library not compatible with 3.13+) ⚠️
+- pip3
 - Node.js v24+
 - npm
 - WSL (Ubuntu 24)
 
 
 # 4. Installation 🚀
+
+### Install Python 3.12
+⚠️ Note: If Python 3.12 is unavailable via PPA, check the Troubleshooting section.
+- sudo add-apt-repository ppa:deadsnakes/ppa
+- sudo apt update
+- sudo apt install python3.12 python3.12-venv -y
+
+### Install pip
+- sudo apt install python3-pip -y
+
+### Install Node.js
+- curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+- source ~/.bashrc
+- nvm install --lts
+- nvm use --lts
+
 ### Clone the repo
 - git clone https://github.com/OsmanSelvi84/blockchain-privacy-projects.git
 - cd blockchain-privacy-projects
@@ -53,6 +70,7 @@ Distributed trust model. No single party holds the full secret. The shares are s
 
 
 # 5. How to Run (step by step) -> IMPORTANT 🛑
+
 ### Step 1: Start Hardhat node (keep this terminal running)
 - npx hardhat node
 
@@ -72,15 +90,27 @@ Distributed trust model. No single party holds the full secret. The shares are s
 ### Step 5: Run interactive Shamir demo (no blockchain needed)
 - python3 main.py
 
+### Step 6: Run comparison with reference
+- python3 compare.py
 
-# 6. Reference Implementation and Compareson 🔃
+(See Section 6 for reference installation instructions)
+
+
+# 6. Reference Implementation and Comparison 🔃
 - Repository: https://github.com/shea256/secret-sharing
 - ⚠️ Note: Reference library requires Python 3.12 or lower
-### If on Python 3.13+ (run compare.py in venv)
+
+### If on Python 3.12:
+- pip3 install secretsharing --break-system-packages
+- python3 compare.py
+
+### If on Python 3.13+:
 - python3.12 -m venv venv
 - source venv/bin/activate
-- pip3 install secretsharing --break-system-packages
-- Compare: python3 compare.py
+- pip install secretsharing web3
+- find venv/lib/python3.12/site-packages/secretsharing/ -name "*.py" -exec sed -i 's/long(/int(/g' {} \;
+- find venv/lib/python3.12/site-packages/secretsharing/ -name "*.py" -exec sed -i 's/isinstance(\(.*\), (int, long))/isinstance(\1, int)/g' {} \;
+- python3 compare.py
 
 
 # 7. Project Structure 🏗️
@@ -101,7 +131,6 @@ Distributed trust model. No single party holds the full secret. The shares are s
 ├── package.json
 └── tsconfig.json
 ```
-
 
 # 8. Test Cases ✅
 - **Test 1**: Normal split and reconstruct, secret matches after the full cycle
@@ -145,7 +174,7 @@ python3 scripts/deploy.py
 ### `web3` or `secretsharing` not found
 Dependencies not installed. Fix:
 ```bash
-pip install web3 secretsharing
+pip3 install web3 secretsharing --break-system-packages
 ```
 
 
