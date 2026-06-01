@@ -130,9 +130,8 @@ The terminal will first prompt you to mint and encrypt a completely new corporat
 * Provide cryptographic passphrase token: Type the passphrase to attempt decryption.
 
 ### 📈 Successful Execution 
-==================================================
+
 🔒 PHASE 1: DYNAMIC ON-CHAIN ASSET LOCKING (ENCRYPTION)
-==================================================
 Enter a unique Asset ID to lock (e.g., 202 or 999): 202
 Set the department policy constraint for this asset (e.g., 'tasarim' or 'finans'): finans
 Set the cryptographic passphrase for this asset: irem_secret_key
@@ -142,9 +141,7 @@ Enter the secure resource pointer/URI (e.g., ipfs://my-private-data): ipfs://my-
 [EVM State Transition]: Executing lockAssetWithPolicy for Asset ID 202...
 🟢 SUCCESS: Asset 202 is now cryptographically locked on-chain under the 'finans' policy!
 
-==================================================
 🔑 PHASE 2: DYNAMIC USER PROVISIONING & DECRYPTION
-==================================================
 1. Assign a department attribute token to the user (To PASS use 'finans', to FAIL use something else): finans
 2. Set attribute token lifetime status. Should it be valid? (yes / no): yes
 
@@ -153,7 +150,6 @@ Enter the secure resource pointer/URI (e.g., ipfs://my-private-data): ipfs://my-
 
 [Cryptographic Processing]: Contract evaluating state transitions on the EVM...
 
-=================== LIVE EVALUATION VERDICT ===================
+LIVE EVALUATION VERDICT 
 🟢 DECRYPTION GRANTED (ALLOWED: TRUE)
 📂 Unlocked IPFS Secure Varlık Pointer: DECRYPTION GRANTED. Payload: ipfs://my-private-data
-===============================================================
