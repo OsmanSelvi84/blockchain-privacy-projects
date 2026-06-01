@@ -116,7 +116,8 @@ module.exports = async (deployer, network, [authority]) => {
       break;
     }
     case "benchmark": {
-      const verifier = artifacts.require("verifier.sol");
+      // Requires contracts/Verifier.sol (Solc 0.6) — not used for authority / Ubuntu demo
+      const verifier = artifacts.require("Verifier");
       const web3 = web3Helper.initWeb3("benchmark");
       await web3.eth.personal.unlockAccount(address, password, null);
       const contractAddress = await deployer.deploy(dUtilityBenchmark)

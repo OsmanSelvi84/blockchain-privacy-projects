@@ -79,10 +79,14 @@ yarn setup-zokrates
 yarn update-contract-bytecodes
 ```
 
-If `contracts/verifier.sol` is missing before migrate, copy from backup:
+See [VERSIONS.md](VERSIONS.md) for locked tool versions. **Do not** copy `Verifier` into `contracts/` for normal migrate — it is Solidity 0.6 and breaks Truffle 0.5.2; the verifier is already in the Parity genesis chain.
+
+### Ubuntu one-shot setup
 
 ```bash
-cp zokrates-code/verifier.sol.backup contracts/verifier.sol
+nvm use 10
+npm config set python /usr/bin/python3.10
+bash scripts/ubuntu-setup.sh
 ```
 
 ---

@@ -2,7 +2,12 @@
   "name": "decentralized-energy-trading",
   "version": "1.0.0",
   "repository": "git@github.com:cp-ss2019/decentralized-energy-trading.git",
+  "engines": {
+    "node": ">=10.15.3 <11",
+    "yarn": ">=1.16.0 <2"
+  },
   "scripts": {
+    "postinstall": "node scripts/check-node.js",
     "compile-contracts": "truffle compile",
     "connect-docker-nodes": "node scripts/connect_nodes.js",
     "migrate-contracts": "truffle migrate",
@@ -22,7 +27,9 @@
     "run-ganache": "ganache-cli --account='0xdcb15ba5d2caf586c22f0414f527201d2fb2424c92ced3efacd742a34e5b0db2,100000000000000000000' -i 1234 -l 0x1fffffffffffff",
     "migrate-contracts-ganache": "truffle migrate --reset hard --network ganache",
     "prepare-verifier": "bash scripts/ensure-verifier.sh",
-    "migrate-contracts-authority": "yarn prepare-verifier && yarn compile-contracts && truffle migrate --reset hard --network authority --f 2",
+    "check-env": "node scripts/check-node.js && bash scripts/ubuntu-check.sh",
+    "ubuntu-setup": "bash scripts/ubuntu-setup.sh",
+    "migrate-contracts-authority": "truffle migrate --reset hard --network authority --f 2",
     "migrate-contracts:benchmark": "truffle migrate --reset hard --network benchmark",
     "test-parity-docker": "./scripts/run_docker_parity_tests.sh",
     "test-helpers": "mocha ./test/helpers/*.js",

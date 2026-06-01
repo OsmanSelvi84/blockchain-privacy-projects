@@ -42,13 +42,6 @@ const config = {
   meterReadingCollection: serverConfig.meterReadingCollection
 };
 
-// Set up the DB
-db.createDB(config.dbUrl, config.dbName, [
-  config.sensorDataCollection,
-  config.utilityDataCollection,
-  config.meterReadingCollection
-])
-
 let web3;
 let utilityContract;
 let latestBlockNumber;
@@ -81,8 +74,6 @@ async function init() {
     }
   );
 }
-
-init();
 
 /**
  * function for retrieving meterDelta from ned-server and checks if it's the correct preimage for meterDelta. Needed for households to validate netting
@@ -286,18 +277,29 @@ app.delete("/", function(req, res, next) {
   );
 });
 
-/**
- * Let the server listen to incoming requests on the given IP:Port
- */
-app.listen(config.port, () => {
-  console.log(
-    `Household Server running at http://${config.host}:${config.port}/`
-  );
-  console.log(`I am authority node ${config.address}.`);
+async function start() {
+  await db.createDB(config.dbUrl, config.dbName, [
+    config.sensorDataCollection,
+    config.utilityDataCollection,
+    config.meterReadingCollection
+  ]);
+  await init();
 
-  setInterval(() => {
-    transferHandler.collectTransfers(config).catch(err => {
-      console.error("sync transfers from NED:", err.message);
-    });
-  }, 25000);
+  app.listen(config.port, () => {
+    console.log(
+      `Household Server running at http://${config.host}:${config.port}/`
+    );
+    console.log(`I am authority node ${config.address}.`);
+
+    setInterval(() => {
+      transferHandler.collectTransfers(config).catch(err => {
+        console.error("sync transfers from NED:", err.message);
+      });
+    }, 25000);
+  });
+}
+
+start().catch(err => {
+  console.error("Household server failed to start:", err.message || err);
+  process.exit(1);
 });
