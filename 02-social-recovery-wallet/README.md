@@ -101,35 +101,35 @@ This project demonstrates how blockchain technology can be used to implement a s
 
 ## Reference Implementation
 
-For comparison and learning purposes, I studied the following open-source social recovery wallet implementation:
+For comparison and learning purposes, I studied the following social recovery wallet implementation:
 
 Reference Repository:
-https://github.com/alymurtazamemon/guardian-social-recovery-wallet-solidity
+https://github.com/ldsanchez/smart-contract-wallet-se
 
 ### Why This Reference Was Selected
 
-This repository was selected because it is directly related to the Social Recovery Wallet concept and includes guardian-based wallet recovery using Solidity.
+This repository demonstrates a smart contract wallet with social recovery mechanisms. It addresses the problem of wallet recovery through trusted participants and account recovery workflows, which closely matches the objectives of my assigned project topic.
 
 ### Comparison With My Implementation
 
 Similarities:
 
-- Both projects use guardian-based recovery.
-- Both projects use Solidity smart contracts.
-- Both projects focus on wallet ownership recovery.
+- Both projects focus on social recovery concepts.
+- Both projects aim to solve the private key loss problem.
+- Both implementations use trusted participants during the recovery process.
+- Both projects are blockchain-based wallet recovery solutions.
 
 Differences:
 
-- My implementation uses a simplified threshold-based recovery mechanism.
-- My implementation demonstrates a 2-of-3 guardian recovery model.
-- My implementation includes a custom Hardhat demo script for ownership transfer demonstration.
+- My implementation uses a guardian-based threshold approval mechanism.
+- My project demonstrates a 2-of-3 guardian recovery scenario.
+- My implementation focuses on simplicity and educational demonstration.
+- My project includes a dedicated Hardhat demo script that shows the complete recovery workflow.
 
 ### Reference Setup
 
 ```bash
-git clone https://github.com/alymurtazamemon/guardian-social-recovery-wallet-solidity.git
-cd guardian-social-recovery-wallet-solidity
-npm install
+git clone https://github.com/ldsanchez/smart-contract-wallet-se.git
 
 ## Author
 
