@@ -110,6 +110,7 @@ Distributed trust model. No single party holds the full secret. The shares are s
 - pip install secretsharing web3
 - find venv/lib/python3.12/site-packages/secretsharing/ -name "*.py" -exec sed -i 's/long(/int(/g' {} \;
 - find venv/lib/python3.12/site-packages/secretsharing/ -name "*.py" -exec sed -i 's/isinstance(\(.*\), (int, long))/isinstance(\1, int)/g' {} \;
+- find venv/lib/python3.12/site-packages/secretsharing/ -name "*.py" -exec sed -i "s/int(byte_from_entropy.encode('hex'), 16)/int(byte_from_entropy.hex(), 16)/g" {} \;
 - python3 compare.py
 
 
@@ -150,6 +151,7 @@ source venv/bin/activate
 pip install secretsharing web3
 find venv/lib/python3.12/site-packages/secretsharing/ -name "*.py" -exec sed -i 's/long(/int(/g' {} \;
 find venv/lib/python3.12/site-packages/secretsharing/ -name "*.py" -exec sed -i 's/isinstance(\(.*\), (int, long))/isinstance(\1, int)/g' {} \;
+find venv/lib/python3.12/site-packages/secretsharing/ -name "*.py" -exec sed -i "s/int(byte_from_entropy.encode('hex'), 16)/int(byte_from_entropy.hex(), 16)/g" {} \;
 ```
 
 ### `No such file or directory: artifacts/...`
