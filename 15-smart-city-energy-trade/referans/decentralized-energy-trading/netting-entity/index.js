@@ -9,6 +9,7 @@ const hhHandler = require("./household-handler");
 const zkHandler = require("./zk-handler");
 const web3Helper = require("../helpers/web3");
 const contractHelper = require("../helpers/contract");
+const truffleConfig = require("../truffle-config");
 
 const serverConfig = require("../ned-server-config");
 
@@ -42,6 +43,13 @@ let utilityContract;
 let latestBlockNumber;
 
 async function init() {
+  const netCfg = truffleConfig.networks[config.network];
+  if (!netCfg) {
+    throw new Error(`Unknown network "${config.network}" in truffle-config.js`);
+  }
+  console.log(
+    `NED chain: ${config.network} (${netCfg.websockets ? "ws" : "http"}://${netCfg.host}:${netCfg.port})`
+  );
   web3 = web3Helper.initWeb3(config.network);
   latestBlockNumber = await web3.eth.getBlockNumber();
   // Off-chain utility instance
@@ -56,20 +64,26 @@ async function init() {
   );
   shell.cd("zokrates-code");
 
-  utilityContract.events.NettingSuccess(
-    {
-      fromBlock: latestBlockNumber
-    },
-    async (error, event) => {
-      if (error) {
-        console.error(error.msg);
-        throw error;
+  if (netCfg.websockets) {
+    utilityContract.events.NettingSuccess(
+      {
+        fromBlock: latestBlockNumber
+      },
+      async (error, event) => {
+        if (error) {
+          console.error(error.message || error);
+          return;
+        }
+        console.log("Netting Successful!");
+        latestBlockNumber = event.blockNumber;
+        utility = utilityAfterNetting;
       }
-      console.log("Netting Successful!");
-      latestBlockNumber = event.blockNumber;
-      utility = utilityAfterNetting;
-    }
-  );
+    );
+  } else {
+    console.log(
+      "HTTP RPC: skipping NettingSuccess subscription (use -n authority_ws for WebSocket)."
+    );
+  }
 
   const scheduleNextNetting = () => {
     console.log(`Sleep for ${config.nettingInterval}ms ...`);
