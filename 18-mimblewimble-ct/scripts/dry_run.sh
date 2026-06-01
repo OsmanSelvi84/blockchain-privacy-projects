@@ -7,6 +7,9 @@
 
 set -u
 
+# Never let Hardhat's first-run telemetry question block the dry run.
+export HARDHAT_DISABLE_TELEMETRY_PROMPT=true
+
 # Resolve paths relative to this script's location.
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT="$(cd "$SCRIPT_DIR/.." && pwd)"

@@ -15,6 +15,8 @@
 # DEMO_NOPAUSE=1 to run straight through.
 
 set -u
+# Never let Hardhat's first-run telemetry question interrupt the live demo.
+export HARDHAT_DISABLE_TELEMETRY_PROMPT=true
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT="$(cd "$SCRIPT_DIR/.." && pwd)"
 cd "$PROJECT"
