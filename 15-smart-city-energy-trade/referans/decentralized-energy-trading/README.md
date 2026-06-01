@@ -163,7 +163,13 @@ If successful:
 Set verifier contract address ... done
 ```
 
-If migrate fails on `setVerifier`, the chain was partially configured — run `docker compose down -v` in `parity-authority` and migrate again.
+If migrate fails on `setVerifier`, the chain was partially configured — run:
+
+```bash
+bash scripts/reset-parity-and-migrate.sh
+```
+
+Diagnose first: `bash scripts/diagnose-chain.sh`
 
 ---
 
