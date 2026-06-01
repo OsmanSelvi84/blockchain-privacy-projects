@@ -1,0 +1,22 @@
+node_modules/
+artifacts/
+cache/
+coverage/
+# build/
+typechain-types/
+
+# ZK build artifacts
+# *.r1cs
+# *.sym
+# *.ptau
+# *.zkey
+# verification_key.json
+
+# Sensitive
+deployedAddresses.json
+.env
+.env.local
+
+# OS
+.DS_Store
+*.log

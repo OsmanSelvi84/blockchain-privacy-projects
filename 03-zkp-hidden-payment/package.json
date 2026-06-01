@@ -1,0 +1,41 @@
+{
+  "name": "zkp-hidden-payment",
+  "version": "1.0.0",
+  "description": "ZKP Hidden Payment - break the on-chain link between sender and receiver using zk-SNARKs",
+  "main": "index.js",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "node": "hardhat node",
+    "deploy:local": "hardhat run scripts/deploy.js --network localhost",
+    "deposit": "node scripts/deposit.js",
+    "withdraw": "node scripts/withdraw.js",
+    "reset": "bash scripts/reset_project.sh",
+    "build": "bash scripts/setup.sh"
+  },
+  "keywords": [
+    "zkp",
+    "zk-snark",
+    "groth16",
+    "circom",
+    "hardhat",
+    "privacy",
+    "ethereum"
+  ],
+  "author": "",
+  "license": "MIT",
+  "type": "module",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "hardhat": "^2.22.0"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.9.6",
+    "circomlib": "^2.0.5",
+    "circomlibjs": "^0.1.7",
+    "dotenv": "^16.4.5",
+    "ethers": "^6.13.0",
+    "poseidon-solidity": "^0.0.5",
+    "snarkjs": "^0.7.4"
+  }
+}
