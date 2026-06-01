@@ -11,13 +11,11 @@ if ! command -v node >/dev/null; then
 fi
 node scripts/check-node.js
 
-echo "=== Python for node-gyp (Ubuntu) ==="
-if command -v python3.10 >/dev/null; then
-  npm config set python /usr/bin/python3.10
-  echo "npm python -> python3.10"
-fi
+echo "=== Python for node-gyp (must be <= 3.10) ==="
+bash scripts/install-python-for-nodegyp.sh
 
-echo "=== yarn install ==="
+echo "=== yarn install (clean if previous install failed) ==="
+rm -rf node_modules
 yarn install
 
 echo "=== Docker: Mongo + Parity ==="
