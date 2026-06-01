@@ -11,12 +11,11 @@ function verifyRecovery(recovered, original) {
   return recovered && recovered.trim() !== '' && recovered === original;
 }
 
-divider('SETUP: SECRET SHARING ESCROW SYSTEM');
-
-const ORIGINAL_SECRET = '0xABC123Def456Ghi789PrivateWalletKeyBBSSE';
+const ORIGINAL_SECRET = process.argv[2] || '0xABC123Def456Ghi789PrivateWalletKeyBBSSE';
 const TOTAL_SHARES    = 5;
 const THRESHOLD       = 3;
 
+divider('SETUP: SECRET SHARING ESCROW SYSTEM');
 console.log('\n  Secret   : ' + ORIGINAL_SECRET);
 console.log('  Shares   : ' + TOTAL_SHARES + ' parties');
 console.log('  Threshold: ' + THRESHOLD + ' parties required for reconstruction');
@@ -38,9 +37,7 @@ const TRUSTEES = {
 
 console.log('\n  Each trustee receives one share:\n');
 Object.entries(TRUSTEES).forEach(function(entry, i) {
-  var name  = entry[0];
-  var share = entry[1];
-  console.log('  [Share ' + (i+1) + '] ' + name + ': ' + share.substring(0, 20) + '...');
+  console.log('  [Share ' + (i+1) + '] ' + entry[0] + ': ' + entry[1].substring(0, 20) + '...');
 });
 console.log('\n  Individual shares are mathematically meaningless alone.');
 
@@ -49,7 +46,7 @@ console.log('');
 console.log('  Escrow.sol enforces the trust model on-chain:');
 console.log('  1. Owner deploys contract with threshold=' + THRESHOLD + ' and ' + TOTAL_SHARES + ' trustee addresses.');
 console.log('  2. Owner calls initiateRecovery() to start a recovery session.');
-console.log('  3. Each trustee calls approveRecovery() — recorded on-chain.');
+console.log('  3. Each trustee calls approveRecovery() -- recorded on-chain.');
 console.log('  4. When approvalCount >= ' + THRESHOLD + ', contract emits RecoverySuccess().');
 console.log('  5. Off-chain: approved trustees combine shares to reconstruct the secret.');
 
@@ -64,7 +61,6 @@ if (verifyRecovery(failedStr, ORIGINAL_SECRET)) {
 } else {
   console.log('  Result: FAILED (expected)');
   console.log('  Reason: Shamir produces cryptographic garbage with insufficient shares.');
-  console.log('  Garbage output: "' + failedStr.substring(0, 30) + '..."');
   console.log('  On-chain: approvalCount=2 < threshold(' + THRESHOLD + '). Contract rejects.');
 }
 
@@ -99,12 +95,12 @@ try {
 divider('SUMMARY');
 console.log('');
 console.log('  Shamir Secret Sharing (' + THRESHOLD + '-of-' + TOTAL_SHARES + '):');
-console.log('  Shares available  |  Reconstruct?');
-console.log('  1 of ' + TOTAL_SHARES + '           |  NO  -- random noise');
-console.log('  2 of ' + TOTAL_SHARES + '           |  NO  -- random noise');
-console.log('  3 of ' + TOTAL_SHARES + ' (threshold)|  YES -- exact secret');
-console.log('  4 of ' + TOTAL_SHARES + '           |  YES -- exact secret');
-console.log('  5 of ' + TOTAL_SHARES + '           |  YES -- exact secret');
+console.log('  Shares available   |  Reconstruct?');
+console.log('  1 of ' + TOTAL_SHARES + '             |  NO  -- random noise');
+console.log('  2 of ' + TOTAL_SHARES + '             |  NO  -- random noise');
+console.log('  3 of ' + TOTAL_SHARES + ' (threshold) |  YES -- exact secret');
+console.log('  4 of ' + TOTAL_SHARES + '             |  YES -- exact secret');
+console.log('  5 of ' + TOTAL_SHARES + '             |  YES -- exact secret');
 console.log('');
 console.log('  Privacy concept: Distributed Trust Model');
 console.log('  - No single party holds the complete secret.');
