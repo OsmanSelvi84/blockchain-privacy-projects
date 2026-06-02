@@ -1,46 +1,53 @@
-# Comprehensive Testing & Evaluation Guide
+# GDPR Privacy-Preserving Consent Contract on Ethereum
 
-This document provides step-by-step instructions for the instructor to independently test and execute both the **Original Implementation** and the **Academic Reference Implementation** under identical functional scenarios.
+This project implements a decentralized, GDPR/KVKK-compliant consent management system using Ethereum smart contracts. It provides data subjects (users) full control over their personal data, supporting clear consent granting, purpose restriction, and the "Right to be Forgotten" (data erasure) on-chain.
 
----
+## 👥 Branch Information
+* **Assigned Student Branch:** `students/210304014-meryem-burkut`
+* **Project Folder:** `11-gdpr-consent-contract/`
 
-## 🛠️ Test Setup Parameters (Identical for Both)
-To execute the tests, please use two different accounts from the Remix Account dropdown:
-* **Account 1 (Data Subject / User):** `0x5B38Da6a701c568545dCfcB03FcB875f56beddC4`
-* **Account 2 (Data Controller / Hospital):** `0xAb843b970116094144312657371d7Eba11513040`
-
-### 📥 Exact Deploy Input Parameters:
-When clicking Deploy, paste the following parameters directly into the deployment fields:
-* `_dataController`: `0xAb843b970116094144312657371d7Eba11513040` (Account 2)
-* `_recipients`: `["0xAb843b970116094144312657371d7Eba11513040"]`
-* `_data`: `12345`
-* `duration`: `86400`
-* `_defaultPurposes`: `[1, 2]`
+## 🏛️ Project Architecture
+The implementation follows a secure, two-layer smart contract structure:
+1. **CollectionConsent.sol (Original Implementation):** Developed from scratch using modern **Solidity 0.8.20**. Manages the explicit initial consent between the Data Subject and the Data Controller.
+2. **ProcessingConsent.sol (Original Implementation):** Handles sub-consent workflows with external third-party Data Processors.
 
 ---
 
-## 🧪 Scenario A: Testing the Original Implementation (Solidity 0.8.20)
+## 📚 Academic Reference Implementation
 
-1. Select `CollectionConsent.sol` and compile using version **0.8.20**.
-2. Switch to **Account 1** and click **Deploy** with the parameters above.
-3. **State 1 (Initial Verification):** Click `verify()`. Output will be **`false`** (Controller signature is missing).
-4. **State 2 (Granting Consent):** Switch to **Account 2** (Controller). Click `grantConsent()`.
-5. **State 3 (Active State):** Switch back to **Account 1**. Click `verify()`. Output will now be **`true`**.
-6. **State 4 (Right to be Forgotten):** Click `eraseData()`. The operational flags will update.
-7. **State 5 (Revocation):** Click `revokeConsent()`. Click `verify()` again. Output will return to **`false`**.
+As required by the evaluation guidelines, a runnable reference implementation has been studied and integrated for independent verification and functional equivalence testing.
+
+* **Reference Repository Link:** [BC_GDPR-Compliant_PDManagement_System](https://github.com/toful/BC_GDPR-Compliant_PDManagement_System)
+* **Reference Files in this Branch:** `CollectionConsent_Ref.sol` and `ProcessingConsent_Ref.sol`
+* **Reference Compiler Target:** Solidity `>=0.4.22 <0.7.0` (Tested successfully on `0.6.12`)
 
 ---
 
-## 🧪 Scenario B: Testing the Reference Implementation (Solidity 0.6.12)
-
-1. Select `CollectionConsent_Ref.sol` and compile using version **0.6.12** (Ensure SPDX warning is ignored or resolved).
-2. Switch to **Account 1** and click **Deploy** using the exact same parameters.
-3. **State 1 (Initial Verification):** Under Deployed Contracts, expand the instance and click `verify()`. Output will be **`false`**.
-4. **State 2 (Granting Consent):** Switch to **Account 2** (Controller). Click `grantConsent()`.
-5. **State 3 (Active State):** Switch back to **Account 1**. Click `verify()`. Output will match and return **`true`**.
-6. **State 4 & 5 (Data Subject Control):** Click `eraseData()` or `revokeConsent()`. Click `verify()`. Output cleanly resets to **`false`**.
+## ⚙️ Environment & Required Software
+To run and evaluate both implementations, the instructor only needs an internet browser:
+* **IDE:** [Remix Online IDE](https://remix.ethereum.org/)
+* **Compiler Sürümü (Original):** `0.8.20+commit.a1b79de6`
+* **Compiler Sürümü (Reference):** `0.6.12+commit.27d51765`
+* **Environment:** Remix VM (Osaka) or any active Remix Virtual Local Environment.
 
 ---
 
-## 🎯 Functional Equivalence Verdict
-Both smart contracts respond identically to the same state changes and actor signatures, completely satisfying **Part A (50 Points)** of the evaluation criteria.
+## 🚀 Deployment & Build Instructions
+
+1. Clone the repository and switch to the student branch.
+2. Open **Remix IDE** and load the workspace.
+3. **To Run Original Implementation:**
+   * Select `CollectionConsent.sol`.
+   * Set compiler to `0.8.20`.
+   * Deploy with parameters.
+4. **To Run Reference Implementation:**
+   * Select `CollectionConsent_Ref.sol`.
+   * Set compiler to `0.6.12`.
+   * Deploy with parameters.
+
+---
+
+## 🧪 Comprehensive Evaluation & Testing
+To see the step-by-step 5-state validation scenario, test inputs/outputs, and how to verify both implementations independently without errors, please check our dedicated test documentation:
+
+👉 **[Go to Detailed Test Guide (test/README.md)](./test/README.md)**
