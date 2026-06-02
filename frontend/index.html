@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>eHealth Dynamic Consent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0d1117;
+        --surface: #161b22;
+        --surface-2: #1c2128;
+        --border: #30363d;
+        --text: #e6edf3;
+        --text-dim: #8b949e;
+        --accent: #2ea043;
+        --accent-hover: #3fb950;
+        --warning: #d29922;
+        --danger: #f85149;
+        --info: #58a6ff;
+        --mono: 'IBM Plex Mono', 'Courier New', monospace;
+        --sans: 'IBM Plex Sans', system-ui, sans-serif;
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: var(--sans);
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.5;
+        min-height: 100vh;
+        padding: 2rem;
+    }
+
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    /* --- Header --- */
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 2rem;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+    }
+
+    h1 .accent {
+        color: var(--accent);
+        font-family: var(--mono);
+        font-weight: 500;
+    }
+
+    .wallet-box {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .wallet-status {
+        font-family: var(--mono);
+        font-size: 0.85rem;
+        color: var(--text-dim);
+    }
+
+    .wallet-status.connected {
+        color: var(--accent);
+    }
+
+    /* --- Status Card --- */
+    .status-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 1rem 1.25rem;
+        margin-bottom: 1.5rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1rem;
+    }
+
+    .status-item .label {
+        font-size: 0.75rem;
+        color: var(--text-dim);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.25rem;
+    }
+
+    .status-item .value {
+        font-family: var(--mono);
+        font-size: 0.85rem;
+        word-break: break-all;
+    }
+
+    /* --- Tabs --- */
+    .tabs {
+        display: flex;
+        gap: 0.25rem;
+        margin-bottom: 1.5rem;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .tab-btn {
+        background: none;
+        border: none;
+        color: var(--text-dim);
+        font-family: var(--sans);
+        font-size: 0.95rem;
+        font-weight: 500;
+        padding: 0.75rem 1.25rem;
+        cursor: pointer;
+        position: relative;
+        bottom: -1px;
+        border-bottom: 2px solid transparent;
+        transition: color 0.15s;
+    }
+
+    .tab-btn:hover {
+        color: var(--text);
+    }
+
+    .tab-btn.active {
+        color: var(--accent);
+        border-bottom-color: var(--accent);
+    }
+
+    /* --- Panels --- */
+    .panel {
+        display: none;
+    }
+
+    .panel.active {
+        display: block;
+        animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(4px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .card h2 {
+        font-size: 1.05rem;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .card .desc {
+        font-size: 0.85rem;
+        color: var(--text-dim);
+        margin-bottom: 1.25rem;
+    }
+
+    /* --- Form Elements --- */
+    .form-grid {
+        display: grid;
+        gap: 0.75rem;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 0.75rem;
+    }
+
+    label {
+        display: block;
+        font-size: 0.8rem;
+        color: var(--text-dim);
+        margin-bottom: 0.35rem;
+        font-weight: 500;
+    }
+
+    input, select {
+        width: 100%;
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        color: var(--text);
+        font-family: var(--mono);
+        font-size: 0.9rem;
+        padding: 0.6rem 0.75rem;
+        transition: border-color 0.15s;
+    }
+
+    input:focus, select:focus {
+        outline: none;
+        border-color: var(--accent);
+    }
+
+    input::placeholder {
+        color: var(--text-dim);
+        opacity: 0.6;
+    }
+
+    select {
+        cursor: pointer;
+    }
+
+    button {
+        background: var(--accent);
+        color: var(--bg);
+        border: none;
+        border-radius: 6px;
+        font-family: var(--sans);
+        font-weight: 600;
+        font-size: 0.9rem;
+        padding: 0.65rem 1.25rem;
+        cursor: pointer;
+        transition: background 0.15s, transform 0.05s;
+    }
+
+    button:hover:not(:disabled) {
+        background: var(--accent-hover);
+    }
+
+    button:active:not(:disabled) {
+        transform: translateY(1px);
+    }
+
+    button:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+
+    button.secondary {
+        background: transparent;
+        color: var(--text);
+        border: 1px solid var(--border);
+    }
+
+    button.secondary:hover:not(:disabled) {
+        background: var(--surface-2);
+        border-color: var(--text-dim);
+    }
+
+    button.danger {
+        background: var(--danger);
+        color: var(--text);
+    }
+
+    button.danger:hover:not(:disabled) {
+        background: #e34c44;
+    }
+
+    button.full {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+
+    /* --- Log --- */
+    .log-section {
+        margin-top: 2rem;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+    }
+
+    .log-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.85rem 1.25rem;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .log-header h3 {
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--text-dim);
+    }
+
+    .log-body {
+        padding: 1rem 1.25rem;
+        max-height: 280px;
+        overflow-y: auto;
+        font-family: var(--mono);
+        font-size: 0.82rem;
+    }
+
+    .log-entry {
+        padding: 0.4rem 0;
+        border-bottom: 1px solid var(--surface-2);
+        display: grid;
+        grid-template-columns: 90px 70px 1fr;
+        gap: 0.75rem;
+        align-items: start;
+    }
+
+    .log-entry:last-child {
+        border-bottom: none;
+    }
+
+    .log-time {
+        color: var(--text-dim);
+    }
+
+    .log-level {
+        font-weight: 600;
+        padding: 0 0.4rem;
+        border-radius: 3px;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        text-align: center;
+        line-height: 1.6;
+    }
+
+    .log-level.info { background: var(--info); color: var(--bg); }
+    .log-level.ok { background: var(--accent); color: var(--bg); }
+    .log-level.warn { background: var(--warning); color: var(--bg); }
+    .log-level.err { background: var(--danger); color: var(--text); }
+
+    .log-msg {
+        word-break: break-word;
+        color: var(--text);
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 0.15rem 0.5rem;
+        font-size: 0.7rem;
+        font-family: var(--mono);
+        font-weight: 500;
+        border-radius: 3px;
+        background: var(--surface-2);
+        color: var(--text-dim);
+        border: 1px solid var(--border);
+    }
+
+    .result-box {
+        margin-top: 1rem;
+        padding: 1rem;
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        font-family: var(--mono);
+        font-size: 0.85rem;
+        white-space: pre-wrap;
+        word-break: break-all;
+    }
+
+    .result-box.ok {
+        border-color: var(--accent);
+    }
+
+    .result-box.err {
+        border-color: var(--danger);
+    }
+
+    footer {
+        margin-top: 3rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border);
+        text-align: center;
+        font-size: 0.8rem;
+        color: var(--text-dim);
+    }
+</style>
+</head>
+<body>
+<div class="container">
+
+    <header>
+        <h1>eHealth <span class="accent">/</span> Dynamic Consent</h1>
+        <div class="wallet-box">
+            <span id="wallet-status" class="wallet-status">Cuzdan baglanmadi</span>
+            <button id="connect-btn">MetaMask Bagla</button>
+        </div>
+    </header>
+
+    <div class="status-card">
+        <div class="status-item">
+            <div class="label">Kontrat Adresi</div>
+            <div class="value" id="contract-addr">—</div>
+        </div>
+        <div class="status-item">
+            <div class="label">Aktif Hesap</div>
+            <div class="value" id="active-addr">—</div>
+        </div>
+        <div class="status-item">
+            <div class="label">Network</div>
+            <div class="value" id="network-info">—</div>
+        </div>
+    </div>
+
+    <nav class="tabs">
+        <button class="tab-btn active" data-tab="patient">Hasta Paneli</button>
+        <button class="tab-btn" data-tab="researcher">Arastirmaci Paneli</button>
+        <button class="tab-btn" data-tab="check">Onay Sorgula</button>
+    </nav>
+
+    <!-- ============= PATIENT PANEL ============= -->
+    <section id="panel-patient" class="panel active">
+
+        <div class="card">
+            <h2>Hasta Kayit</h2>
+            <p class="desc">Sistemde hasta olarak yer almak icin bir kerelik kayit gereklidir.</p>
+            <button onclick="registerPatient()">Kayit Ol</button>
+            <div id="patient-register-result"></div>
+        </div>
+
+        <div class="card">
+            <h2>Onay Ver</h2>
+            <p class="desc">Belirli bir arastirmaciya, belirli veri tipi ve amac icin sureli onay ver.</p>
+            <div class="form-grid">
+                <div>
+                    <label>Arastirmaci adresi (0x...)</label>
+                    <input id="grant-researcher" placeholder="0x..." />
+                </div>
+                <div class="form-row">
+                    <div>
+                        <label>Veri tipi</label>
+                        <select id="grant-datatype">
+                            <option value="0">BloodTest (Kan tahlili)</option>
+                            <option value="1">Xray (Rontgen)</option>
+                            <option value="2">Genetic (Genetik)</option>
+                            <option value="3">MRI (MR)</option>
+                            <option value="4">Prescription (Recete)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Amac</label>
+                        <select id="grant-purpose">
+                            <option value="0">Treatment (Tedavi)</option>
+                            <option value="1">Research (Arastirma)</option>
+                            <option value="2">Insurance (Sigorta)</option>
+                            <option value="3">Statistical (Istatistik)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Sure (gun)</label>
+                        <input id="grant-duration" type="number" min="0" max="3650" value="30" />
+                    </div>
+                </div>
+                <button onclick="grantConsent()">Onay Ver</button>
+            </div>
+            <div id="grant-result"></div>
+        </div>
+
+        <div class="card">
+            <h2>Onay Geri Cek</h2>
+            <p class="desc">Daha once verdigin bir onayi geri cek. <span class="badge">GDPR right to withdraw</span></p>
+            <div class="form-grid">
+                <div>
+                    <label>Arastirmaci adresi (0x...)</label>
+                    <input id="revoke-researcher" placeholder="0x..." />
+                </div>
+                <div class="form-row">
+                    <div>
+                        <label>Veri tipi</label>
+                        <select id="revoke-datatype">
+                            <option value="0">BloodTest</option>
+                            <option value="1">Xray</option>
+                            <option value="2">Genetic</option>
+                            <option value="3">MRI</option>
+                            <option value="4">Prescription</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Amac</label>
+                        <select id="revoke-purpose">
+                            <option value="0">Treatment</option>
+                            <option value="1">Research</option>
+                            <option value="2">Insurance</option>
+                            <option value="3">Statistical</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="danger" onclick="revokeConsent()">Onayi Geri Cek</button>
+            </div>
+            <div id="revoke-result"></div>
+        </div>
+
+    </section>
+
+    <!-- ============= RESEARCHER PANEL ============= -->
+    <section id="panel-researcher" class="panel">
+
+        <div class="card">
+            <h2>Arastirmaci Kayit</h2>
+            <p class="desc">Sistemde arastirmaci olarak yer almak icin ad ve kurum bilgilerini gir.</p>
+            <div class="form-grid">
+                <div>
+                    <label>Ad / Unvan</label>
+                    <input id="researcher-name" placeholder="Dr. Ayse Yilmaz" />
+                </div>
+                <div>
+                    <label>Kurum</label>
+                    <input id="researcher-institution" placeholder="Istanbul Tip Fakultesi" />
+                </div>
+                <button onclick="registerResearcher()">Kayit Ol</button>
+            </div>
+            <div id="researcher-register-result"></div>
+        </div>
+
+        <div class="card">
+            <h2>Bir Hastanin Verdigi Onayi Goruntule</h2>
+            <p class="desc">Erisim oncesi spesifik bir onayin detaylarini kontrol et.</p>
+            <div class="form-grid">
+                <div>
+                    <label>Hasta adresi (0x...)</label>
+                    <input id="researcher-patient" placeholder="0x..." />
+                </div>
+                <div class="form-row">
+                    <div>
+                        <label>Veri tipi</label>
+                        <select id="researcher-datatype">
+                            <option value="0">BloodTest</option>
+                            <option value="1">Xray</option>
+                            <option value="2">Genetic</option>
+                            <option value="3">MRI</option>
+                            <option value="4">Prescription</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Amac</label>
+                        <select id="researcher-purpose">
+                            <option value="0">Treatment</option>
+                            <option value="1">Research</option>
+                            <option value="2">Insurance</option>
+                            <option value="3">Statistical</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="secondary" onclick="getMyConsent()">Detay Sorgula</button>
+            </div>
+            <div id="my-consent-result"></div>
+        </div>
+
+    </section>
+
+    <!-- ============= CHECK PANEL ============= -->
+    <section id="panel-check" class="panel">
+        <div class="card">
+            <h2>Onay Kontrolu</h2>
+            <p class="desc">Bir hastanin, bir arastirmaciya, belirli veri+amac kombinasyonu icin <strong>su an gecerli</strong> onayi var mi?</p>
+            <div class="form-grid">
+                <div class="form-row">
+                    <div>
+                        <label>Hasta adresi</label>
+                        <input id="check-patient" placeholder="0x..." />
+                    </div>
+                    <div>
+                        <label>Arastirmaci adresi</label>
+                        <input id="check-researcher" placeholder="0x..." />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div>
+                        <label>Veri tipi</label>
+                        <select id="check-datatype">
+                            <option value="0">BloodTest</option>
+                            <option value="1">Xray</option>
+                            <option value="2">Genetic</option>
+                            <option value="3">MRI</option>
+                            <option value="4">Prescription</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Amac</label>
+                        <select id="check-purpose">
+                            <option value="0">Treatment</option>
+                            <option value="1">Research</option>
+                            <option value="2">Insurance</option>
+                            <option value="3">Statistical</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="secondary" onclick="checkConsent()">Onay Var Mi?</button>
+            </div>
+            <div id="check-result"></div>
+        </div>
+    </section>
+
+    <!-- ============= LOG ============= -->
+    <div class="log-section">
+        <div class="log-header">
+            <h3>Olay Akisi</h3>
+            <button class="secondary" onclick="clearLog()" style="font-size: 0.75rem; padding: 0.3rem 0.7rem;">Temizle</button>
+        </div>
+        <div class="log-body" id="log-body">
+            <div class="log-entry">
+                <span class="log-time">--:--:--</span>
+                <span class="log-level info">init</span>
+                <span class="log-msg">Sayfa yuklendi. MetaMask'i baglayin.</span>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        eHealth Dynamic Consent · Solidity 0.8.20 · Hardhat · Ethers.js v6
+    </footer>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.4/ethers.umd.min.js"></script>
+<script>
+    // ============================================================
+    //                       STATE
+    // ============================================================
+    let provider = null;
+    let signer = null;
+    let contract = null;
+    let contractInfo = null;
+
+    // ============================================================
+    //                       UTILS
+    // ============================================================
+    function log(msg, level = 'info') {
+        const time = new Date().toTimeString().slice(0, 8);
+        const body = document.getElementById('log-body');
+        const entry = document.createElement('div');
+        entry.className = 'log-entry';
+        entry.innerHTML = `
+            <span class="log-time">${time}</span>
+            <span class="log-level ${level}">${level}</span>
+            <span class="log-msg">${msg}</span>
+        `;
+        body.insertBefore(entry, body.firstChild);
+    }
+
+    function clearLog() {
+        document.getElementById('log-body').innerHTML = '';
+        log('Log temizlendi', 'info');
+    }
+
+    function showResult(elementId, message, ok = true) {
+        const el = document.getElementById(elementId);
+        el.innerHTML = `<div class="result-box ${ok ? 'ok' : 'err'}">${message}</div>`;
+    }
+
+    function shortAddr(addr) {
+        if (!addr) return '—';
+        return addr.slice(0, 6) + '...' + addr.slice(-4);
+    }
+
+    function parseError(e) {
+        if (e?.reason) return e.reason;
+        if (e?.data?.message) return e.data.message;
+        if (e?.shortMessage) return e.shortMessage;
+        if (e?.message) {
+            const m = e.message.match(/reverted with custom error '(\w+)/);
+            if (m) return `Kontrat hatasi: ${m[1]}`;
+            return e.message.split('\n')[0];
+        }
+        return String(e);
+    }
+
+    function dataTypeName(n) {
+        return ['BloodTest', 'Xray', 'Genetic', 'MRI', 'Prescription'][n] || `Type${n}`;
+    }
+    function purposeName(n) {
+        return ['Treatment', 'Research', 'Insurance', 'Statistical'][n] || `Purpose${n}`;
+    }
+
+    function fmtTimestamp(bigInt) {
+        const t = Number(bigInt);
+        if (t === 0) return '—';
+        return new Date(t * 1000).toLocaleString('tr-TR');
+    }
+
+    // ============================================================
+    //                  CONTRACT LOAD & WALLET
+    // ============================================================
+    async function loadContractInfo() {
+        try {
+            const res = await fetch('./contract-info.json');
+            if (!res.ok) throw new Error('contract-info.json bulunamadi');
+            contractInfo = await res.json();
+            document.getElementById('contract-addr').textContent = contractInfo.address;
+            log(`Kontrat bilgisi yuklendi: ${contractInfo.address}`, 'ok');
+        } catch (e) {
+            log(`Kontrat bilgisi yuklenemedi: ${e.message}`, 'err');
+            document.getElementById('contract-addr').textContent = 'YUKLENEMEDI';
+        }
+    }
+
+    async function connectWallet() {
+        if (!window.ethereum) {
+            alert('MetaMask kurulu degil. Brave/Chrome icin MetaMask eklentisini yukleyin.');
+            log('MetaMask bulunamadi', 'err');
+            return;
+        }
+
+        try {
+            provider = new ethers.BrowserProvider(window.ethereum);
+            await provider.send('eth_requestAccounts', []);
+            signer = await provider.getSigner();
+            const addr = await signer.getAddress();
+            const network = await provider.getNetwork();
+
+            document.getElementById('active-addr').textContent = addr;
+            document.getElementById('network-info').textContent =
+                `${network.name === 'unknown' ? 'localhost' : network.name} (chainId ${network.chainId})`;
+            document.getElementById('wallet-status').textContent = shortAddr(addr);
+            document.getElementById('wallet-status').classList.add('connected');
+            document.getElementById('connect-btn').textContent = 'Baglandi';
+            document.getElementById('connect-btn').disabled = true;
+
+            if (!contractInfo) {
+                await loadContractInfo();
+            }
+
+            if (contractInfo) {
+                contract = new ethers.Contract(contractInfo.address, contractInfo.abi, signer);
+                log(`Cuzdan baglandi: ${addr}`, 'ok');
+                log(`Network: chainId ${network.chainId}`, 'info');
+                listenToEvents();
+            }
+        } catch (e) {
+            log(`Baglanti hatasi: ${parseError(e)}`, 'err');
+        }
+    }
+
+    function listenToEvents() {
+        if (!contract) return;
+
+        contract.on('PatientRegistered', (patient, timestamp) => {
+            log(`Hasta kayit: ${shortAddr(patient)}`, 'ok');
+        });
+
+        contract.on('ResearcherRegistered', (researcher, name, institution) => {
+            log(`Arastirmaci kayit: ${name} (${institution}) [${shortAddr(researcher)}]`, 'ok');
+        });
+
+        contract.on('ConsentGranted', (patient, researcher, dataType, purpose, expiry) => {
+            log(`Onay verildi: ${shortAddr(patient)} → ${shortAddr(researcher)} [${dataTypeName(Number(dataType))}/${purposeName(Number(purpose))}]`, 'ok');
+        });
+
+        contract.on('ConsentRevoked', (patient, researcher, dataType, purpose) => {
+            log(`Onay geri cekildi: ${shortAddr(patient)} → ${shortAddr(researcher)} [${dataTypeName(Number(dataType))}/${purposeName(Number(purpose))}]`, 'warn');
+        });
+    }
+
+    // ============================================================
+    //                  CONTRACT INTERACTIONS
+    // ============================================================
+    async function registerPatient() {
+        if (!contract) return alert('Once cuzdan baglayin');
+        try {
+            log('registerPatient() cagriliyor...', 'info');
+            const tx = await contract.registerPatient();
+            log(`Tx gonderildi: ${tx.hash.slice(0, 20)}...`, 'info');
+            await tx.wait();
+            showResult('patient-register-result', 'Hasta olarak basariyla kayit oldunuz.', true);
+            log('Hasta kayit basarili', 'ok');
+        } catch (e) {
+            const err = parseError(e);
+            showResult('patient-register-result', `Hata: ${err}`, false);
+            log(`Hasta kayit hatasi: ${err}`, 'err');
+        }
+    }
+
+    async function registerResearcher() {
+        if (!contract) return alert('Once cuzdan baglayin');
+        const name = document.getElementById('researcher-name').value.trim();
+        const institution = document.getElementById('researcher-institution').value.trim();
+
+        if (!name || !institution) {
+            alert('Ad ve kurum bos olamaz');
+            return;
+        }
+
+        try {
+            log(`registerResearcher("${name}", "${institution}")...`, 'info');
+            const tx = await contract.registerResearcher(name, institution);
+            await tx.wait();
+            showResult('researcher-register-result', `Arastirmaci kayit basarili: ${name} (${institution})`, true);
+        } catch (e) {
+            const err = parseError(e);
+            showResult('researcher-register-result', `Hata: ${err}`, false);
+            log(`Arastirmaci kayit hatasi: ${err}`, 'err');
+        }
+    }
+
+    async function grantConsent() {
+        if (!contract) return alert('Once cuzdan baglayin');
+        const researcher = document.getElementById('grant-researcher').value.trim();
+        const dataType = parseInt(document.getElementById('grant-datatype').value);
+        const purpose = parseInt(document.getElementById('grant-purpose').value);
+        const duration = parseInt(document.getElementById('grant-duration').value);
+
+        if (!ethers.isAddress(researcher)) {
+            return alert('Gecersiz arastirmaci adresi');
+        }
+
+        try {
+            log(`grantConsent(${shortAddr(researcher)}, ${dataTypeName(dataType)}, ${purposeName(purpose)}, ${duration})...`, 'info');
+            const tx = await contract.grantConsent(researcher, dataType, purpose, duration);
+            await tx.wait();
+            const durText = duration === 0 ? 'sinirsiz' : `${duration} gun`;
+            showResult('grant-result',
+                `Onay verildi.\n` +
+                `Arastirmaci: ${researcher}\n` +
+                `Veri tipi:   ${dataTypeName(dataType)}\n` +
+                `Amac:        ${purposeName(purpose)}\n` +
+                `Sure:        ${durText}`,
+                true
+            );
+        } catch (e) {
+            const err = parseError(e);
+            showResult('grant-result', `Hata: ${err}`, false);
+            log(`grantConsent hatasi: ${err}`, 'err');
+        }
+    }
+
+    async function revokeConsent() {
+        if (!contract) return alert('Once cuzdan baglayin');
+        const researcher = document.getElementById('revoke-researcher').value.trim();
+        const dataType = parseInt(document.getElementById('revoke-datatype').value);
+        const purpose = parseInt(document.getElementById('revoke-purpose').value);
+
+        if (!ethers.isAddress(researcher)) {
+            return alert('Gecersiz arastirmaci adresi');
+        }
+
+        try {
+            log(`revokeConsent(${shortAddr(researcher)}, ${dataTypeName(dataType)}, ${purposeName(purpose)})...`, 'info');
+            const tx = await contract.revokeConsent(researcher, dataType, purpose);
+            await tx.wait();
+            showResult('revoke-result',
+                `Onay geri cekildi.\n` +
+                `Arastirmaci: ${researcher}\n` +
+                `Veri tipi:   ${dataTypeName(dataType)}\n` +
+                `Amac:        ${purposeName(purpose)}`,
+                true
+            );
+        } catch (e) {
+            const err = parseError(e);
+            showResult('revoke-result', `Hata: ${err}`, false);
+            log(`revokeConsent hatasi: ${err}`, 'err');
+        }
+    }
+
+    async function checkConsent() {
+        if (!contract) return alert('Once cuzdan baglayin');
+        const patient = document.getElementById('check-patient').value.trim();
+        const researcher = document.getElementById('check-researcher').value.trim();
+        const dataType = parseInt(document.getElementById('check-datatype').value);
+        const purpose = parseInt(document.getElementById('check-purpose').value);
+
+        if (!ethers.isAddress(patient) || !ethers.isAddress(researcher)) {
+            return alert('Gecersiz adres(ler)');
+        }
+
+        try {
+            const hasConsent = await contract.checkConsent(patient, researcher, dataType, purpose);
+            const consent = await contract.getConsent(patient, researcher, dataType, purpose);
+
+            let msg = `Onay durumu: ${hasConsent ? 'GECERLI ✓' : 'GECERSIZ ✗'}\n\n`;
+            msg += `Detaylar:\n`;
+            msg += `  Hasta:       ${patient}\n`;
+            msg += `  Arastirmaci: ${researcher}\n`;
+            msg += `  Veri tipi:   ${dataTypeName(dataType)}\n`;
+            msg += `  Amac:        ${purposeName(purpose)}\n`;
+            msg += `  Aktif mi:    ${consent.active}\n`;
+            msg += `  Verilis:     ${fmtTimestamp(consent.grantedAt)}\n`;
+            msg += `  Bitis:       ${consent.expiry == 0 ? 'sinirsiz' : fmtTimestamp(consent.expiry)}\n`;
+            msg += `  Geri cekme:  ${fmtTimestamp(consent.revokedAt)}`;
+
+            showResult('check-result', msg, hasConsent);
+            log(`checkConsent → ${hasConsent}`, hasConsent ? 'ok' : 'warn');
+        } catch (e) {
+            const err = parseError(e);
+            showResult('check-result', `Hata: ${err}`, false);
+            log(`checkConsent hatasi: ${err}`, 'err');
+        }
+    }
+
+    async function getMyConsent() {
+        if (!contract) return alert('Once cuzdan baglayin');
+        const patient = document.getElementById('researcher-patient').value.trim();
+        const dataType = parseInt(document.getElementById('researcher-datatype').value);
+        const purpose = parseInt(document.getElementById('researcher-purpose').value);
+
+        if (!ethers.isAddress(patient)) {
+            return alert('Gecersiz hasta adresi');
+        }
+
+        try {
+            const me = await signer.getAddress();
+            const consent = await contract.getConsent(patient, me, dataType, purpose);
+            const hasConsent = await contract.checkConsent(patient, me, dataType, purpose);
+
+            let msg = `Durum: ${hasConsent ? 'ERISILEBILIR ✓' : 'ERISILEMEZ ✗'}\n\n`;
+            msg += `Hasta:     ${patient}\n`;
+            msg += `Veri:      ${dataTypeName(dataType)}\n`;
+            msg += `Amac:      ${purposeName(purpose)}\n`;
+            msg += `Aktif:     ${consent.active}\n`;
+            msg += `Verilis:   ${fmtTimestamp(consent.grantedAt)}\n`;
+            msg += `Bitis:     ${consent.expiry == 0 ? 'sinirsiz' : fmtTimestamp(consent.expiry)}\n`;
+            msg += `Geri cek.: ${fmtTimestamp(consent.revokedAt)}`;
+
+            showResult('my-consent-result', msg, hasConsent);
+        } catch (e) {
+            const err = parseError(e);
+            showResult('my-consent-result', `Hata: ${err}`, false);
+        }
+    }
+
+    // ============================================================
+    //                  TABS & INITIALIZATION
+    // ============================================================
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
+        });
+    });
+
+    document.getElementById('connect-btn').addEventListener('click', connectWallet);
+
+    // Sayfa yuklenir yuklenmez kontrat bilgisini al
+    loadContractInfo();
+</script>
+</body>
+</html>
