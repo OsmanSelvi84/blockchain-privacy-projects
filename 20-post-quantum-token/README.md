@@ -27,5 +27,5 @@ Traditional Ethereum transactions rely on ECDSA (secp256k1) signatures, which ar
 1. **Node.js**: Ensure Node.js (>= 18.0.0) is installed.
 2. **Clone the repository**:
    ```bash
-   git clone <your-repository-url>
+   git clone <https://github.com/OsmanSelvi84/blockchain-privacy-projects/tree/students/220304142-waren-moudoumi-moustafa-konate/20-post-quantum-token>
    cd 20-post-quantum-token
