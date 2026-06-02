@@ -47,6 +47,9 @@
     "solc": "0.5.17",
     "truffle": "5.1.67"
   },
+  "resolutions": {
+    "secp256k1": "3.8.1"
+  },
   "engines": {
     "node": ">=10 <=20"
   },
