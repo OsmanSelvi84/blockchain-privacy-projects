@@ -82,30 +82,62 @@ Install dependencies:
 npm install
 ```
 
-Compile Smart Contract
+# Compile Smart Contract
+
+```bash
 npx hardhat compile
-Expected is Compiled succesfully
+```
 
+Expected output:
+
+```text
+Compiled successfully
+```
+
+# Run Tests
+
+```bash
 npx hardhat test
-Expected is 3 passing 
+```
 
-Start Local Blockchain
+Expected output:
+
+```text
+3 passing
+```
+
+# Start Local Blockchain
+
+```bash
 npx hardhat node
+```
 
-Deploy Smart Contract
+# Deploy Smart Contract
+
+```bash
 npx hardhat run scripts/deploy.js --network localhost
-Expected output: Contract deployed to: 0x...
+```
 
-Frontend Demo
+Expected output:
+
+```text
+Contract deployed to: 0x...
+```
+
+# Frontend Demo
+
+```text
 frontend/index.html
+```
 
-Smart Contract Functions
-transfer()
-createCommitment()
-privateTransfer()
+# Smart Contract Functions
 
+- transfer()
+- createCommitment()
+- privateTransfer()
 
-Reference Implementation
+# Reference Implementation
+
 Reference project used for learning and comparison:
 
 DDMixer
@@ -116,39 +148,44 @@ https://github.com/alibertay/DDMixer
 
 The reference implementation was:
 
-* cloned locally
-* dependency-installed
-* executed successfully
+- cloned locally
+- dependency-installed
+- executed successfully
 
 Reference project technologies:
 
-* Solidity
-* Python
-* Flask
-* HTML
-* JavaScript
+- Solidity
+- Python
+- Flask
+- HTML
+- JavaScript
 
+# Comparison
 
-Comparison
+```text
 comparison/test-inputs.json
 comparison/comparison.md
+```
 
 These files contain:
-5 sample test inputs
-implementation comparison
-privacy mechanism explanations
 
-Demo Flow
+- 5 sample test inputs
+- implementation comparison
+- privacy mechanism explanations
 
-1.Compile smart contract
-2.Run tests
-3.Start local blockchain
-4.Deploy smart contract
-5.Open frontend demo
-6.Generate commitment hash
+# Demo Flow
 
-Notes
+1. Compile smart contract
+2. Run tests
+3. Start local blockchain
+4. Deploy smart contract
+5. Open frontend demo
+6. Generate commitment hash
+
+# Notes
 
 This project is a simplified educational privacy token implementation.
+
 The project was developed for learning blockchain privacy concepts and demonstrating privacy-preserving transaction logic.
+
 This implementation is not intended for production use.
