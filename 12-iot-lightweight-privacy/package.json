@@ -1,0 +1,20 @@
+{
+  "name": "iot-lightweight-privacy-final",
+  "version": "1.0.0",
+  "description": "Original IoT lightweight privacy smart contract with runnable reference comparison.",
+  "private": true,
+  "scripts": {
+    "build": "hardhat compile",
+    "test": "hardhat test",
+    "reference:demo": "hardhat run scripts/reference-demo.js --network hardhat",
+    "original:demo": "hardhat run scripts/original-demo.js --network hardhat",
+    "compare": "hardhat run scripts/compare.js --network hardhat",
+    "compare:input": "hardhat run scripts/compare-input.js --network hardhat",
+    "demo": "npm run compare",
+    "deploy:local": "hardhat run scripts/deploy.js --network hardhat"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "hardhat": "^2.22.19"
+  }
+}

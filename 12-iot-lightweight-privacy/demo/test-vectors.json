@@ -1,0 +1,97 @@
+[
+  {
+    "name": "greenhouse-sensor-01",
+    "requestedData": "temperature-humidity",
+    "requestedPurpose": "greenhouse-monitoring",
+    "requestedOperation": "aggregate-average",
+    "requestedDisclosure": "aggregator-only",
+    "requestedRetention": 3600,
+    "aggregationFunction": "average",
+    "needExplicitConsent": false,
+    "consentResponse": true,
+    "deviceSalt": "greenhouse-device-salt",
+    "deviceSecret": "greenhouse-device-secret",
+    "commitmentSalt": "greenhouse-commitment-salt",
+    "reading": {
+      "temperatureMilliC": 22450,
+      "humidityBps": 6150,
+      "timestamp": 1717200001
+    }
+  },
+  {
+    "name": "cold-chain-truck-07",
+    "requestedData": "temperature",
+    "requestedPurpose": "cold-chain-compliance",
+    "requestedOperation": "aggregate-min",
+    "requestedDisclosure": "auditor-only",
+    "requestedRetention": 7200,
+    "aggregationFunction": "minimum",
+    "needExplicitConsent": true,
+    "consentResponse": true,
+    "deviceSalt": "truck-device-salt",
+    "deviceSecret": "truck-device-secret",
+    "commitmentSalt": "truck-commitment-salt",
+    "reading": {
+      "temperatureMilliC": -4250,
+      "humidityBps": 4830,
+      "timestamp": 1717200300
+    }
+  },
+  {
+    "name": "smart-meter-floor-4",
+    "requestedData": "energy-usage",
+    "requestedPurpose": "billing-aggregation",
+    "requestedOperation": "aggregate-sum",
+    "requestedDisclosure": "billing-service",
+    "requestedRetention": 86400,
+    "aggregationFunction": "sum",
+    "needExplicitConsent": false,
+    "consentResponse": true,
+    "deviceSalt": "meter-device-salt",
+    "deviceSecret": "meter-device-secret",
+    "commitmentSalt": "meter-commitment-salt",
+    "reading": {
+      "temperatureMilliC": 19700,
+      "humidityBps": 3980,
+      "timestamp": 1717200600
+    }
+  },
+  {
+    "name": "water-quality-node-12",
+    "requestedData": "water-quality",
+    "requestedPurpose": "public-health-aggregation",
+    "requestedOperation": "aggregate-average",
+    "requestedDisclosure": "health-authority",
+    "requestedRetention": 43200,
+    "aggregationFunction": "average",
+    "needExplicitConsent": true,
+    "consentResponse": true,
+    "deviceSalt": "water-node-device-salt",
+    "deviceSecret": "water-node-device-secret",
+    "commitmentSalt": "water-node-commitment-salt",
+    "reading": {
+      "temperatureMilliC": 16880,
+      "humidityBps": 7550,
+      "timestamp": 1717200900
+    }
+  },
+  {
+    "name": "factory-vibration-edge-3",
+    "requestedData": "vibration-health",
+    "requestedPurpose": "predictive-maintenance",
+    "requestedOperation": "aggregate-max",
+    "requestedDisclosure": "maintenance-team",
+    "requestedRetention": 21600,
+    "aggregationFunction": "maximum",
+    "needExplicitConsent": false,
+    "consentResponse": true,
+    "deviceSalt": "factory-vibration-device-salt",
+    "deviceSecret": "factory-vibration-device-secret",
+    "commitmentSalt": "factory-vibration-commitment-salt",
+    "reading": {
+      "temperatureMilliC": 30200,
+      "humidityBps": 3010,
+      "timestamp": 1717201200
+    }
+  }
+]

@@ -1,0 +1,16 @@
+{
+  "testCaseCount": 5,
+  "functionalEquivalenceCriteria": {
+    "policyMatchedEqual": true,
+    "inputHashEqual": true,
+    "hashValidationEqual": true,
+    "acceptedBehaviorEqual": true,
+    "resultHashEqual": true,
+    "rawPlaintextStoredEqual": true
+  },
+  "notes": [
+    "The reference contract stores encrypted participation bytes and their hash.",
+    "The original contract stores the same payload hash plus a salted commitment and nullifier.",
+    "Raw plaintext IoT readings are not stored by the original contract."
+  ]
+}
