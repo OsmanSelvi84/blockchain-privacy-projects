@@ -4,7 +4,7 @@
 |-----------|---------|-----|
 | Node.js | **10.24.1** | `web3@1.2.1`, native addons, Truffle 5 |
 | Yarn | 1.22.x | lockfile |
-| Truffle | 5.1.x | migrations API |
+| Truffle | **5.1.0** | Node 10 compatible; avoids optional chaining in newer Truffle builds |
 | Solidity (dUtility) | **0.5.2** | Parity genesis bytecode |
 | ZoKrates | **0.6.4** | `settlement-check.zok` |
 | Verifier.sol | **0.6.1** | ZoKrates export — **not** compiled with Truffle 0.5.2 |
