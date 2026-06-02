@@ -65,39 +65,48 @@ contract AgencyABEControl {
     }
 
     // Requirement 3: Multi-Attribute Access Control & Decrypt
-    function evaluateAndDecrypt(uint256 _assetId, string memory _secretPassphrase) 
+    function evaluateAndDecrypt(
+        uint256 _assetId,               // The unique ID of the locked asset the user wants to access
+        string memory _secretPassphrase // The clear-text passphrase provided by the user to unlock the asset
+    ) 
         public 
         returns (bool allowed, string memory decryptedURI) 
     {
+// Fetches the caller's attribute key ring and the asset's ciphertext envelope from EVM persistent storage into memory
         SubjectKeyRing memory userKeys = subjectRegistry[msg.sender];
         CiphertextEnvelope memory envelope = securedEnvelopes[_assetId];
 
         // Multi-Attribute check 1: Temporal validation
+// Checks if the current block timestamp has exceeded the user's token expiration deadline
         if (block.timestamp > userKeys.expirationTimestamp) {
-            emit ABEDecryptionTriggered(msg.sender, _assetId, false);
+            emit ABEDecryptionTriggered(msg.sender, _assetId, false); // Logs the failed access attempt
             return (false, "ABE Failure: Attribute token lifetime expired.");
         }
 
         // Multi-Attribute check 2: Policy attribute string matching loop
+// Iterates through the user's dynamic attribute array to find a match against the asset's rule constraint
         bool policySatisfied = false;
         for (uint256 i = 0; i < userKeys.cryptAttributes.length; i++) {
+// Converts strings into Keccak-256 hashes to perform secure data comparison in Solidity
             if (keccak256(abi.encodePacked(userKeys.cryptAttributes[i])) == keccak256(abi.encodePacked(envelope.policyConstraint))) {
-                policySatisfied = true;
-                break;
+                policySatisfied = true; // Sets the flag to true if a valid attribute match is found
+                break;                  // Immediately breaks the loop to conserve Gas execution costs
             }
         }
-
+// Reverts or stops execution if the user's attributes do not satisfy the policy conditions
         if (!policySatisfied) {
             emit ABEDecryptionTriggered(msg.sender, _assetId, false);
             return (false, "ABE Failure: Subject attributes do not satisfy ciphertext constraints.");
         }
 
         // Multi-Attribute check 3: Cryptographic mathematical lock verification
+// Hashes the user's inputted passphrase and compares it with the unalterable hash root stored on-chain
         if (keccak256(abi.encodePacked(_secretPassphrase)) == envelope.cryptographicLock) {
             emit ABEDecryptionTriggered(msg.sender, _assetId, true);
+// Concatenates the success message with the securely retrieved IPFS pointer payload
             return (true, string(abi.encodePacked("DECRYPTION GRANTED. Payload: ", envelope.targetIPFSURI)));
         }
-
+// Final fallback block triggered if the passphrase fails the cryptographic check
         emit ABEDecryptionTriggered(msg.sender, _assetId, false);
         return (false, "ABE Mathematical Failure: Invalid cryptographic key token.");
     }
