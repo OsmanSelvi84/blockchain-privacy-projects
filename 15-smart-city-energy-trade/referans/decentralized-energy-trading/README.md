@@ -163,11 +163,26 @@ If successful:
 Set verifier contract address ... done
 ```
 
-If migrate fails on `setVerifier`, the chain was partially configured — run:
+#### Migration troubleshooting (common on Ubuntu VMs)
+
+- **Node 10 + Truffle `SyntaxError: Unexpected token .`** (shows `this?.hexFormat`):
+  - You have a newer Truffle version installed (optional chaining requires newer Node).
+  - Fix by pinning Truffle to a Node 10 compatible version:
+
+```bash
+nvm use 10
+yarn add -D truffle@5.1.0
+```
+
+- **`setVerifier` revert**:
+  - Usually means the chain is **already configured** (ownership transferred) or partially configured.
+  - For a clean demo, reset the chain volumes and re-run migrate:
 
 ```bash
 bash scripts/reset-parity-and-migrate.sh
 ```
+
+- **If you only need the terminal demo** (NED + H1/H2 + `GET /transfers`), you can often **skip migration** as long as Parity is running and the genesis contracts exist at their fixed addresses.
 
 Diagnose first: `bash scripts/diagnose-chain.sh`
 
@@ -194,10 +209,13 @@ yarn run-server -p 4002 \
   -a 0x00aa39d30f0d20ff03a22ccfc30b7efbfca597c2 \
   -P node1 -n authority_1 \
   -d mongodb://127.0.0.1:27011 \
-  -h 127.0.0.1
+  -h 127.0.0.1 \
+  -N http://127.0.0.1:4005
 ```
 
 Expected log: `Household Server running at http://127.0.0.1:4002/`
+
+If you see `ECONNREFUSED 127.0.0.1:4005`, NED is not running yet — start Terminal 1 first.
 
 ---
 
