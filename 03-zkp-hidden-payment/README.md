@@ -1,6 +1,6 @@
 # ZKP Hidden Payment
 
-## What this is
+## Description
 
 Hardhat + Circom project. One address deposits ETH, another withdraws it with no on-chain link between them.
 
@@ -219,8 +219,9 @@ cd tornado-core
 
 ### Requirements
 
-1. `node v11.15.0` [Installment instructions](https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-20-04)
-2. `npm install -g npx`
+1. `node v22.x` or newer LTS
+2. `nvm use` in this repo before running the build
+3. `npm` and `npx` from that Node install
 
 ### Usage
 
