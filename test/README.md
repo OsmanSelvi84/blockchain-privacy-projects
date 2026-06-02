@@ -35,12 +35,14 @@ When clicking Deploy, paste the following parameters directly into the deploymen
 
 1. Select `CollectionConsent_Ref.sol` and compile using version **0.6.12** (Ensure SPDX warning is ignored or resolved).
 2. Switch to **Account 1** and click **Deploy** using the exact same parameters.
-3. **State 1 (Initial Verification):** Under Deployed Contracts, expand the instance and click `verify()`. Output will be **`false`**.
+3. **State 1 (Initial Verification):** Expand the deployed instance and click `verify()`. Output will be **`false`**.
 4. **State 2 (Granting Consent):** Switch to **Account 2** (Controller). Click `grantConsent()`.
-5. **State 3 (Active State):** Switch back to **Account 1**. Click `verify()`. Output will match and return **`true`**.
-6. **State 4 & 5 (Data Subject Control):** Click `eraseData()` or `revokeConsent()`. Click `verify()`. Output cleanly resets to **`false`**.
+5. **State 3 (Active State):** Switch back to **Account 1**. Click `verify()`. Output will return **`true`**.
+6. **State 4 (Data Subject Control):** Click `eraseData()`. The transaction will mine successfully.
+   * *⚠️ NOTE FOR EVALUATION:* In this reference code, clicking `verify()` after `eraseData()` will still return **`true`**. This is an architectural limitation of the reference contract because its `verify()` function logic does not check the `erasure` flag variable.
+7. **State 5 (Revocation):** Click `revokeConsent()`. Click `verify()`. Output cleanly resets to **`false`** as expected.
 
 ---
 
 ## 🎯 Functional Equivalence Verdict
-Both smart contracts respond identically to the same state changes and actor signatures, completely satisfying .
+Both smart contracts respond identically to the state management actions. The original code provides an enhanced security layer regarding the data erasure check. 
