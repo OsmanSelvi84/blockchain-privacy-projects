@@ -1,120 +1,24 @@
-# Attribute-Based Encryption (ABE) Access Control for Digital Agencies
-
-This repository contains the **Original Implementation** of a fine-grained Access Control system based on the concepts of **Ciphertext-Policy Attribute-Based Encryption (CP-ABE)**. It is built from scratch using the **Hardhat Development Framework** and deployed simulation-style via Solidity smart contracts.
-
----
-
-## 📌 Project Description & Privacy Concept
-Traditional Role-Based Access Control (RBAC) models lack the granularity needed to secure highly sensitive corporate digital assets (e.g., 3D landing page source files). This project introduces a **Fine-Grained Attribute-Based Access Control** mechanism. 
-
-The core privacy engine enforces a multi-attribute cryptographic validation sequence where an entity is granted asset decryption privileges **only if** their cumulative attribute tokens (Department, Position Hierarchy, and Temporal Validity Locks) mathematically satisfy the specific access policy constraint bound to the encrypted payload.
-
----
-
-## 📂 Repository Branch Information
-* **Main Production Branch:** `main`
-* **Student Evaluation Branch:** `student-irem-branch`
-
-> ⚠️ **CRITICAL NOTE FOR THE INSTRUCTOR:** All development code, dependencies, and testing automation material reside inside the student branch. Please switch branches immediately after cloning by running:
-> ```bash
-> git checkout student-irem-branch
-> ```
-
----
-
-## ⚙️ Required Software & Tools
-Before executing the build setup, ensure your local environment contains the following runtimes:
-* **Node.js:** v18.x / v20.x or higher (Tested up to v25.9)
-* **Package Manager:** `npm` (Comes bundled with Node.js)
-* **Code Editor:** Visual Studio Code (Recommended with *Nomic Foundation Solidity* extension)
-
----
-
-## 🚀 Installation & Dependency Setup
-
-1. **Clone the Repository:**
-   ```bash
-   git clone [INSERT_YOUR_GITHUB_REPOSITORY_URL_HERE]
-   cd Agency-ABE-Project 
-   ```
-
-2. **Switch to Student Evaluation Branch:**
-
-   ```bash git checkout students/210304001-ayse-irem-colak ```
-
-3. **Install Core Project Dependencies:**
-   ```bash npm install ```
-   
-
-## 🛠️ Build & Compilation Commands
-
-To compile the underlying Solidity smart contract architecture and generate the necessary artifacts/ABIs, execute the local hardhat compiler tool:
-
-```bash npx hardhat compile```
-
-Expected Output: Upon execution, the terminal will download the compiler layer and return:
-Compiled 1 Solidity file successfully (or up to date)
-
-## 🏃 Run & Deployment Instructions
-To simulate network provisioning and boot up a local temporary ledger network node to deploy the live contract address instance, invoke the migration script:
-
-```bash npx hardhat run scripts/deploy.js ```
-Expected Output Structure:
-Deploying original ABE contract with authority account: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
-Original Implementation successfully deployed to: 0x5FbDB2315678afecb367f032d93F642f64180aa3
-
-## 🧪 Testing Instructions & Demo Reproduction
-The verification layer evaluates the cryptographic engine against a precise matrix of 5 distinct evaluation test inputs. The automated framework generates a mock blockchain infrastructure in-memory, provisions structural attributes, hashes authorization passphrases via Keccak-256, and validates compliance behaviors.
-
-To initiate the fully automated evaluation test harness and verify outputs, run:
-```bash npx hardhat test ```
+## Reference Implementation Details
+Repository: https://github.com/maethlucky/ABAC-Simulator.git
 
 
-### 📊 Sample Inputs & Expected Outputs Matrix (Instructor Evaluation Verification)
+* **Reference Prototype Design:** Multi-Domain Attribute-Based Access Control (ABAC) Simulator
 
-| Test Scenario | Target Function | Key Input Parameters | Expected Behavior & Terminal Output Status |
-| :--- | :--- | :--- | :--- |
-| **Test Input 1:<br>Access Granted** | `evaluateAndDecrypt` | `_assetId`: `101`<br>`_secretPassphrase`: `"agency_secure_passphrase"`<br>*(User: Ayse - Valid dynamic attributes)* | **`PASS (allowed: true)`**<br>`decryptedURI`: `"DECRYPTION GRANTED. Payload: ipfs://3d-landing-page-v1"` |
-| **Test Input 2:<br>Time Expired** | `evaluateAndDecrypt` | `_assetId`: `101`<br>`_secretPassphrase`: `"agency_secure_passphrase"`<br>*(User: Mehmet - Expired timestamp)* | **`PASS (allowed: false)`**<br>`message`: `"ABE Failure: Attribute token lifetime expired."` |
-| **Test Input 3:<br>Dept Mismatch** | `evaluateAndDecrypt` | `_assetId`: `101`<br>`_secretPassphrase`: `"agency_secure_passphrase"`<br>*(User: Veli - Belongs to 'pazarlama')* | **`PASS (allowed: false)`**<br>`message`: `"ABE Failure: Subject attributes do not satisfy ciphertext constraints."` |
-| **Test Input 4:<br>Wrong Passphrase** | `evaluateAndDecrypt` | `_assetId`: `101`<br>`_secretPassphrase`: `"wrong_password"`<br>*(User: Can - Valid attributes)* | **`PASS (allowed: false)`**<br>`message`: `"ABE Mathematical Failure: Invalid cryptographic key token."` |
-| **Test Input 5:<br>Unregistered Entity**| `evaluateAndDecrypt` | `_assetId`: `101`<br>`_secretPassphrase`: `"agency_secure_passphrase"`<br>*(User: Unregistered Address - No tokens)* | **`PASS (allowed: false)`**<br>`message`: `"ABE Failure: Attribute token lifetime expired."` |
+* **Setup and Study Context:** The reference implementation executes a Python-based ABAC parsing engine (`myabac.py`). It reads external declarative policy constraint frameworks (`.abac` files) and validates real-time contextual transaction vectors (`-requests.txt` files) across healthcare and university schemas. It was heavily analyzed to study granular request-to-policy evaluation mappings.
 
-### 📈 Successful Execution Proof Ledger
-A completely compliant compile-and-test loop will return the following green signature directly inside your console environment:
+* **Execution for Comparison:** Navigate to the reference directory and execute the simulation model directly via console using standard Python execution paths:
+  ```bash
+  python myabac.py university.abac university-requests.txt 
+  ```
 
-AgencyABEControl - Comprehensive 5-Input Evaluation Matrix
-    ✔ Test Input 1: Should GRANT access for valid attributes matching the ciphertext policy
-    ✔ Test Input 2: Should DENY access if the user's attribute key lifetime has expired
-    ✔ Test Input 3: Should DENY access if the user's department attribute doesn't match the policy
-    ✔ Test Input 4: Should DENY access if attributes match but the secret token is wrong
-    ✔ Test Input 5: Should DENY access if the user address holds no attributes in the registry
+* **📉 Reference Simulator Production Output (University Schema)**
+When executing the reference script, the engine evaluates domain-specific constraints and outputs the following logical state vector:
+csStu1,cs101gradebook,addScore: DENY          -> Role mismatch (Student cannot modify instructor assets)
+csStu1,cs101gradebook,readMyScores: PERMIT    -> Attribute match (Student can read own course data)
+csStu2,cs601gradebook,addScore: DENY          -> Role mismatch (Unauthorized write attempt)
+csStu2,cs602gradebook,addScore: DENY          -> Role mismatch (Unauthorized write attempt)
+csStu3,cs602gradebook,readMyScores: PERMIT    -> Attribute match (Graduate student reads matching course data)
 
-  5 passing (224ms)
-  
-### 👨‍🏫 Special Guide for the Instructor: Live Interactive Testing & On-Chain Encryption Simulation
-If you wish to test the smart contract deployment manually with your own dynamic runtime variables instead of relying solely on automated mocks, execute the standard testing suite:
-```bash
-npx hardhat test
-```
-The framework will execute the 5 core deterministic vectors first (5 passing), and will immediately freeze execution to spawn an advanced Two-Phase Interactive Blockchain Simulator directly inside your terminal console:
+* **🧠 Comparative Architecture Mapping**
+original decentralized digital agency implementation successfully transitions and compiles these high-level Python attribute rules (PERMIT / DENY) into unalterable, cryptographically enforced on-chain ledger constraints (GRANT / REVERT) using Solidity, Hardhat, and Keccak-256 secure envelopes.
 
-**🔒 PHASE 1: Dynamic On-Chain Asset Locking (Encryption)**
-The terminal will first prompt you to mint and encrypt a completely new corporate digital asset from scratch:
-
-* Enter a unique Asset ID: Provide any unassigned numerical identifier (e.g., 202 or 999).
-
-* Set the department policy constraint: Define the mandatory access string required to unlock this specific asset (e.g., finans or tasarim).
-
-* Set the cryptographic passphrase: Define a raw secret passphrase string. The deployment framework will automatically pass this through Keccak-256 hashing structures on-chain.
-
-* Enter secure resource pointer/URI: Provide a mock decentralized pointer path (e.g., ipfs://my-private-ledger).
-
-**🔑 PHASE 2: Dynamic User Provisioning & Decryption Verification**
-* Once your custom asset is securely locked, you can dynamically configure a test user profile to evaluate the contract's defensive attributes:
-
-* Assign department attribute token: Input the department tag for the test worker. (To simulate a successful match, input the exact string you defined in Phase 1. To trigger a policy breach defense, input a mismatching tag like pazarlama).
-
-* Set token lifetime status: Type yes to grant an active, valid Unix time-lock window, or no to instantly seed an expired epoch.
-
-* Provide cryptographic passphrase token: Type the passphrase to attempt decryption.
