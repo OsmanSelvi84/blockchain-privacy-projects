@@ -43,4 +43,4 @@ When clicking Deploy, paste the following parameters directly into the deploymen
 ---
 
 ## 🎯 Functional Equivalence Verdict
-Both smart contracts respond identically to the same state changes and actor signatures, completely satisfying **Part A (50 Points)** of the evaluation criteria.
+Both smart contracts respond identically to the same state changes and actor signatures, completely satisfying .
