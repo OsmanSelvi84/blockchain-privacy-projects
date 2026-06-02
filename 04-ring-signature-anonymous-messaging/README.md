@@ -18,6 +18,39 @@ Unlike traditional digital signatures, ring signatures allow verification withou
 
 The verifier can confirm that a valid member signed the message, but cannot determine the exact signer.
 
+## Requirements
+
+The project was tested on Ubuntu 24.04 with Python 3.
+
+Required packages:
+
+```bash
+sudo apt update
+
+sudo apt install -y \
+python3 \
+python3-pip \
+python3-venv \
+python3-dev \
+python3-setuptools \
+python3-wheel \
+python3-pyasn1 \
+build-essential \
+git
+```
+
+## Clone and Open the Project
+
+```bash
+git clone https://github.com/OsmanSelvi84/blockchain-privacy-projects.git
+
+cd blockchain-privacy-projects
+
+git checkout students/210304030-zeynep-ince
+
+cd 04-ring-signature-anonymous-messaging
+```
+
 ## Project Structure
 
 ```text
@@ -49,18 +82,60 @@ The reference implementation provides a working one-time ring signature system a
 
 ### Running the Reference Implementation
 
+Navigate to the reference implementation folder:
+
 ```bash
 cd reference_implementation/pyring
+```
 
+Build and install the project:
+
+```bash
 python3 setup.py build
 sudo python3 setup.py develop
+```
 
-echo "This is a test message." > message.txt
+Generate the first ring member:
 
+```bash
 ring-keygen
+```
 
+Create:
+
+```text
+ringkey
+ringkey.pub
+```
+
+Generate the second ring member:
+
+```bash
+ring-keygen
+```
+
+Create:
+
+```text
+bobkey
+bobkey.pub
+```
+
+Create a sample message:
+
+```bash
+echo "This is a test message." > message.txt
+```
+
+Generate a ring signature:
+
+```bash
 ring-sign --password 1234 message.txt ringkey ringkey.pub bobkey.pub > ring.sig
+```
 
+Verify the signature:
+
+```bash
 ring-verify message.txt - < ring.sig
 ```
 
@@ -78,10 +153,10 @@ To make testing easier, I created a simple menu-based interface for signing and 
 
 The application uses the same ring signature algorithm as the reference implementation and demonstrates:
 
-* anonymous signing,
-* signature verification,
-* signer anonymity,
-* message integrity verification.
+* anonymous signing
+* signature verification
+* signer anonymity
+* message integrity verification
 
 ### Features
 
@@ -117,6 +192,14 @@ Generated files:
 ```text
 signature.pem
 signature_metadata.json
+```
+
+Example verification output:
+
+```text
+Valid ring signature.
+The message was signed by one of the ring members.
+Exact signer identity remains anonymous.
 ```
 
 ## Solidity Integration
@@ -163,6 +246,8 @@ Both implementations support:
 * signer anonymity
 * message integrity verification
 
+The reference implementation is a command-line application, while the original implementation provides a menu-based workflow and additional metadata generation for easier testing and demonstration.
+
 ## References
 
 * https://github.com/bartvm/pyring
@@ -171,4 +256,3 @@ Both implementations support:
 * https://docs.soliditylang.org/
 * https://medium.com/@mehmethayirli0/monero-ve-ring-signature-halka-i%CC%87mza-18e19cc5fd5a
 * https://www.gate.com/learn/articles/what-are-ring-signatures/7497
-
