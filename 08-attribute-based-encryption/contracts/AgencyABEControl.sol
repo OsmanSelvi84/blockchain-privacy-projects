@@ -40,23 +40,27 @@ contract AgencyABEControl {
 
     // Requirement 1: Attribute Validation System
     function provisionUserAttributes(
-        address _employee,
-        string memory _name,
-        string[] memory _attributes,
-        uint256 _expiry
-    ) public onlyAuthority {
+        address _employee, // The Ethereum wallet address of the employee being registered
+        string memory _name, // The human-readable name of the employee (used for logging and auditing)
+        string[] memory _attributes, // The list of assigned cryptographic attribute tokens (e.g., ["design", "senior"])
+        uint256 _expiry // The expiration date of this attribute key (stored as a Unix Timestamp)
+    ) public onlyAuthority { // Security modifier restricting execution exclusively to the Central Authority (Admin)
+// Bundles the parameters into the SubjectKeyRing struct and maps it to the user's wallet address in state storage
         subjectRegistry[_employee] = SubjectKeyRing(_name, _attributes, _expiry);
+// Emits an on-chain event to record the attribute provisioning permanently in the blockchain logs
         emit KeysProvisioned(_employee, _attributes);
     }
 
     // Requirement 2: Encrypt Based on Policy
     function lockAssetWithPolicy(
-        uint256 _assetId,
-        bytes32 _cryptoLock,
-        string memory _policyString,
-        string memory _uri
-    ) public onlyAuthority {
+        uint256 _assetId, // The unique identifier/ID for the secure digital asset (file)
+        bytes32 _cryptoLock, // The Keccak-256 cryptographic hash of the passphrase used as the security lock
+        string memory _policyString, // The target department access rule (Policy Constraint - e.g., "design")
+        string memory _uri // The secure resource pointer pointing to the file hosted on IPFS
+    ) public onlyAuthority { // Security guard ensuring only the Central Authority can mint/lock assets
+// Wraps the asset specifications inside the CiphertextEnvelope struct and commits it to the EVM ledger storage
         securedEnvelopes[_assetId] = CiphertextEnvelope(_cryptoLock, _policyString, _uri);
+// Triggers an event announcing that the asset is now securely locked under the specified policy
         emit AssetLockedUnderPolicy(_assetId, _policyString);
     }
 
