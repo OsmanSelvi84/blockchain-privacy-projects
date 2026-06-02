@@ -50,6 +50,9 @@ cd 03-zkp-hidden-payment/
 ```bash
 npm install
 ```
+```bash
+cp .env.example .env
+```
 
 ### 1. Run a local chain
 
@@ -64,10 +67,6 @@ npm run deploy:local
 ```
 
 Addresses saved to `deployedAddresses.json`.
-
-```bash
-cp .env.example .env
-```
 
 ### 3. Deposit
 
@@ -139,6 +138,9 @@ Verify: `circom --version` should show 2.x.x+
 ```bash
 npm install
 ```
+```bash
+cp .env.example .env
+```
 
 ### 4. Compile circuits
 
@@ -164,10 +166,6 @@ npm run deploy:local
 ```
 
 Addresses saved to `deployedAddresses.json`.
-
-```bash
-cp .env.example .env
-```
 
 ### 7. Deposit
 
