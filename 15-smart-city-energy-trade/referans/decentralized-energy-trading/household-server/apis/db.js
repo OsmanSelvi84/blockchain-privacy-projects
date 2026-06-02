@@ -286,21 +286,41 @@ module.exports = {
   * @param {string} dbName Name of db
   * @param {string} collection the used collection of the inserted data
   */
-function initializeMeterReading(dbUrl, dbName, collectionSensor, collectionMeter){
+function initializeMeterReading(dbUrl, dbName, collectionSensor, collectionMeter) {
   return new Promise((resolve, reject) => {
-    MongoClient.connect(dbUrl, { useNewUrlParser: true }, (err, db) => {
-      if (err) reject(err);
-      const dbo = db.db(dbName);
-      dbo.collection(collectionSensor).mapReduce(
-        function () { emit(null, this.produce - this.consume) },
-        function (key, value) { return Array.sum(value) },
-        {
-          out: collectionMeter
+    MongoClient.connect(dbUrl, { useNewUrlParser: true }, (err, client) => {
+      if (err) return reject(err);
+      const dbo = client.db(dbName);
+      dbo.collection(collectionSensor).count((countErr, count) => {
+        if (countErr) {
+          client.close();
+          return reject(countErr);
         }
-      )
-        .catch(err => {
-          console.log(err)
-        })
+        if (!count) {
+          client.close();
+          return resolve();
+        }
+        dbo
+          .collection(collectionSensor)
+          .mapReduce(
+            function () {
+              emit(null, this.produce - this.consume);
+            },
+            function (key, value) {
+              return Array.sum(value);
+            },
+            { out: collectionMeter }
+          )
+          .then(() => {
+            client.close();
+            resolve();
+          })
+          .catch(mapErr => {
+            console.log(mapErr);
+            client.close();
+            resolve();
+          });
+      });
     });
-  })
+  });
 }
