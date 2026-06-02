@@ -77,6 +77,59 @@ scripts/             check-ned, check-validators, reference-4000-patch, …
 
 Follow these steps **in order** on a clean Ubuntu VM. Use **Node 10** for all commands below unless noted.
 
+## Quick run (Linux, terminal demo — smart-city)
+
+This is the shortest path to get a working demo on Linux. **Do not** use `truffle migrate --reset` (Ganache); this project expects the **Parity authority chain** (network id **8995**) with WebSocket ports **8546/8556/8566**.
+
+### A) Start Mongo (27017)
+
+```bash
+cd ~/smart-city-energy-trade
+docker compose -f docker/mongo/docker-compose.yml up -d
+
+# if `docker compose` is not available:
+# docker-compose -f docker/mongo/docker-compose.yml up -d
+```
+
+### B) Start 3 services (3 terminals)
+
+```bash
+source ~/.nvm/nvm.sh && nvm use 10
+cd ~/smart-city-energy-trade
+yarn run-netting
+```
+
+```bash
+source ~/.nvm/nvm.sh && nvm use 10
+cd ~/smart-city-energy-trade
+yarn run-gateway-h1
+```
+
+```bash
+source ~/.nvm/nvm.sh && nvm use 10
+cd ~/smart-city-energy-trade
+yarn run-gateway-h2
+```
+
+If a gateway prints `Mongo kapalı (mongodb://127.0.0.1:27017)`, start Mongo and **restart the gateway**.
+
+### C) Test 1 (curl)
+
+```bash
+curl -X POST http://127.0.0.1:3005/reset
+
+curl -X PUT http://127.0.0.1:3002/sensor-stats -H "Content-Type: application/json" \
+  -d '{"produce":1800000000,"consume":720000000,"meterDelta":1080000000}'
+
+curl -X PUT http://127.0.0.1:3003/sensor-stats -H "Content-Type: application/json" \
+  -d '{"produce":720000000,"consume":2160000000,"meterDelta":-1440000000}'
+
+sleep 65
+curl -s http://127.0.0.1:3005/ledger
+```
+
+Expected transfer amount: **`1080000000`** (Ws).
+
 ## 1. System packages
 
 ```bash
