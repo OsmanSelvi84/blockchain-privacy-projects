@@ -43,6 +43,7 @@ Before executing the build setup, ensure your local environment contains the fol
    ```bash
    git checkout students/210304001-ayse-irem-colak
    cd 08-attribute-based-encryption
+   git pull origin students/210304001-ayse-irem-colak
     ```
 
 4. **Install Core Project Dependencies:**
