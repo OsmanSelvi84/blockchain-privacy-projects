@@ -13,11 +13,11 @@ The core privacy engine enforces a multi-attribute cryptographic validation sequ
 
 ## 📂 Repository Branch Information
 * **Main Production Branch:** `main`
-* **Student Evaluation Branch:** `student-irem-branch`
+* **Student Evaluation Branch:** `students/210304001-ayse-irem-colak`
 
 > ⚠️ **CRITICAL NOTE FOR THE INSTRUCTOR:** All development code, dependencies, and testing automation material reside inside the student branch. Please switch branches immediately after cloning by running:
 > ```bash
-> git checkout student-irem-branch
+> git checkout students/210304001-ayse-irem-colak
 > ```
 
 ---
@@ -34,23 +34,30 @@ Before executing the build setup, ensure your local environment contains the fol
 
 1. **Clone the Repository:**
    ```bash
-   git clone [INSERT_YOUR_GITHUB_REPOSITORY_URL_HERE]
-   cd Agency-ABE-Project 
+   git clone https://github.com/OsmanSelvi84/blockchain-privacy-projects.git
+   cd blockchain-privacy-projects
    ```
 
 2. **Switch to Student Evaluation Branch:**
 
-   ```bash git checkout students/210304001-ayse-irem-colak ```
+   ```bash
+   git checkout students/210304001-ayse-irem-colak
+   cd 08-attribute-based-encryption
+    ```
 
-3. **Install Core Project Dependencies:**
-   ```bash npm install ```
+4. **Install Core Project Dependencies:**
+   ```bash
+   npm install
+   ```
    
 
 ## 🛠️ Build & Compilation Commands
 
 To compile the underlying Solidity smart contract architecture and generate the necessary artifacts/ABIs, execute the local hardhat compiler tool:
 
-```bash npx hardhat compile```
+```bash 
+npx hardhat compile
+```
 
 Expected Output: Upon execution, the terminal will download the compiler layer and return:
 Compiled 1 Solidity file successfully (or up to date)
@@ -58,7 +65,9 @@ Compiled 1 Solidity file successfully (or up to date)
 ## 🏃 Run & Deployment Instructions
 To simulate network provisioning and boot up a local temporary ledger network node to deploy the live contract address instance, invoke the migration script:
 
-```bash npx hardhat run scripts/deploy.js ```
+```bash 
+npx hardhat run scripts/deploy.js
+```
 Expected Output Structure:
 Deploying original ABE contract with authority account: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
 Original Implementation successfully deployed to: 0x5FbDB2315678afecb367f032d93F642f64180aa3
@@ -67,7 +76,9 @@ Original Implementation successfully deployed to: 0x5FbDB2315678afecb367f032d93F
 The verification layer evaluates the cryptographic engine against a precise matrix of 5 distinct evaluation test inputs. The automated framework generates a mock blockchain infrastructure in-memory, provisions structural attributes, hashes authorization passphrases via Keccak-256, and validates compliance behaviors.
 
 To initiate the fully automated evaluation test harness and verify outputs, run:
-```bash npx hardhat test ```
+```bash
+npx hardhat test
+ ```
 
 
 ### 📊 Sample Inputs & Expected Outputs Matrix (Instructor Evaluation Verification)
@@ -118,3 +129,28 @@ The terminal will first prompt you to mint and encrypt a completely new corporat
 * Set token lifetime status: Type yes to grant an active, valid Unix time-lock window, or no to instantly seed an expired epoch.
 
 * Provide cryptographic passphrase token: Type the passphrase to attempt decryption.
+
+### 📈 Successful Execution 
+
+🔒 PHASE 1: DYNAMIC ON-CHAIN ASSET LOCKING (ENCRYPTION)
+Enter a unique Asset ID to lock (e.g., 202 or 999): 202
+Set the department policy constraint for this asset (e.g., 'tasarim' or 'finans'): finans
+Set the cryptographic passphrase for this asset: irem_secret_key
+Enter the secure resource pointer/URI (e.g., ipfs://my-private-data): ipfs://my-private-data
+
+[Cryptographic Minter]: Hashing the passphrase via Keccak-256...
+[EVM State Transition]: Executing lockAssetWithPolicy for Asset ID 202...
+🟢 SUCCESS: Asset 202 is now cryptographically locked on-chain under the 'finans' policy!
+
+🔑 PHASE 2: DYNAMIC USER PROVISIONING & DECRYPTION
+1. Assign a department attribute token to the user (To PASS use 'finans', to FAIL use something else): finans
+2. Set attribute token lifetime status. Should it be valid? (yes / no): yes
+
+[Ledger Report]: Dynamic attributes successfully mined on-chain for 'Juri_User'.
+3. Provide the cryptographic passphrase token to unlock Asset 202: irem_secret_key
+
+[Cryptographic Processing]: Contract evaluating state transitions on the EVM...
+
+LIVE EVALUATION VERDICT 
+🟢 DECRYPTION GRANTED (ALLOWED: TRUE)
+📂 Unlocked IPFS Secure Varlık Pointer: DECRYPTION GRANTED. Payload: ipfs://my-private-data
