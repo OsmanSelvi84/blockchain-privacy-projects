@@ -65,6 +65,10 @@ npm run deploy:local
 
 Addresses saved to `deployedAddresses.json`.
 
+```bash
+cp .env.example .env
+```
+
 ### 3. Deposit
 
 ```bash
@@ -160,6 +164,10 @@ npm run deploy:local
 ```
 
 Addresses saved to `deployedAddresses.json`.
+
+```bash
+cp .env.example .env
+```
 
 ### 7. Deposit
 
