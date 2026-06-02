@@ -219,10 +219,32 @@ cd tornado-core
 
 ### Requirements
 
-1. `node v22.x` or newer LTS
+1. `node v18.x` or newer LTS
 2. `nvm use` in this repo before running the build
 3. `npm` and `npx` from that Node install
 
+### VERY IMPORTANT
+
+1. update truffle-config.js to
+   ```json
+     compilers: {
+      solc: {
+        version: require.resolve("solc"),
+        docker: false,
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200
+          }
+        }
+      }
+    }
+   ```
+2. update .nvmrc to 18 instead of 12
+3. run
+   ```bash
+   npm install --save-dev solc@0.7.6
+   ```
 ### Usage
 
 1. `npm install`
