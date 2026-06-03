@@ -35,15 +35,21 @@ cd 08-attribute-based-encryption
 
 ## Install Dependencies
 
+\```bash
 pip3 install cryptography
-
+\```
+ 
 ## Run Original Implementation
 
+\```bash
 python3 abe.py
+\```
 
 ## Run 5 Test Cases
 
+\```bash
 python3 test_abe.py
+\```
 
 Expected: 5/5 tests passed
 
@@ -84,3 +90,9 @@ Expected: 5/5 tests passed
 Reference uses HMAC-SHA3-256 key derivation and inline token parser.
 Original uses SHA-256 + MSK and recursive PolicyNode tree.
 Both produce identical access control behavior on all 5 test cases.
+## Test Output
+
+Both implementations produce identical access control results on all 5 test cases.
+
+![Test Results](docs/test_output.png)
+
