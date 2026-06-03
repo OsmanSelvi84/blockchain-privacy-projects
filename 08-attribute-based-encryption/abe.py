@@ -63,6 +63,8 @@ def evaluate_policy(node, attributes):
     return False
 
 class Authority:
+    """Trusted authority that generates the master secret and issues
+    attribute-based private keys to users."""
     def __init__(self):
         self.master_secret = secrets.token_bytes(32)
         self.public_params = {"scheme": "CP-ABE-Demo", "version": "1.0"}
@@ -80,6 +82,8 @@ class Authority:
         return self.public_params
 
 class Encryptor:
+    """Encrypts messages under a ciphertext policy (CP-ABE).
+    Only users whose attributes satisfy the policy can decrypt."""
     def __init__(self, authority):
         self.authority = authority
 
@@ -92,6 +96,8 @@ class Encryptor:
         return {"policy": policy_str, "nonce": nonce.hex(), "ciphertext": ct_bytes.hex(), "scheme": "CP-ABE-AES-GCM"}
 
 class Decryptor:
+    """Decrypts ciphertext bundles if the user's attributes
+    satisfy the embedded access policy."""
     def __init__(self, authority):
         self.authority = authority
 
@@ -108,6 +114,7 @@ class Decryptor:
         return aesgcm.decrypt(nonce, ct_bytes, None).decode()
 
 class ABESystem:
+    """Top-level CP-ABE system combining Authority, Encryptor and Decryptor."""
     def __init__(self):
         self.authority = Authority()
         self.encryptor = Encryptor(self.authority)
