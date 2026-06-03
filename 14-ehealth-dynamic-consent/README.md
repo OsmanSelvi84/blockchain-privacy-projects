@@ -1,197 +1,230 @@
 # eHealth Dynamic Consent Smart Contract
 
-## About the Project
+## 1. Project Description
 
-This project is a simple smart contract system for managing patient consent in healthcare environments.
+### Goal
 
-The main idea is to let patients control permissions for sharing their medical-related information with healthcare providers. A patient can give consent, update it later, or completely revoke it whenever they want.
+The purpose of this project is to create a simple blockchain-based healthcare consent management system using Solidity and Hardhat.
 
-The project was developed using Solidity and Hardhat as part of a blockchain privacy assignment.
+In many healthcare systems, patients do not have direct control over how their data permissions are managed. This project focuses on giving patients the ability to manage their own consent dynamically through a smart contract.
 
----
-
-# What the Contract Can Do
-
-The smart contract allows patients to:
+The system allows a patient to:
 
 * give consent to a healthcare provider,
 * update an existing consent,
-* revoke consent,
-* and check whether a consent is active.
+* revoke consent at any time,
+* and allow providers to verify whether consent is active.
 
-Each consent stores:
+The project stores only consent-related information on-chain such as:
 
-* whether it is active,
-* the purpose of the consent,
-* the type of medical data,
-* and the last update timestamp.
+* consent status,
+* purpose,
+* data type,
+* and timestamps.
 
-The contract does not store actual medical records. Only permission-related information is stored.
+Actual medical records are NOT stored on the blockchain.
 
 ---
 
-# Technologies Used
+### Requirements
 
-* Solidity
+* Solidity smart contract implementation
+* Dynamic consent management
+* Consent validation checks
+* Automated testing with Hardhat
+* Deployment script
+* Reference implementation comparison
+* Permission control using `msg.sender`
+
+---
+
+### Privacy Concept
+
+The project focuses on patient-controlled permissions.
+
+Instead of storing sensitive medical records directly on-chain, the blockchain is only used to store consent information. This reduces privacy risks and unnecessary storage costs while still providing transparency and integrity for consent management.
+
+Only the patient who created the consent can update or revoke it.
+
+---
+
+### How It Works
+
+1. A patient gives consent to a healthcare provider.
+2. The consent stores:
+
+   * provider address,
+   * purpose,
+   * data type,
+   * timestamp,
+   * active status.
+3. The provider can check whether consent exists.
+4. The patient can later:
+
+   * update the consent,
+   * or revoke it completely.
+5. Validation checks prevent invalid or unauthorized actions.
+
+---
+
+# 2. Branch Information 
+
+Repository:
+https://github.com/OsmanSelvi84/blockchain-privacy-projects.git
+
+Branch:
+`students/220304119-mena-ghazowan-hamood`
+
+Project Folder:
+`14-ehealth-dynamic-consent`
+
+---
+
+# 3. Requirements (software/tools) 
+
+* Node.js
+* npm
 * Hardhat
+* Solidity
 * TypeScript
-* Ethers.js
-* Chai
 
 ---
 
-# Project Structure
-
-```text id="v1y8mb"
-14-ehealth-dynamic-consent/
-│
-├── contracts/
-│   └── DynamicConsent.sol
-│
-├── test/
-│   └── DynamicConsent.ts
-│
-├── scripts/
-│   └── deploy.ts
-│
-├── hardhat.config.ts
-├── tsconfig.json
-├── package.json
-└── README.md
-```
-
----
-
-# Installation
+# 4. Installation 
 
 Clone the repository:
 
-```bash id="3gn1yi"
+```bash
 git clone https://github.com/OsmanSelvi84/blockchain-privacy-projects.git
 ```
 
 Enter the repository:
 
-```bash id="r1jvsf"
+```bash
 cd blockchain-privacy-projects
 ```
 
 Switch to the assigned branch:
 
-```bash id="kcgq7q"
+```bash
 git checkout students/220304119-mena-ghazowan-hamood
 ```
 
 Open the project folder:
 
-```bash id="5r4g2n"
+```bash
 cd 14-ehealth-dynamic-consent
 ```
 
 Install dependencies:
 
-```bash id="snr6gh"
+```bash
 npm install
 ```
 
 ---
 
-# Compile the Contract
+# 5. How to Run (step by step)
 
-```bash id="q7e0gx"
+### Step 1: Compile the smart contract
+
+```bash
 npx hardhat compile
 ```
 
 ---
 
-# Run Tests
+### Step 2: Run the automated tests
 
-```bash id="m9m3p2"
+```bash
 npx hardhat test
 ```
 
-The project includes:
-
-* functional tests,
-* validation tests,
-* and security-related checks.
-
 Expected result:
 
-```text id="5x2wbn"
+```text
 10 passing
 ```
 
 ---
 
-# Deploy the Contract
+### Step 3: Deploy the contract
 
-```bash id="svm6ph"
+```bash
 npx hardhat run scripts/deploy.ts
 ```
 
 Example output:
 
-```text id="7v4g4y"
+```text
 DynamicConsent deployed to: 0x...
 ```
 
 ---
 
-# Implemented Test Cases
+# 6. Reference
 
-## Main Tests
-
-* giving consent,
-* checking consent,
-* updating consent,
-* revoking consent,
-* preventing unauthorized updates.
-
-## Validation Tests
-
-* invalid provider address,
-* empty purpose field,
-* empty data type field,
-* revoking non-existing consent,
-* updating inactive consent.
-
----
-
-# Reference Project
-
-The following project was used as a reference during research:
-
+Reference project used during research:
 SC-DCMS
 https://github.com/mlecjm/sc-dcms
 
-It was mainly used to understand how blockchain-based dynamic consent systems are structured.
+The reference implementation was used only to understand how blockchain based dynamic consent systems are structured.
+This project was independently implemented using Solidity and Hardhat.
 
-The implementation in this repository was written independently for this assignment.
+
+# 7. Project Structure 
+
+```text
+14-ehealth-dynamic-consent/
+│
+├── contracts
+│   └── DynamicConsent.sol
+│
+├── test
+│   └── DynamicConsent.ts
+│
+├── scripts
+│   └── deploy.ts
+│
+├── hardhat.config.ts
+├── package.json
+├── tsconfig.json
+└── README.md
+```
 
 ---
 
-# Notes
+# 8. Test Cases 
 
-This project focuses on the consent management logic itself rather than storing medical records.
+### Functional Tests
 
-Keeping medical data directly on-chain would create privacy and storage problems, so only consent information is stored inside the smart contract.
+* Patient gives consent
+* Provider checks consent
+* Patient updates consent
+* Patient revokes consent
+* Unauthorized user update rejection
+
+### Validation Tests
+
+* Invalid provider address rejection
+* Empty purpose rejection
+* Empty data type rejection
+* Revoking non-existing consent rejection
+* Updating inactive consent rejection
 
 ---
 
-# Future Improvements
+# 9. Notes 
 
-Possible future improvements:
-
-* provider roles,
-* frontend interface,
-* encrypted off-chain storage,
-* IPFS integration,
-* more advanced privacy mechanisms.
+This project intentionally avoids storing real healthcare data on-chain.
+The blockchain is used only for consent verification and permission management.
+The focus of the implementation is:
+* dynamic consent logic,
+* validation/security checks,
+* and blockchain-based transparency.
 
 ---
 
-# Conclusion
-
-This project demonstrates a simple example of how smart contracts can be used for managing dynamic patient consent in healthcare systems.
-
+# 10. References 
+* Hardhat Documentation: https://hardhat.org/docs
+* SC-DCMS Reference Project: https://github.com/mlecjm/sc-dcms
