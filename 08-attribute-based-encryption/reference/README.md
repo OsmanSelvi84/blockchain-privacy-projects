@@ -13,11 +13,11 @@ Repository: https://github.com/maethlucky/ABAC-Simulator.git
 
 * **📉 Reference Simulator Production Output (University Schema)**
 When executing the reference script, the engine evaluates domain-specific constraints and outputs the following logical state vector:
-csStu1,cs101gradebook,addScore: DENY          -> Role mismatch (Student cannot modify instructor assets)
-csStu1,cs101gradebook,readMyScores: PERMIT    -> Attribute match (Student can read own course data)
-csStu2,cs601gradebook,addScore: DENY          -> Role mismatch (Unauthorized write attempt)
-csStu2,cs602gradebook,addScore: DENY          -> Role mismatch (Unauthorized write attempt)
-csStu3,cs602gradebook,readMyScores: PERMIT    -> Attribute match (Graduate student reads matching course data)
+* csStu1,cs101gradebook,addScore: DENY          -> Role mismatch (Student cannot modify instructor assets)
+* csStu1,cs101gradebook,readMyScores: PERMIT    -> Attribute match (Student can read own course data)
+* csStu2,cs601gradebook,addScore: DENY          -> Role mismatch (Unauthorized write attempt)
+* csStu2,cs602gradebook,addScore: DENY          -> Role mismatch (Unauthorized write attempt)
+* csStu3,cs602gradebook,readMyScores: PERMIT    -> Attribute match (Graduate student reads matching course data)
 
 * **🧠 Comparative Architecture Mapping**
 original decentralized digital agency implementation successfully transitions and compiles these high-level Python attribute rules (PERMIT / DENY) into unalterable, cryptographically enforced on-chain ledger constraints (GRANT / REVERT) using Solidity, Hardhat, and Keccak-256 secure envelopes.
