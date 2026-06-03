@@ -16,10 +16,11 @@ describe("AgencyABEControl - Comprehensive 5-Input Evaluation Matrix", function 
   let cryptoLock;
 
   beforeEach(async function () {
+    // Virtual test wallets (Signers) to be simulated on the blockchain are generated
     [admin, employeeAyse, expiredUser, wrongDeptUser, invalidKeyUser, unregisteredUser] = await ethers.getSigners();
     const AgencyABEControl = await ethers.getContractFactory("AgencyABEControl");
     contract = await AgencyABEControl.deploy();
-
+// The “agency_secure_passphrase” is hashed using Keccak-256 for on-chain storage
     cryptoLock = ethers.solidityPackedKeccak256(["string"], [secretPass]);
     await contract.lockAssetWithPolicy(101, cryptoLock, "tasarim", "ipfs://3d-landing-page-v1");
   });
