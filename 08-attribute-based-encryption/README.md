@@ -156,3 +156,21 @@ Enter the secure resource pointer/URI (e.g., ipfs://my-private-data): ipfs://my-
 LIVE EVALUATION VERDICT 
 🟢 DECRYPTION GRANTED (ALLOWED: TRUE)
 📂 Unlocked IPFS Secure Varlık Pointer: DECRYPTION GRANTED. Payload: ipfs://my-private-data
+
+### 📊 Mapping and Alignment with the Reference Project
+
+To provide a rigorous academic and structural comparison, the original implementation of **AgencyABEControl** maintains a 1:1 functional mapping with the core access control matrices found in the Reference ABAC Simulator. 
+
+While the reference project uses an academic (University) domain, this project adapts those exact mathematical validation states into an enterprise (Digital Agency) domain. The structural and logical alignment of inputs is strictly mapped as follows:
+
+| Access Control Component | Reference Project Input (University Domain) | Original Project Input (Agency Domain) | Logical & Cryptographic Role |
+| :--- | :--- | :--- | :--- |
+| **Subject** | `csStu1` (Student) | `employeeAyse` (Employee Address) | The cryptographic identity/wallet address initiating the on-chain request. |
+| **Resource** | `cs101gradebook` (Gradebook Asset) | `Asset 101` / `ipfs://3d-landing-page-v1` | The target secure pointer/URI locked within the state storage. |
+| **Action / Attribute** | `readMyScores` / `addScore` (Actions) | `tasarim` / `pazarlama` (Department Tokens) | The evaluation criteria parsed by the cryptographic matrix logic loop. |
+
+### Architectural Validation Equality
+* **Reference Logic:** Evaluates whether `Subject (csStu1)` possesses the necessary operational permission to execute an action on `Resource (cs101gradebook)`.
+* **Original Blockchain Logic:** Evaluates whether `Subject (employeeAyse)` possesses the required cryptographic department attribute token to unlock the `Resource (Asset 101)` under the designated `policyConstraint`.
+
+Both systems execute the exact same structural access tree verification matrix; the inputs vary only in domain nomenclature to fit an enterprise blockchain architecture.
