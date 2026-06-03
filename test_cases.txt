@@ -1,0 +1,39 @@
+TEST CASE 1
+Create DID
+Input:
+did:001
+
+Expected:
+DID created
+
+---
+
+TEST CASE 2
+Resolve DID
+
+Expected:
+User information returned
+
+---
+
+TEST CASE 3
+Update DID
+
+Expected:
+DID updated
+
+---
+
+TEST CASE 4
+Revoke DID
+
+Expected:
+DID revoked
+
+---
+
+TEST CASE 5
+Resolve Revoked DID
+
+Expected:
+DID exists but inactive
