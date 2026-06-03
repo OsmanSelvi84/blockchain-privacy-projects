@@ -49,7 +49,7 @@ To run and test this original project, you need to have Node.js (v18 or higher) 
 Clone the course repository, checkout to the specific student branch, and install the required Hardhat dependencies:
 
 ```bash
-git clone [https://github.com/OsmanSelvi84/blockchain-privacy-projects.git](https://github.com/OsmanSelvi84/blockchain-privacy-projects.git)
+git clone https://github.com/OsmanSelvi84/blockchain-privacy-projects.git
 cd blockchain-privacy-projects
 git checkout students/210304003-elif-kus
 npm install
