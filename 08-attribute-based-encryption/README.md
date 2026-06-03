@@ -97,11 +97,11 @@ npx hardhat test
 A completely compliant compile-and-test loop will return the following green signature directly inside your console environment:
 
 AgencyABEControl - Comprehensive 5-Input Evaluation Matrix
-    ✔ Test Input 1: Should GRANT access for valid attributes matching the ciphertext policy
-    ✔ Test Input 2: Should DENY access if the user's attribute key lifetime has expired
-    ✔ Test Input 3: Should DENY access if the user's department attribute doesn't match the policy
-    ✔ Test Input 4: Should DENY access if attributes match but the secret token is wrong
-    ✔ Test Input 5: Should DENY access if the user address holds no attributes in the registry
+*    ✔ Test Input 1: Should GRANT access for valid attributes matching the ciphertext policy
+*    ✔ Test Input 2: Should DENY access if the user's attribute key lifetime has expired
+*    ✔ Test Input 3: Should DENY access if the user's department attribute doesn't match the policy
+*    ✔ Test Input 4: Should DENY access if attributes match but the secret token is wrong
+*    ✔ Test Input 5: Should DENY access if the user address holds no attributes in the registry
 
   5 passing (224ms)
   
