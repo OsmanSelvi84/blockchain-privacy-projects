@@ -7,7 +7,8 @@ This repository contains the **Original Implementation** of a fine-grained Acces
 ## 📌 Project Description & Privacy Concept
 Traditional Role-Based Access Control (RBAC) models lack the granularity needed to secure highly sensitive corporate digital assets (e.g., 3D landing page source files). This project introduces a **Fine-Grained Attribute-Based Access Control** mechanism. 
 
-The core privacy engine enforces a multi-attribute cryptographic validation sequence where an entity is granted asset decryption privileges **only if** their cumulative attribute tokens (Department, Position Hierarchy, and Temporal Validity Locks) mathematically satisfy the specific access policy constraint bound to the encrypted payload.
+The core privacy engine enforces a multi-attribute cryptographic validation sequence where an entity is granted asset decryption privileges **only if** their cumulative attribute tokens (Department, Position Hierarchy, and Temporal Validity Locks) mathematically satisfy the specific access policy constraint bound to the encrypted payload. Sensitive data is stored in encrypted form on IPFS (InterPlanetary File System). The smart contract does not store the file itself, but only its unique address pointer on IPFS—that is, the IPFS URI/hash value. When the user successfully solves the attribute matrix and the encryption key, the contract returns the output: DECRYPTION GRANTED. Payload: ipfs://... The user gains access to that secret file on IPFS only if they pass this on-chain verification.
+
 
 ---
 
