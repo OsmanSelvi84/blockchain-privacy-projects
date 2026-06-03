@@ -52,6 +52,7 @@ Clone the course repository, checkout to the specific student branch, and instal
 git clone https://github.com/OsmanSelvi84/blockchain-privacy-projects.git
 cd blockchain-privacy-projects
 git checkout students/210304003-elif-kus
+cd 20-post-quantum-token
 npm install
 ```
 ## 🛠️ Troubleshooting (NVM / Node): 
