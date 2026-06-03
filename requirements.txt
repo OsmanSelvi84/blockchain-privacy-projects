@@ -1,0 +1,11 @@
+## 📌 Requirements
+
+- Create a Decentralized Identifier (DID) registry system
+- Support DID lifecycle management including:
+  - DID creation
+  - DID update
+  - DID revocation
+- Enable DID resolution to retrieve DID data
+- Maintain identity state (active / revoked)
+- Store and manage DID data in a structured format
+- Simulate self-sovereign identity principles without relying on a centralized authority

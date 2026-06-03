@@ -30,8 +30,6 @@ class DIDManager:
             return "DID not found"
         return self.registry[did]
 
-
-# test
 manager = DIDManager()
 
 print(manager.create_did("did:001", {"name": "Suden"}))
