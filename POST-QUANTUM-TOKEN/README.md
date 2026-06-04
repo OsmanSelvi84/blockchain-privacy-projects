@@ -1,50 +1,50 @@
 # Post Quantum Privacy Token
 
-This project is a simple blockchain privacy project developed with Solidity and Hardhat.
+This project was developed for the Blockchain Privacy Projects course.
 
-The purpose of the project is to create a basic privacy-focused token system using hash commitments.
-
-The project was developed for the Blockchain Privacy Projects course.
+The goal of the project is to demonstrate a simple privacy-preserving token mechanism using commitment hashes generated with Solidity and Hardhat.
 
 ---
 
 # Project Topic
 
-20 - Post Quantum Token
+**20 - Post Quantum Token**
+
+---
+
+# Project Description
+
+The project generates commitment hashes instead of storing transaction details directly.
+
+Each commitment is generated using:
+
+- receiver address
+- transfer amount
+- secret value
+
+The commitment is calculated using:
+
+```solidity
+keccak256(abi.encodePacked(receiver, amount, secret))
+```
+
+This allows transaction information to be represented through a cryptographic hash.
 
 ---
 
 # Project Features
 
-- Basic token transfer
-- Privacy transfer mechanism
+- Token transfer functionality
 - Commitment hash generation
-- Local blockchain deployment
+- Privacy transfer mechanism
 - Smart contract testing
-- Simple frontend demo
+- Frontend demonstration
 - Reference implementation comparison
 
 ---
 
-# Privacy Mechanism
-
-In this project, transaction information is not stored directly on chain.
-
-Instead, a commitment hash is created using:
-
-- receiver address
-- transfer amount
-- secret string
-
-The commitment is generated with `keccak256`.
-
-Example:
-
-```text
-commitment = hash(receiver + amount + secret)
-```
-
 # Folder Structure
+
 ```text
 contracts/
 test/
@@ -54,9 +54,37 @@ reference/
 comparison/
 README.md
 ```
+
+---
+
 # Branch Information
 
-20-post-quantum-token
+```text
+students/210304037-efe-ozturk
+```
+
+Project directory:
+
+```text
+POST-QUANTUM-TOKEN
+```
+
+---
+
+# Required Software
+
+- Node.js
+- npm
+- Hardhat
+
+Check installation:
+
+```bash
+node -v
+npm -v
+```
+
+---
 
 # Installation
 
@@ -66,21 +94,31 @@ Clone repository:
 git clone https://github.com/OsmanSelvi84/blockchain-privacy-projects.git
 ```
 
-Checkout project branch:
+Enter repository:
+
+```bash
+cd blockchain-privacy-projects
+```
+
+Checkout student branch:
 
 ```bash
 git checkout students/210304037-efe-ozturk
 ```
 
-project folder:
+Enter project directory:
+
 ```bash
-cd post-quantum-token
+cd POST-QUANTUM-TOKEN
 ```
 
 Install dependencies:
+
 ```bash
 npm install
 ```
+
+---
 
 # Compile Smart Contract
 
@@ -94,6 +132,8 @@ Expected output:
 Compiled successfully
 ```
 
+---
+
 # Run Tests
 
 ```bash
@@ -106,13 +146,19 @@ Expected output:
 3 passing
 ```
 
+---
+
 # Start Local Blockchain
 
 ```bash
 npx hardhat node
 ```
 
+---
+
 # Deploy Smart Contract
+
+Open a new terminal:
 
 ```bash
 npx hardhat run scripts/deploy.js --network localhost
@@ -124,68 +170,221 @@ Expected output:
 Contract deployed to: 0x...
 ```
 
+---
+
 # Frontend Demo
+
+Frontend file:
 
 ```text
 frontend/index.html
 ```
 
+The frontend allows users to:
+
+- enter receiver address
+- enter transfer amount
+- enter secret value
+- generate commitment hashes
+
+---
+
 # Smart Contract Functions
 
-- transfer()
-- createCommitment()
-- privateTransfer()
+## transfer()
+
+Transfers tokens between users.
+
+## createCommitment()
+
+Creates a commitment hash using:
+
+```text
+receiver
+amount
+secret
+```
+
+Returns:
+
+```text
+bytes32 commitment
+```
+
+## privateTransfer()
+
+Stores and validates commitment-based transfers.
+
+---
 
 # Reference Implementation
 
-Reference project used for learning and comparison:
+Reference file:
 
-DDMixer
+```text
+reference/reference_demo.js
+```
 
-Repository:
+Technology:
 
-https://github.com/alibertay/DDMixer
+- Node.js
+- Ethers.js
 
-The reference implementation was:
+Run reference implementation:
 
-- cloned locally
-- dependency-installed
-- executed successfully
+```bash
+node reference/reference_demo.js
+```
 
-Reference project technologies:
+The reference implementation generates commitment hashes using:
 
-- Solidity
-- Python
-- Flask
-- HTML
-- JavaScript
+```javascript
+ethers.solidityPackedKeccak256(
+  ["address", "uint256", "string"],
+  [receiver, amount, secret]
+)
+```
+
+This is equivalent to:
+
+```solidity
+keccak256(
+    abi.encodePacked(
+        receiver,
+        amount,
+        secret
+    )
+)
+```
+
+used in the original implementation.
+
+---
+
+# Original Implementation Demo
+
+Run original implementation:
+
+```bash
+npx hardhat run scripts/demo.js
+```
+
+The original Solidity implementation executes the same five test cases and generates commitment hashes.
+
+---
+
+# Sample Inputs and Outputs
+
+## Test 1
+
+Input:
+
+```text
+receiver = 0x0000000000000000000000000000000000000001
+amount = 10
+secret = privacy1
+```
+
+Output:
+
+```text
+0x16d8eeb6913f20c1db9b2a0a3796b577659c79bf39d2ffba1ee598e808d17dd4
+```
+
+## Test 2
+
+```text
+0xf7a60bda82ba8671534d6ecdeb0586380288f0ebbe1eb9b453d289102351bc6b
+```
+
+## Test 3
+
+```text
+0xb1e438b0531f0a57e0da643ddbee8c8aefb42a2f5855fec4c59d14ec0334fff4
+```
+
+## Test 4
+
+```text
+0x5a041850fddea7f427258bf88121c623b793570bb10b0ce2ec87ae2e4891e699
+```
+
+## Test 5
+
+```text
+0x490e6db72ffb2582a39b995e0bbfae31891eab95c78c5c93e40585221150f2de
+```
+
+---
 
 # Comparison
 
+Files:
+
 ```text
-comparison/test-inputs.json
 comparison/comparison.md
+comparison/test-inputs.json
 ```
 
-These files contain:
+Comparison Method:
 
-- 5 sample test inputs
-- implementation comparison
-- privacy mechanism explanations
+1. Run reference implementation
+2. Run original implementation
+3. Compare outputs
+4. Verify matching commitment hashes
+
+Result:
+
+```text
+All five test cases generate identical commitment hashes.
+```
+
+---
 
 # Demo Flow
 
-1. Compile smart contract
-2. Run tests
-3. Start local blockchain
-4. Deploy smart contract
-5. Open frontend demo
-6. Generate commitment hash
+1. Install dependencies
+2. Compile smart contract
+3. Run tests
+4. Run reference implementation
+5. Run original implementation
+6. Compare outputs
+7. Open frontend demo
+
+---
+
+# Commands Used During Evaluation
+
+Reference implementation:
+
+```bash
+node reference/reference_demo.js
+```
+
+Original implementation:
+
+```bash
+npx hardhat run scripts/demo.js
+```
+
+Tests:
+
+```bash
+npx hardhat test
+```
+
+---
 
 # Notes
 
-This project is a simplified educational privacy token implementation.
+This project was developed for educational purposes.
 
-The project was developed for learning blockchain privacy concepts and demonstrating privacy-preserving transaction logic.
+The implementation demonstrates:
 
-This implementation is not intended for production use.
+- commitment hashes
+- privacy-preserving transaction representation
+- Solidity smart contract development
+- Hardhat testing
+- reference implementation comparison
+
+This project is not intended for production use.
