@@ -36,7 +36,9 @@ python3-setuptools \
 python3-wheel \
 python3-pyasn1 \
 build-essential \
-git
+git \
+libsodium-dev \
+libffi-dev
 ```
 
 ## Clone and Open the Project
