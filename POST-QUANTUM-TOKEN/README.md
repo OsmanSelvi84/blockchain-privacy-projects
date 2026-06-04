@@ -266,7 +266,7 @@ used in the original implementation.
 Run original implementation:
 
 ```bash
-npx hardhat run scripts/demo.js
+npx hardhat run scripts/scripts/demo.js
 ```
 
 The original Solidity implementation executes the same five test cases and generates commitment hashes.
