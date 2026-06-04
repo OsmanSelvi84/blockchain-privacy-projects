@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # DID Management System
 
 ## Student Information
@@ -132,3 +133,12 @@ See reference.md for comparison with an existing DID framework.
 ## Author
 
 Suden Bakan
+=======
+# Blockchain Privacy Projects
+
+COMP4052 - Introduction to Blockchain and DLT
+
+Instructor: Osman SELVİ
+
+This repository created for collecting student projects for the term 2025-2026 Fall
+>>>>>>> fde1371c5a6cc59dc8d8b92849edaa043d4f4b75
