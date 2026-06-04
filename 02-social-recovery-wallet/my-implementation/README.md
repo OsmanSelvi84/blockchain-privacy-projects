@@ -21,14 +21,34 @@ The owner registers **N trusted guardians**. Those guardians might be close or t
 
 ---
 
+## How to Clone and Run This Project
+
+### Step 1 — Clone the Repository
+git clone https://github.com/OsmanSelvi84/blockchain-privacy-projects.git
+cd blockchain-privacy-projects
+git checkout students/220304134-norris-nishimwe
+cd 02-social-recovery-wallet
+
+### Step 2 — Run the Reference Implementation
+cd reference-implementation
+forge install
+forge build
+forge test
+
+### Step 3 — Run My Implementation
+cd ../my-implementation
+npm install
+npx hardhat compile
+npx hardhat test
+python src/social_recovery_wallet.py --test
+python src/social_recovery_wallet.py --demo
+
 ## Reference Implementation
 
 **Repository:** https://github.com/verumlotus/social-recovery-wallet  
 **Author:** verumlotus  
 **Building Tool:** Foundry  
 ---
-
-# — Reference Implementation Setup and Test
 
 ## Required Software for Reference Implementation
 
@@ -111,12 +131,11 @@ Compiler run successful
 
 ## Step 6 — Run Reference Tests
 
-```bash
 forge test
-```
+
 
 Expected output:
-```
+
 Running tests...
 [PASS] testRecovery() ...
 Test result: ok. 9 passed
@@ -141,9 +160,8 @@ Test result: ok. 9 passed
 4. Install with all defaults
 5. Open Command Prompt and verify:
 
-```bash
+
 python --version
-```
 
 Expected output: `Python 3.11.x`
 
@@ -156,26 +174,15 @@ Expected output: `Python 3.11.x`
 3. Install with all defaults
 4. Open Command Prompt and verify:
 
-```bash
+
 node --version
 npm --version
-```
+
 
 Expected output:
-```
+
 v22.x.x
 10.x.x
-```
-
----
-
-## Step 3 — Download the Original Implementation
-
-**open your Terminal
-1.open the location where you want to clone this repository(Desktop is better): cd Desktop
-2.git 
-3.cd 
-
 
 ---
 
@@ -183,15 +190,15 @@ v22.x.x
 
 Open Command Prompt:
 
-```bash
+
 cd "C:\Users\HP\Desktop\Social Recovery Wallet"
-```
+
 
 Verify you are in the right place:
 
-```bash
+
 dir
-```
+
 
 You should see: contracts, src, test, scripts, package.json, hardhat.config.js
 
@@ -201,9 +208,7 @@ You should see: contracts, src, test, scripts, package.json, hardhat.config.js
 
 Run this once only:
 
-```bash
 npm install
-```
 
 Expected output: `added 577 packages`
 
@@ -213,14 +218,13 @@ Deprecation warnings are normal and can be ignored.
 
 ## Step 6 — Compile the Smart Contract
 
-```bash
 npx hardhat compile
-```
+
 
 Expected output:
-```
+
 Compiled 1 Solidity file successfully (evm target: paris).
-```
+
 
 ---
 
@@ -228,7 +232,7 @@ Compiled 1 Solidity file successfully (evm target: paris).
 
 ## Python Commands (No extra install needed)
 
-```bash
+
 # Run 13 automated tests
 python src/social_recovery_wallet.py --test
 
@@ -237,10 +241,10 @@ python src/social_recovery_wallet.py --demo
 
 # Interactive CLI menu
 python src/cli.py
-```
+
 
 ### Expected Output for --test:
-```
+
   [PASS] Commitment derivation is deterministic
   [PASS] Valid proof passes verification
   [PASS] Tampered secret fails verification
@@ -256,19 +260,18 @@ python src/cli.py
   [PASS] Guardian successfully swapped after timelock
 
   Results: 13 passed, 0 failed out of 13 tests
-```
+
 
 ---
 
 ## Solidity / Hardhat Commands
 
-```bash
 # Run 22 smart contract tests
 npx hardhat test
-```
+
 
 ### Expected Output:
-```
+
   SocialRecoveryWallet
     Deployment
       ✓ sets correct owner and threshold
@@ -299,7 +302,7 @@ npx hardhat test
       ✓ non-owner cannot execute external transaction
 
   22 passing (2s)
-```
+
 
 ---
 
@@ -308,27 +311,27 @@ npx hardhat test
 Open TWO terminal windows:
 
 **Terminal 1 — Start local blockchain:**
-```bash
+
 cd "C:\Users\HP\Desktop\Social Recovery Wallet"
 npx hardhat node
-```
+
 
 Leave this running. You will see 20 test accounts with fake ETH.
 
 **Terminal 2 — Deploy contract:**
-```bash
+
 cd "C:\Users\HP\Desktop\Social Recovery Wallet"
 npx hardhat run scripts/deploy.js --network localhost
-```
+
 
 Expected output:
-```
+
 Deploying SocialRecoveryWallet...
   Deployer : 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
   Threshold: 2
 
 ✓ Deployed to: 0x5FbDB2315678afecb367f032d93F642f64180aa3
-```
+
 
 ---
 
@@ -338,9 +341,9 @@ Deploying SocialRecoveryWallet...
 
 **Input:** Register a guardian with ZK commitment  
 **Command:**
-```bash
+
 npx hardhat test --grep "owner can add a guardian"
-```
+
 **Expected output:** `✓ owner can add a guardian`
 
 ---
@@ -349,15 +352,15 @@ npx hardhat test --grep "owner can add a guardian"
 
 **Input:** 3 guardians, threshold=2, 2 guardians approve, execute called  
 **Command:**
-```bash
+
 npx hardhat test --grep "executes recovery when threshold is reached"
-```
+
 **Expected output:** `✓ executes recovery when threshold is reached`
 
 Full demo:
-```bash
+
 python src/social_recovery_wallet.py --demo
-```
+
 
 ---
 
@@ -365,9 +368,9 @@ python src/social_recovery_wallet.py --demo
 
 **Input:** Guardian submits same nullifier twice  
 **Command:**
-```bash
+
 npx hardhat test --grep "spent nullifier is rejected"
-```
+
 **Expected output:** `✓ spent nullifier is rejected`
 
 ---
@@ -376,9 +379,9 @@ npx hardhat test --grep "spent nullifier is rejected"
 
 **Input:** Only 1 guardian approves when threshold=2  
 **Command:**
-```bash
+
 npx hardhat test --grep "execution blocked below threshold"
-```
+
 **Expected output:** `✓ execution blocked below threshold`
 
 ---
@@ -387,9 +390,9 @@ npx hardhat test --grep "execution blocked below threshold"
 
 **Input:** Random values not matching any registered commitment  
 **Command:**
-```bash
+
 npx hardhat test --grep "unregistered guardian cannot initiate"
-```
+
 **Expected output:** `✓ unregistered guardian cannot initiate`
 
 ---
@@ -401,7 +404,6 @@ npx hardhat test --grep "unregistered guardian cannot initiate"
 
 ## Commitment Scheme
 
-```
 Guardian keeps private:
     secret    = random 256-bit value
     nullifier = unique 256-bit tag
@@ -414,7 +416,6 @@ To vote (prove guardianship):
     Contract re-computes keccak256(secret || nullifier)
     Checks it equals the stored commitment  
     Marks nullifier as permanently spent    
-```
 
 ## Why This Is Private
 
@@ -430,12 +431,10 @@ A nullifier works like a unique serial number. Once spent, it is permanently rec
 ---
 ### Privacy of the Reference
 
-
 - Guardian stored as `keccak256(address)` which can be unsecure
 - During votes, the guardian's Address is revealed which means that the identity can easily be revealed Never revealed
 
 ## Similarities 
-
 - Recovery flow: initiate→support→execute 
 - Guardian removal: 3-day timelock 
 - Threshold scheme: T(threshold)-of-N(guardians)
