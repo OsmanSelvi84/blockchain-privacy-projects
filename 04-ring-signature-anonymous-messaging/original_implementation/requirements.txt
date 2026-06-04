@@ -1,3 +1,4 @@
 cryptography
 pyasn1
 click
+cffi
