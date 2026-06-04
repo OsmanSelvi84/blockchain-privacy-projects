@@ -13,7 +13,7 @@ app = AnonymousRingMessaging()
 
 while True:
     print(f"\n{BLUE}=== Ring Signature Anonymous Messaging ==={RESET}")
-    print("1. Send anonymous message")
+    print("1. Sign anonymous message")
     print("2. Verify signature")
     print("3. Show ring information")
     print("4. Exit")
@@ -22,16 +22,29 @@ while True:
 
     if choice == "1":
         message = input("\nEnter your anonymous message: ")
+        signer_key = input("Enter signer private key filename: ")
+        password = input("Enter signer password: ")
 
-        metadata = app.sign_message(message)
+        try:
+            metadata = app.sign_message(message, signer_key, password)
 
-        print(f"\n{GREEN}Ring signature created successfully.{RESET}")
-        print("Signature saved as signature.pem")
-        print("Metadata saved as signature_metadata.json")
-        print("Signer identity is not stored.")
+            print(f"\n{GREEN}Ring signature created successfully.{RESET}")
+            print("Signature saved as signature.pem")
+            print("Metadata saved as signature_metadata.json")
+            print("Signer identity is not stored.")
 
-        print("\nMessage Hash:")
-        print(metadata["message_hash"])
+            print("\nMessage Hash:")
+            print(metadata["message_hash"])
+
+            print("\nRing Size:")
+            print(metadata["ring_size"])
+
+        except FileNotFoundError as error:
+            print(f"\n{RED}Missing key file: {error}{RESET}")
+            print("Please generate key files in reference_implementation/pyring.")
+
+        except ValueError as error:
+            print(f"\n{RED}{error}{RESET}")
 
     elif choice == "2":
         is_valid, metadata = app.verify_message()
@@ -46,16 +59,26 @@ while True:
             print("\nRing Size:")
             print(metadata["ring_size"])
 
+            print("\nRing Members:")
+            for member in metadata.get("ring_members", []):
+                print(f"- {member}")
+
             print("\nMessage Hash:")
             print(metadata["message_hash"])
         else:
             print(f"{RED}Invalid ring signature or no signature found.{RESET}")
 
     elif choice == "3":
+        info = app.get_ring_information()
+
         print(f"\n{BLUE}=== Ring Information ==={RESET}")
-        print("Ring members are represented by public keys.")
-        print("Private signer identity is not shown.")
-        print("Current ring size: 2")
+        print(f"Current ring size: {info['ring_size']}")
+
+        print("\nRing members:")
+        for member in info["members"]:
+            print(f"- {member}")
+
+        print("\nPrivate signer identity is not shown.")
 
     elif choice == "4":
         print(f"\n{YELLOW}Exiting program...{RESET}")
