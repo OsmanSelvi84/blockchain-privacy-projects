@@ -1,116 +1,32 @@
-# eHealth Dynamic Consent Smart Contract
+# 14-ehealth-dynamic-consent
 
-## 1. Project Description
+## Project Description
 
-### Goal
+This project is a blockchain-based Dynamic Consent Management System for healthcare environments.
 
-The purpose of this project is to create a simple blockchain-based healthcare consent management system using Solidity and Hardhat.
+The main idea is to let patients control which healthcare provider can access their medical information. A patient can give consent, update it later, or revoke it completely.
 
-In many healthcare systems, patients do not have direct control over how their data permissions are managed. This project focuses on giving patients the ability to manage their own consent dynamically through a smart contract.
+The contract also stores the purpose of access and the type of medical data, such as Blood Test, MRI, or X-Ray.
 
-The system allows a patient to:
+## Main Features
 
-* give consent to a healthcare provider,
-* update an existing consent,
-* revoke consent at any time,
-* and allow providers to verify whether consent is active.
+* Give consent to a healthcare provider
+* Update consent purpose and data type
+* Revoke consent
+* Check if consent is active
+* View full consent details
+* Record actions through blockchain events
 
-The project stores only consent-related information on-chain such as:
+## Technologies Used
 
-* consent status,
-* purpose,
-* data type,
-* and timestamps.
-
-Actual medical records are NOT stored on the blockchain.
-
----
-
-### Requirements
-
-* Solidity smart contract implementation
-* Dynamic consent management
-* Consent validation checks
-* Automated testing with Hardhat
-* Deployment script
-* Reference implementation comparison
-* Permission control using `msg.sender`
-
----
-
-### Privacy Concept
-
-The project focuses on patient-controlled permissions.
-
-Instead of storing sensitive medical records directly on-chain, the blockchain is only used to store consent information. This reduces privacy risks and unnecessary storage costs while still providing transparency and integrity for consent management.
-
-Only the patient who created the consent can update or revoke it.
-
----
-
-### How It Works
-
-1. A patient gives consent to a healthcare provider.
-2. The consent stores:
-
-   * provider address,
-   * purpose,
-   * data type,
-   * timestamp,
-   * active status.
-3. The provider can check whether consent exists.
-4. The patient can later:
-
-   * update the consent,
-   * or revoke it completely.
-5. Validation checks prevent invalid or unauthorized actions.
-
----
-
-# 2. Branch Information 
-
-Repository:
-https://github.com/OsmanSelvi84/blockchain-privacy-projects.git
-
-Branch:
-`students/220304119-mena-ghazowan-hamood`
-
-Project Folder:
-`14-ehealth-dynamic-consent`
-
----
-
-# 3. Requirements (software/tools) 
-
-* Node.js
-* npm
-* Hardhat
 * Solidity
-* TypeScript
+* Hardhat
+* Ethereum Smart Contracts
+* JavaScript
 
----
+## How to Run the Project
 
-# 4. Installation 
-
-Clone the repository:
-
-```bash
-git clone https://github.com/OsmanSelvi84/blockchain-privacy-projects.git
-```
-
-Enter the repository:
-
-```bash
-cd blockchain-privacy-projects
-```
-
-Switch to the assigned branch:
-
-```bash
-git checkout students/220304119-mena-ghazowan-hamood
-```
-
-Open the project folder:
+First, open the project folder:
 
 ```bash
 cd 14-ehealth-dynamic-consent
@@ -122,19 +38,13 @@ Install dependencies:
 npm install
 ```
 
----
-
-# 5. How to Run (step by step)
-
-### Step 1: Compile the smart contract
+Compile the smart contract:
 
 ```bash
 npx hardhat compile
 ```
 
----
-
-### Step 2: Run the automated tests
+Run automated tests:
 
 ```bash
 npx hardhat test
@@ -142,89 +52,162 @@ npx hardhat test
 
 Expected result:
 
-```text
+```bash
 10 passing
 ```
 
----
+## Manual Testing with Hardhat Console
 
-### Step 3: Deploy the contract
+Open Hardhat console:
 
 ```bash
-npx hardhat run scripts/deploy.ts
+npx hardhat console
 ```
 
-Example output:
+### Step 1: Load the smart contract
 
-```text
-DynamicConsent deployed to: 0x...
+```js
+const DynamicConsent = await ethers.getContractFactory("DynamicConsent")
 ```
 
----
+### Step 2: Deploy the contract
 
-# 6. Reference
-
-Reference project used during research:
-SC-DCMS
-https://github.com/mlecjm/sc-dcms
-
-The reference implementation was used only to understand how blockchain based dynamic consent systems are structured.
-This project was independently implemented using Solidity and Hardhat.
-
-
-# 7. Project Structure 
-
-```text
-14-ehealth-dynamic-consent/
-│
-├── contracts
-│   └── DynamicConsent.sol
-│
-├── test
-│   └── DynamicConsent.ts
-│
-├── scripts
-│   └── deploy.ts
-│
-├── hardhat.config.ts
-├── package.json
-├── tsconfig.json
-└── README.md
+```js
+const contract = await DynamicConsent.deploy()
 ```
 
----
+### Step 3: Get test accounts
 
-# 8. Test Cases 
+```js
+const [patient, provider] = await ethers.getSigners()
+```
 
-### Functional Tests
+Here:
 
-* Patient gives consent
-* Provider checks consent
-* Patient updates consent
-* Patient revokes consent
-* Unauthorized user update rejection
+* `patient` represents the patient account.
+* `provider` represents the healthcare provider account.
 
-### Validation Tests
+### Step 4: Give consent
 
-* Invalid provider address rejection
-* Empty purpose rejection
-* Empty data type rejection
-* Revoking non-existing consent rejection
-* Updating inactive consent rejection
+```js
+await contract.giveConsent(provider.address, "Treatment", "Blood Test")
+```
 
----
+This means the patient gives the provider permission to access Blood Test data for treatment.
 
-# 9. Notes 
+### Step 5: Check if consent is active
 
-This project intentionally avoids storing real healthcare data on-chain.
-The blockchain is used only for consent verification and permission management.
-The focus of the implementation is:
-* dynamic consent logic,
-* validation/security checks,
-* and blockchain-based transparency.
+```js
+await contract.checkConsent(patient.address, provider.address)
+```
 
----
+Expected result:
 
-# 10. References 
-* Hardhat Documentation: https://hardhat.org/docs
-* SC-DCMS Reference Project: https://github.com/mlecjm/sc-dcms
+```js
+true
+```
+
+### Step 6: Get full consent information
+
+```js
+await contract.getConsent(patient.address, provider.address)
+```
+
+Expected result includes:
+
+```js
+true
+"Treatment"
+"Blood Test"
+timestamp
+```
+
+### Step 7: Update consent
+
+```js
+await contract.updateConsent(provider.address, "Research", "MRI")
+```
+
+This changes the purpose from Treatment to Research and the data type from Blood Test to MRI.
+
+### Step 8: Check updated consent details
+
+```js
+await contract.getConsent(patient.address, provider.address)
+```
+
+Expected result includes:
+
+```js
+true
+"Research"
+"MRI"
+timestamp
+```
+
+### Step 9: Revoke consent
+
+```js
+await contract.revokeConsent(provider.address)
+```
+
+This makes the consent inactive.
+
+### Step 10: Check consent after revocation
+
+```js
+await contract.checkConsent(patient.address, provider.address)
+```
+
+Expected result:
+
+```js
+false
+```
+
+To exit the console:
+
+```js
+.exit
+```
+
+## Smart Contract Functions
+
+### giveConsent(provider, purpose, dataType)
+
+Creates a consent record between the patient and provider.
+
+### updateConsent(provider, newPurpose, newDataType)
+
+Updates an existing active consent.
+
+### revokeConsent(provider)
+
+Revokes an active consent.
+
+### checkConsent(patient, provider)
+
+Returns `true` if the consent is active, otherwise returns `false`.
+
+### getConsent(patient, provider)
+
+Returns the full consent information.
+
+## Events
+
+The contract uses events to keep a record of consent actions:
+
+* `ConsentGiven`
+* `ConsentUpdated`
+* `ConsentRevoked`
+
+These events help create an audit trail on the blockchain.
+
+## Reference
+
+Reference project:
+
+SC-DCMS Reference Project: https://github.com/mlecjm/sc-dcms
+
+The reference project has a larger healthcare privacy architecture. My project focuses on the dynamic consent management part in a simpler and more practical way.
+
