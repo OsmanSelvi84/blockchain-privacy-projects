@@ -1,50 +1,50 @@
 # Post Quantum Privacy Token
 
-This project was developed for the Blockchain Privacy Projects course.
+This project is a simple blockchain privacy project developed with Solidity and Hardhat.
 
-The goal of the project is to demonstrate a simple privacy-preserving token mechanism using commitment hashes generated with Solidity and Hardhat.
+The purpose of the project is to create a basic privacy-focused token system using hash commitments.
+
+The project was developed for the Blockchain Privacy Projects course.
 
 ---
 
 # Project Topic
 
-**20 - Post Quantum Token**
-
----
-
-# Project Description
-
-The project generates commitment hashes instead of storing transaction details directly.
-
-Each commitment is generated using:
-
-- receiver address
-- transfer amount
-- secret value
-
-The commitment is calculated using:
-
-```solidity
-keccak256(abi.encodePacked(receiver, amount, secret))
-```
-
-This allows transaction information to be represented through a cryptographic hash.
+20 - Post Quantum Token
 
 ---
 
 # Project Features
 
-- Token transfer functionality
-- Commitment hash generation
+- Basic token transfer
 - Privacy transfer mechanism
+- Commitment hash generation
+- Local blockchain deployment
 - Smart contract testing
-- Frontend demonstration
+- Simple frontend demo
 - Reference implementation comparison
 
 ---
 
-# Folder Structure
+# Privacy Mechanism
 
+In this project, transaction information is not stored directly on chain.
+
+Instead, a commitment hash is created using:
+
+- receiver address
+- transfer amount
+- secret string
+
+The commitment is generated with `keccak256`.
+
+Example:
+
+```text
+commitment = hash(receiver + amount + secret)
+```
+
+# Folder Structure
 ```text
 contracts/
 test/
@@ -55,36 +55,26 @@ comparison/
 README.md
 ```
 
----
-
 # Branch Information
 
-```text
-students/210304037-efe-ozturk
-```
+20-post-quantum-token
 
-Project directory:
+# Requirements
 
-```text
-POST-QUANTUM-TOKEN
-```
+- Node.js v18 or v20 (v21 and above are not supported by Hardhat 2.x)
 
----
-
-# Required Software
-
-- Node.js
-- npm
-- Hardhat
-
-Check installation:
+Check your version:
 
 ```bash
-node -v
-npm -v
+node --version
 ```
 
----
+If you need to switch versions, use nvm:
+
+```bash
+nvm install 20
+nvm use 20
+```
 
 # Installation
 
@@ -94,22 +84,16 @@ Clone repository:
 git clone https://github.com/OsmanSelvi84/blockchain-privacy-projects.git
 ```
 
-Enter repository:
-
-```bash
-cd blockchain-privacy-projects
-```
-
-Checkout student branch:
+Checkout project branch:
 
 ```bash
 git checkout students/210304037-efe-ozturk
 ```
 
-Enter project directory:
+Go to project folder:
 
 ```bash
-cd POST-QUANTUM-TOKEN
+cd post-quantum-token
 ```
 
 Install dependencies:
@@ -118,7 +102,14 @@ Install dependencies:
 npm install
 ```
 
----
+> **Important:** Always run all commands from inside the project folder.
+> Running `npx hardhat` from outside the project folder will download the latest global Hardhat version, which may be incompatible with this project.
+
+> **If you get a `Bus error` or strange install errors**, clean and reinstall:
+> ```bash
+> rm -rf node_modules package-lock.json
+> npm install
+> ```
 
 # Compile Smart Contract
 
@@ -129,10 +120,8 @@ npx hardhat compile
 Expected output:
 
 ```text
-Compiled successfully
+Compiled 1 Solidity file successfully
 ```
-
----
 
 # Run Tests
 
@@ -146,21 +135,30 @@ Expected output:
 3 passing
 ```
 
----
+> **Note:** Do not use `--network localhost` for tests. Hardhat runs tests on its built-in in-memory network by default. No separate node is needed for testing.
 
 # Start Local Blockchain
+
+Open a terminal and run:
 
 ```bash
 npx hardhat node
 ```
 
----
+Expected output:
+
+```text
+Started HTTP and WebSocket JSON-RPC server at http://127.0.0.1:8545/
+```
+
+Keep this terminal open. The node must stay running while you deploy.
 
 # Deploy Smart Contract
 
-Open a new terminal:
+Open a **second terminal**, go to the project folder, and run:
 
 ```bash
+cd post-quantum-token
 npx hardhat run scripts/deploy.js --network localhost
 ```
 
@@ -170,178 +168,110 @@ Expected output:
 Contract deployed to: 0x...
 ```
 
----
+> **Important:** The `hardhat node` terminal must be running before you deploy.
+> Deploy and node commands must run in **separate terminals**.
 
 # Frontend Demo
 
-Frontend file:
+Open in browser:
 
 ```text
 frontend/index.html
 ```
 
-The frontend allows users to:
+Enter receiver address, amount, and secret. Click "Create Commitment" to generate a keccak256 commitment hash.
 
-- enter receiver address
-- enter transfer amount
-- enter secret value
-- generate commitment hashes
-
----
+The frontend works standalone and does not require the local node to be running.
 
 # Smart Contract Functions
 
-## transfer()
-
-Transfers tokens between users.
-
-## createCommitment()
-
-Creates a commitment hash using:
-
-```text
-receiver
-amount
-secret
-```
-
-Returns:
-
-```text
-bytes32 commitment
-```
-
-## privateTransfer()
-
-Stores and validates commitment-based transfers.
-
----
+- transfer()
+- createCommitment()
+- privateTransfer()
 
 # Reference Implementation
 
-Reference file:
+Reference project used for learning and comparison:
 
-```text
-reference/reference_demo.js
-```
+DDMixer
 
-Technology:
+Repository:
 
-- Node.js
-- Ethers.js
+https://github.com/alibertay/DDMixer
 
-Run reference implementation:
+The reference implementation was:
 
-```bash
-node reference/reference_demo.js
-```
+- cloned locally
+- dependency-installed
+- executed successfully
 
-The reference implementation generates commitment hashes using:
+Reference project technologies:
 
-```javascript
-ethers.solidityPackedKeccak256(
-  ["address", "uint256", "string"],
-  [receiver, amount, secret]
-)
-```
-
-This is equivalent to:
-
-```solidity
-keccak256(
-    abi.encodePacked(
-        receiver,
-        amount,
-        secret
-    )
-)
-```
-
-used in the original implementation.
-
----
-
-# Original Implementation Demo
-
-Run original implementation:
-
-```bash
-npx hardhat run scripts/demo.js
-```
-
-The original Solidity implementation executes the same five test cases and generates commitment hashes.
-
----
-
+- Solidity
+- Python
+- Flask
+- HTML
+- JavaScript
 
 # Comparison
 
-Files:
-
 ```text
-comparison/comparison.md
 comparison/test-inputs.json
+comparison/comparison.md
 ```
 
-Comparison Method:
+These files contain:
 
-1. Run reference implementation
-2. Run original implementation
-3. Compare outputs
-4. Verify matching commitment hashes
-
-Result:
-
-```text
-All five test cases generate identical commitment hashes.
-```
-
----
+- 5 sample test inputs
+- implementation comparison
+- privacy mechanism explanations
 
 # Demo Flow
 
-1. Install dependencies
-2. Compile smart contract
-3. Run tests
-4. Run reference implementation
-5. Run original implementation
-6. Compare outputs
-7. Open frontend demo
+1. Compile smart contract
+2. Run tests
+3. Start local blockchain (Terminal 1)
+4. Deploy smart contract (Terminal 2)
+5. Open frontend demo
+6. Generate commitment hash
 
----
+# Troubleshooting
 
-# Commands Used During Evaluation
+**Bus error (core dumped) during test**
 
-Reference implementation:
-
-```bash
-node reference/reference_demo.js
-```
-
-Original implementation:
+Node.js binary incompatibility in node_modules. Fix:
 
 ```bash
-npx hardhat run scripts/demo.js
+rm -rf node_modules package-lock.json
+npm install
 ```
 
-Tests:
+**Cannot connect to localhost / ECONNREFUSED 127.0.0.1:8545**
+
+The local node is not running. Start it first:
 
 ```bash
-npx hardhat test
+npx hardhat node
 ```
 
----
+Then run deploy in a separate terminal.
+
+**Wrong Hardhat version installed globally**
+
+If you see `ERROR: You are using Node.js X which is not supported by Hardhat`, you ran `npx hardhat` from outside the project folder. Always `cd` into the project folder first so the local `node_modules/.bin/hardhat` is used instead of the global one.
+
+**Port already in use (EADDRINUSE 8545)**
+
+A `hardhat node` instance is already running. Either use that existing node, or kill it:
+
+```bash
+lsof -ti:8545 | xargs kill
+```
 
 # Notes
 
-This project was developed for educational purposes.
+This project is a simplified educational privacy token implementation.
 
-The implementation demonstrates:
+The project was developed for learning blockchain privacy concepts and demonstrating privacy-preserving transaction logic.
 
-- commitment hashes
-- privacy-preserving transaction representation
-- Solidity smart contract development
-- Hardhat testing
-- reference implementation comparison
-
-This project is not intended for production use.
+This implementation is not intended for production use.
