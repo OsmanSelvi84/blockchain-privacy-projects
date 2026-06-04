@@ -321,7 +321,7 @@ node reference/reference_demo.js
 Original implementation:
 
 ```bash
-npx hardhat run scripts/demo.js
+npx hardhat run scripts/scrpits/demo.js
 ```
 
 Tests:
