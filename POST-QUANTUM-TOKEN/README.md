@@ -273,49 +273,6 @@ The original Solidity implementation executes the same five test cases and gener
 
 ---
 
-# Sample Inputs and Outputs
-
-## Test 1
-
-Input:
-
-```text
-receiver = 0x0000000000000000000000000000000000000001
-amount = 10
-secret = privacy1
-```
-
-Output:
-
-```text
-0x16d8eeb6913f20c1db9b2a0a3796b577659c79bf39d2ffba1ee598e808d17dd4
-```
-
-## Test 2
-
-```text
-0xf7a60bda82ba8671534d6ecdeb0586380288f0ebbe1eb9b453d289102351bc6b
-```
-
-## Test 3
-
-```text
-0xb1e438b0531f0a57e0da643ddbee8c8aefb42a2f5855fec4c59d14ec0334fff4
-```
-
-## Test 4
-
-```text
-0x5a041850fddea7f427258bf88121c623b793570bb10b0ce2ec87ae2e4891e699
-```
-
-## Test 5
-
-```text
-0x490e6db72ffb2582a39b995e0bbfae31891eab95c78c5c93e40585221150f2de
-```
-
----
 
 # Comparison
 
