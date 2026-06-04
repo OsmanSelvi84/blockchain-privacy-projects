@@ -57,12 +57,24 @@ else:
     sys.exit(1)
 
 # Proof size analysis
-ip_elems = proof.ipa.proof_size_elements
-total_elems = 5 + ip_elems          # 5 curve points + IPA
-total_bytes = total_elems * 64 + 3 * 32  # curve pts (64B) + 3 scalars (32B)
-naive_bytes = n * 32                 # naive: send all n bits as scalars
-info(f"Proof size: {total_elems} group elements + 3 scalars  = ~{total_bytes} bytes")
-info(f"Naive approach for n={n}: {naive_bytes} bytes  →  Bulletproof saves {naive_bytes - total_bytes} bytes")
+# Correct byte-size calculation:
+#   BN128 curve points = 64 bytes each (two 32-byte field elements)
+#   Scalars = 32 bytes each
+#   Main points: A, S, T_1, T_2 (not V — V is the commitment, known to verifier)
+#   IPA:  2*log2(n) curve points (L_vec + R_vec)  +  2 scalars (a, b)
+#   Plus main scalars: tau_x, mu, t_hat
+ipa_rounds     = len(proof.ipa.L_vec)          # log2(n)
+ipa_curve_pts  = 2 * ipa_rounds                # L_vec + R_vec
+main_curve_pts = 4                             # A, S, T_1, T_2
+total_curve_pts = main_curve_pts + ipa_curve_pts
+total_scalars   = 5                            # tau_x, mu, t_hat, a, b
+total_bytes = total_curve_pts * 64 + total_scalars * 32
+# Naive baseline: n sigma proofs, each = 1 point (64B) + 2 scalars (64B) = 128B per bit
+naive_bytes = n * 128
+savings = naive_bytes - total_bytes
+savings_pct = f"{100*(1 - total_bytes/naive_bytes):.0f}%" if naive_bytes > total_bytes else "N/A (small n)"
+info(f"Proof size: {total_curve_pts} curve pts + {total_scalars} scalars  = ~{total_bytes} bytes")
+info(f"Naive sigma-proof for n={n}: {naive_bytes} bytes  →  Bulletproof saves {savings} bytes ({savings_pct})")
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 2. EDGE CASES: boundary values, different bit lengths
@@ -132,9 +144,10 @@ print(f"\n  {'n_bits':>6}  {'Range':>12}  {'Naive(B)':>9}  {'BP(B)':>7}  {'Round
 print(f"  {'-'*6}  {'-'*12}  {'-'*9}  {'-'*7}  {'-'*7}  {'-'*8}")
 for n_test in [4, 8, 16, 32]:
     p = prove(1, n_bits=n_test)
-    ip_e = p.ipa.proof_size_elements
-    bp_b = (5 + ip_e) * 64 + 3 * 32
-    naive_b = n_test * 32
+    ipa_rounds = len(p.ipa.L_vec)
+    ipa_pts = 2 * ipa_rounds              # L_vec + R_vec curve points
+    bp_b = (4 + ipa_pts) * 64 + 5 * 32   # 4 main curve pts + IPA pts, 5 scalars
+    naive_b = n_test * 128                # n sigma proofs (128B each)
     savings = f"{(1 - bp_b/naive_b)*100:.0f}%" if naive_b > bp_b else "N/A"
     print(f"  {n_test:>6}  {f'[0, {2**n_test})':>12}  {naive_b:>9}  {bp_b:>7}  {len(p.ipa.L_vec):>7}  {savings:>8}")
 
@@ -187,3 +200,4 @@ print(f"""
 
   All tests passed: {GREEN}✓{RESET}
 """)
+
