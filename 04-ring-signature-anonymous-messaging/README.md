@@ -163,11 +163,12 @@ The application uses the same ring signature algorithm as the reference implemen
 ### Features
 
 * Anonymous message signing
-* One-time ring signature generation using `pyring`
+* Ring signature generation using `pyring`
 * Ring signature verification using `pyring`
 * SHA-256 message hashing
 * Message integrity verification
 * Ring member information display
+* Dynamic ring size calculation
 * Signature metadata generation
 * Menu-based terminal interface
 * Blockchain integration through a Solidity smart contract
@@ -183,11 +184,17 @@ python3 main.py
 Menu:
 
 ```text
-1. Send anonymous message
+1. Sign anonymous message
 2. Verify signature
 3. Show ring information
 4. Exit
 ```
+
+During signing, the user provides:
+
+* the message,
+* the signer private key filename,
+* the signer password.
 
 Generated files:
 
@@ -196,7 +203,19 @@ signature.pem
 signature_metadata.json
 ```
 
-Example verification output:
+### Ring Members
+
+The application automatically loads all public key files (`*.pub`) located in:
+
+```text
+reference_implementation/pyring
+```
+
+Each public key becomes a ring member.
+
+Ring size is calculated automatically based on the number of available public key files.
+
+### Example Verification Output
 
 ```text
 Valid ring signature.
@@ -212,13 +231,12 @@ The project includes a simple Solidity smart contract:
 contracts/AnonymousMessageRegistry.sol
 ```
 
-The contract stores:
+The contract demonstrates how verification-related information could be stored on-chain, including:
 
 * message hash
 * verification status
-* timestamp
 
-The signer identity is not stored on-chain.
+The signer identity is intentionally not stored on-chain.
 
 ## Test Scenario
 
@@ -248,7 +266,7 @@ Both implementations support:
 * signer anonymity
 * message integrity verification
 
-The reference implementation is a command-line application, while the original implementation provides a menu-based workflow and additional metadata generation for easier testing and demonstration.
+The reference implementation is a command-line application, while the original implementation provides a menu-based workflow, automatic ring member loading, ring information display, and metadata generation for easier testing and demonstration.
 
 ## References
 
