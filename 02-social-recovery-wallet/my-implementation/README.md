@@ -30,18 +30,26 @@ git checkout students/220304134-norris-nishimwe
 cd 02-social-recovery-wallet
 
 ### Step 2 — Run the Reference Implementation
-cd reference-implementation
-forge install
-forge build
-forge test
+-cd reference-implementation
+
+-forge install
+
+-forge build
+
+-forge test
 
 ### Step 3 — Run My Implementation
-cd ../my-implementation
-npm install
-npx hardhat compile
-npx hardhat test
-python src/social_recovery_wallet.py --test
-python src/social_recovery_wallet.py --demo
+-cd ../my-implementation
+
+-npm install
+
+-npx hardhat compile
+
+-npx hardhat test
+
+-python src/social_recovery_wallet.py --test
+
+-python src/social_recovery_wallet.py --demo
 
 ## Reference Implementation
 
