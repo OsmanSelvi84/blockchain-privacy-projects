@@ -1,5 +1,5 @@
-import random
 import hashlib
+import random
 from dataclasses import dataclass
 
 
@@ -11,82 +11,127 @@ class Participant:
     amount: float
 
 
-@dataclass
-class ShuffleTransaction:
-    inputs: list
-    outputs: list
-    denomination: float
-    fee: float
-    privacy_goal: str
+class MixingPool:
+    def __init__(self):
+        self.participants = []
+
+    def add_participant(self, participant):
+        self.participants.append(participant)
+
+    def size(self):
+        return len(self.participants)
 
 
 def hash_address(address):
     return hashlib.sha256(address.encode()).hexdigest()
 
 
-def validate_participants(participants):
-    if len(participants) < 3:
-        raise ValueError("CoinShuffle needs at least 3 participants for meaningful privacy.")
+def validate_pool(pool):
+    if pool.size() < 3:
+        raise ValueError(
+            "Mixing pool must contain at least 3 participants."
+        )
 
-    amounts = {p.amount for p in participants}
+    amounts = {p.amount for p in pool.participants}
+
     if len(amounts) != 1:
-        raise ValueError("All participants must use the same amount denomination.")
+        raise ValueError(
+            "All participants must use the same denomination."
+        )
 
 
-def create_shuffle_transaction(participants, fee=0.001):
-    validate_participants(participants)
+def create_shuffle_transaction(pool):
+    validate_pool(pool)
 
-    denomination = participants[0].amount
-    shuffled_outputs = [p.output_address for p in participants]
-    random.shuffle(shuffled_outputs)
+    outputs = [p.output_address for p in pool.participants]
+    random.shuffle(outputs)
 
-    inputs = []
-    for p in participants:
-        inputs.append({
-            "participant": p.name,
-            "input_address_hash": hash_address(p.input_address),
-            "amount": p.amount
+    result = []
+
+    for participant, output in zip(pool.participants, outputs):
+        result.append({
+            "participant": participant.name,
+            "input": participant.input_address,
+            "output": output,
+            "valid": "yes"
         })
 
-    outputs = []
-    for output in shuffled_outputs:
-        outputs.append({
-            "output_address": output,
-            "amount": round(denomination - fee, 6)
-        })
+    return result
 
-    return ShuffleTransaction(
-        inputs=inputs,
-        outputs=outputs,
-        denomination=denomination,
-        fee=fee,
-        privacy_goal="Break the direct link between input addresses and output addresses."
+
+def print_transaction(transaction):
+    print("\n============================================================")
+    print("FINAL MIXED TRANSACTION")
+    print("============================================================\n")
+
+    print(
+        f"{'Slot':<5} {'Input Address':<20} "
+        f"{'Output Address':<25} {'Valid'}"
+    )
+    print("-" * 65)
+
+    for i, tx in enumerate(transaction):
+        print(
+            f"{i:<5} "
+            f"{tx['input']:<20} "
+            f"{tx['output']:<25} "
+            f"{tx['valid']}"
+        )
+
+    print("\nPrivacy Goal:")
+    print(
+        "Break the direct link between input addresses and output addresses."
     )
 
 
-def print_transaction(tx):
-    print("\n=== CoinShuffle Mixing Protocol Demo ===")
-
-    print("\nHashed Inputs:")
-    for item in tx.inputs:
-        print(f"{item['participant']} -> {item['input_address_hash']} | amount: {item['amount']}")
-
-    print("\nShuffled Outputs:")
-    for item in tx.outputs:
-        print(f"{item['output_address']} | amount after fee: {item['amount']}")
-
-    print("\nPrivacy Goal:")
-    print(tx.privacy_goal)
-
-
 if __name__ == "__main__":
-    participants = [
-        Participant("User1", "wallet_input_A", "wallet_output_A_private", 1.0),
-        Participant("User2", "wallet_input_B", "wallet_output_B_private", 1.0),
-        Participant("User3", "wallet_input_C", "wallet_output_C_private", 1.0),
-        Participant("User4", "wallet_input_D", "wallet_output_D_private", 1.0),
-        Participant("User5", "wallet_input_E", "wallet_output_E_private", 1.0),
-    ]
 
-    transaction = create_shuffle_transaction(participants)
+    pool = MixingPool()
+
+    pool.add_participant(
+        Participant(
+            "User1",
+            "wallet_input_A",
+            "wallet_output_A_private",
+            1.0
+        )
+    )
+
+    pool.add_participant(
+        Participant(
+            "User2",
+            "wallet_input_B",
+            "wallet_output_B_private",
+            1.0
+        )
+    )
+
+    pool.add_participant(
+        Participant(
+            "User3",
+            "wallet_input_C",
+            "wallet_output_C_private",
+            1.0
+        )
+    )
+
+    pool.add_participant(
+        Participant(
+            "User4",
+            "wallet_input_D",
+            "wallet_output_D_private",
+            1.0
+        )
+    )
+
+    pool.add_participant(
+        Participant(
+            "User5",
+            "wallet_input_E",
+            "wallet_output_E_private",
+            1.0
+        )
+    )
+
+    transaction = create_shuffle_transaction(pool)
     print_transaction(transaction)
