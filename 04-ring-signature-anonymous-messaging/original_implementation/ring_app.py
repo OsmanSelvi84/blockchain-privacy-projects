@@ -37,27 +37,25 @@ def cryptography_public_to_point(public_key):
 
 class AnonymousRingMessaging:
     def __init__(self):
-        self.private_key_path = REFERENCE_DIR / "ringkey"
-        self.public_key_paths = [
-            REFERENCE_DIR / "ringkey.pub",
-            REFERENCE_DIR / "bobkey.pub",
-        ]
         self.password = b"1234"
         self.signature_path = BASE_DIR / "signature.pem"
         self.metadata_path = BASE_DIR / "signature_metadata.json"
 
-    def load_private_key(self):
-        with open(self.private_key_path, "rb") as file:
+    def get_public_key_paths(self):
+        return sorted(REFERENCE_DIR.glob("*.pub"))
+
+    def load_private_key(self, private_key_path, password):
+        with open(private_key_path, "rb") as file:
             return serialization.load_pem_private_key(
                 file.read(),
-                self.password,
+                password,
                 default_backend()
             )
 
     def load_public_keys(self):
         public_keys = []
 
-        for path in self.public_key_paths:
+        for path in self.get_public_key_paths():
             with open(path, "rb") as file:
                 public_key = serialization.load_pem_public_key(
                     file.read(),
@@ -67,12 +65,25 @@ class AnonymousRingMessaging:
 
         return public_keys
 
-    def sign_message(self, message):
-        message_bytes = message.encode()
+    def get_ring_information(self):
+        public_key_paths = self.get_public_key_paths()
 
-        private_key = self.load_private_key()
+        return {
+            "ring_size": len(public_key_paths),
+            "members": [path.name for path in public_key_paths]
+        }
+
+    def sign_message(self, message, signer_key_filename="ringkey", password="1234"):
+        message_bytes = message.encode()
+        private_key_path = REFERENCE_DIR / signer_key_filename
+
+        if not private_key_path.exists():
+            raise FileNotFoundError(f"{signer_key_filename} was not found.")
+
+        private_key = self.load_private_key(private_key_path, password.encode())
         signer_private_scalar = cryptography_private_to_scalar(private_key)
 
+        public_key_paths = self.get_public_key_paths()
         public_keys = [
             cryptography_public_to_point(pk)
             for pk in self.load_public_keys()
@@ -103,6 +114,7 @@ class AnonymousRingMessaging:
             "message_hash": hashlib.sha256(message_bytes).hexdigest(),
             "signature_file": "signature.pem",
             "ring_size": len(public_keys),
+            "ring_members": [path.name for path in public_key_paths],
             "verification_result": "not verified yet",
             "privacy_note": "Signer identity is not stored. The verifier only checks that one ring member signed the message."
         }
