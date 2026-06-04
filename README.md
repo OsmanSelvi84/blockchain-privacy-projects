@@ -1,4 +1,4 @@
-# CoinShuffle Mixing 
+# CoinShuffle Mixing Protocol
 
 ## Goal
 
@@ -6,15 +6,13 @@ Break transaction traceability using coin mixing.
 
 ## Requirements
 
-* Implement a mixing pool simulation
-* Shuffle input and output addresses
-* Prevent linking sender to receiver
-* Demonstrate transaction unlinkability
+- Implement mixing pool
+- Shuffle inputs and outputs
+- Prevent linking sender to receiver
 
 ## Privacy Concept
 
 Transaction unlinkability.
-
 ---
 
 ## Project Description
@@ -76,13 +74,15 @@ pytest>=8.0.0
 Example execution:
 
 ```txt
-Shuffled Outputs:
+FINAL MIXED TRANSACTION
 
-wallet_output_C_private
-wallet_output_A_private
-wallet_output_B_private
-wallet_output_D_private
-wallet_output_E_private
+Slot   Input Address      Output Address      Valid
+--------------------------------------------------
+0      wallet_input_A     wallet_output_B_private   yes
+1      wallet_input_B     wallet_output_E_private   yes
+2      wallet_input_C     wallet_output_A_private   yes
+3      wallet_input_D     wallet_output_C_private   yes
+4      wallet_input_E     wallet_output_D_private   yes
 
 Privacy Goal:
 Break the direct link between input addresses and output addresses.
@@ -91,5 +91,5 @@ Break the direct link between input addresses and output addresses.
 Test result:
 
 ```txt
-5 passed
+7 passed
 ```
