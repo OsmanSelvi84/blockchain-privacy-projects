@@ -3,10 +3,11 @@ import secrets
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
 class PolicyNode:
+    # Each node is either AND, OR (with children) or ATTR (a leaf attribute)
     def __init__(self, kind, value=None, children=None):
-        self.kind = kind
-        self.value = value
-        self.children = children or []
+        self.kind = kind        # 'AND', 'OR', or 'ATTR'
+        self.value = value      # attribute name if kind == 'ATTR'
+        self.children = children or []  # sub-nodes for AND/OR
 
 def parse_policy(policy_str):
     tokens = tokenize(policy_str)
@@ -53,6 +54,7 @@ def parse_atom(tokens, pos):
         node = PolicyNode('ATTR', value=tokens[pos])
         return node, pos + 1
 
+# Recursively walks the policy tree, returns True if user attributes satisfy it
 def evaluate_policy(node, attributes):
     if node.kind == 'ATTR':
         return node.value in attributes
