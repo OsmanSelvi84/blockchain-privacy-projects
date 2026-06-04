@@ -30,39 +30,6 @@ Project folder: 08-attribute-based-encryption
 ---
 
 ## Project Structure
-cat > README.md << 'ENDOFFILE'
-# Attribute-Based Encryption (CP-ABE)
-
-**Course:** COMP4052 — Introduction to Blockchain and DLT
-**Student:** Aminata Kone | **ID:** 220304144
-**Branch:** students/220304144-aminata-kone
-**Instructor:** Osman SELVİ
-
----
-
-## Project Description
-
-This project implements Ciphertext-Policy Attribute-Based Encryption (CP-ABE), a privacy-preserving access control scheme. The access policy is embedded in the ciphertext and user attributes are stored in the private key. Decryption only succeeds when the user's attributes satisfy the policy — no central authority is needed to enforce access.
-
-**Privacy Concept:** Fine-grained, decentralized, cryptographic access control for blockchain data.
-
-**Key features:**
-- AND / OR policy logic with arbitrary nesting and parentheses
-- Recursive PolicyNode tree for policy parsing and evaluation
-- AES-GCM authenticated encryption
-- SHA-256 master secret key derivation
-- Clean separation of Authority, Encryptor, and Decryptor components
-
----
-
-## Branch Information
-
-Student branch: students/220304144-aminata-kone
-Project folder: 08-attribute-based-encryption
-
----
-
-## Project Structure
 08-attribute-based-encryption/
 ├── abe.py                  Original CP-ABE implementation
 ├── test_abe.py             5 evaluation test cases
@@ -167,6 +134,8 @@ Results: 5/5 tests passed
 ---
 
 ## Test Output Screenshot
+
+Both implementations produce identical access control results on all 5 test cases.
 
 ![Test Results](docs/test_output.png)
 
