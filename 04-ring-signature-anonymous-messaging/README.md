@@ -235,8 +235,11 @@ The contract demonstrates how verification-related information could be stored o
 
 * message hash
 * verification status
+* timestamp
 
 The signer identity is intentionally not stored on-chain.
+
+The smart contract does not perform ring signature verification. Ring signature generation and verification are performed by the Python application, while the contract is used only for storing verification-related metadata.
 
 ## Test Scenario
 
