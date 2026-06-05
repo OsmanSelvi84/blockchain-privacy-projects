@@ -203,7 +203,92 @@ The contract uses events to keep a record of consent actions:
 
 These events help create an audit trail on the blockchain.
 
-## Reference
+
+## Reference Implementations
+
+During the project, I checked two different reference implementations.
+
+I used one reference for understanding the healthcare dynamic consent architecture, and another reference as a runnable smart contract access-control example.
+
+---
+
+### 1. Healthcare Dynamic Consent Reference
+
+Reference repository:
+
+```text
+https://github.com/mlecjm/sc-dcms
+```
+
+This project is related to Smart Contract Dynamic Consent Management Systems. It includes multiple smart contracts for:
+
+* user profile management
+* personal data management
+* consent request management
+* consent agreement management
+
+I used this reference to understand how a larger healthcare consent system can be structured. Compared to this reference, my project focuses only on the dynamic consent management part and implements a simpler version using Solidity and Hardhat.
+
+
+### 2. Runnable Access Control Reference
+
+Reference repository:
+
+```text
+https://github.com/OpenZeppelin/openzeppelin-contracts
+```
+
+Since the healthcare dynamic consent reference could not be compiled without modifying its source code, I also used OpenZeppelin AccessControl as a runnable smart contract reference.
+
+This reference is not healthcare-specific, but it is related to the core blockchain mechanism used in my project: permission and access control.
+
+My project controls whether a healthcare provider has permission to access a patient's medical data. OpenZeppelin AccessControl also focuses on permission checking, granting, revoking, and validating access.
+
+#### How to run the runnable reference
+
+```bash
+cd ~/Desktop
+rm -rf reference-access-control
+git clone https://github.com/OpenZeppelin/openzeppelin-contracts.git reference-access-control
+cd reference-access-control
+npm install
+npm test -- --grep "AccessControl"
+```
+
+Expected result:
+
+```text
+181 passing
+```
+
+This confirms that the runnable reference project can be installed and tested successfully.
+
+#### Why this reference is useful
+
+OpenZeppelin AccessControl helped me understand how access permissions are tested in smart contracts.
+
+The tested features include:
+
+* checking whether an account has permission
+* granting permission
+* revoking permission
+* rejecting unauthorized users
+* testing invalid access attempts
+
+These ideas are similar to my project because my contract checks whether a healthcare provider has active consent from a patient.
+
+---
+
+### Reference Comparison Summary
+
+| Part      | Healthcare Dynamic Consent Reference | Runnable Access Control Reference     | My Project                       |
+| --------- | ------------------------------------ | ------------------------------------- | -------------------------------- |
+| Topic     | Healthcare consent system            | Smart contract access control         | Healthcare dynamic consent       |
+| Runnable  | Not without modifying source code    | Yes                                   | Yes                              |
+| Main idea | Consent requests and agreements      | Grant/revoke/check permissions        | Give/update/revoke/check consent |
+| Used for  | Architecture understanding           | Runnable comparison and testing style | Final implementation             |
+
+My final implementation was developed independently. The references were only used for understanding system design, permission management, and testing structure.
 
 Reference project:
 
