@@ -36,6 +36,8 @@ where inputs.json is a list of objects:
 Standard differential-testing pattern.
 """
 
+from __future__ import annotations  # allow `X | None` hints on Python 3.9
+
 import argparse
 import json
 import os

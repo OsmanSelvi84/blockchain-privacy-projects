@@ -24,6 +24,8 @@ real work is in transaction.build / transaction.verify which call into
 the primitives.
 """
 
+from __future__ import annotations  # allow `X | None` hints on Python 3.9
+
 import argparse
 import json
 import sys

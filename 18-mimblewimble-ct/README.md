@@ -39,7 +39,7 @@ are run on the same inputs for the output-matching evaluation — see §3.
 
 ## 1. Quick start
 
-Prereqs: macOS or Linux, Python 3.10+, git.
+Prereqs: macOS or Linux, Python 3.9+, git.
 
 ```bash
 # clone this project
@@ -475,7 +475,7 @@ your own test inputs") so no code editing is required.
 | `pytest` | Test runner. |
 
 No C extensions in the original implementation. Everything runs on stock
-CPython 3.10+.
+CPython 3.9+.
 
 ---
 
