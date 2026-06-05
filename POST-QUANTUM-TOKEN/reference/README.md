@@ -1,76 +1,103 @@
 # Reference Implementation
 
-## Selected Reference Project
+## Selected Reference Implementation
 
-DDMixer
+reference/reference_demo.js
 
-Repository Link:
-https://github.com/alibertay/DDMixer
+## Why This Reference Was Selected
 
----
+The original Solidity implementation generates commitment hashes using:
 
-## Why This Project Was Selected
+```solidity
+keccak256(
+    abi.encodePacked(
+        receiver,
+        amount,
+        secret
+    )
+)
+```
 
-This project was selected because it includes:
+The reference implementation uses the equivalent Ethers.js function:
 
-- privacy-preserving transfer logic
-- Solidity smart contracts
-- mixer-based transaction privacy
-- blockchain privacy concepts
+```javascript
+ethers.solidityPackedKeccak256(
+  ["address", "uint256", "string"],
+  [receiver, amount, secret]
+)
+```
 
-The project structure and privacy approach were useful for understanding commitment-style hidden transfers.
+Both implementations use the same inputs and produce identical commitment hashes.
+
+This makes the reference implementation suitable for direct comparison during evaluation.
 
 ---
 
 ## Technologies Used
 
-- Solidity
-- HTML
+- Node.js
 - JavaScript
-- Python
-- Binance Smart Chain Testnet
+- Ethers.js
 
 ---
 
-## Reference Project Purpose
+## Reference Implementation Purpose
 
-The purpose of DDMixer is to hide transaction relationships between sender and receiver using mixer logic.
+The purpose of the reference implementation is to generate commitment hashes off-chain using the same logic as the Solidity smart contract.
 
-It aims to improve blockchain transaction privacy.
+This allows verification that the original implementation behaves correctly.
 
 ---
 
 ## Comparison With My Project
 
-Reference Project:
+### Reference Implementation
 
-- mixer-based privacy
-- more advanced architecture
-- larger implementation
+- JavaScript based
+- Uses Ethers.js
+- Generates commitment hashes
+- Executes 5 comparison test cases
 
-My Project:
+### Original Implementation
 
-- simplified educational implementation
-- commitment hash privacy mechanism
-- local blockchain testing with Hardhat
-- easier to understand and explain
+- Solidity based
+- Uses Hardhat
+- Generates commitment hashes
+- Executes the same 5 comparison test cases
+
+Both implementations generate identical outputs.
 
 ---
 
-## Basic Setup Steps
+## Running the Reference Implementation
 
-Clone repository:
-
-```bash
-git clone https://github.com/alibertay/DDMixer
-Go to project folder:
+Install dependencies:
 
 ```bash
-cd DDMixer
+npm install
+```
 
-pip3 install flask
+Run:
 
-python3 main.py
+```bash
+node reference/reference_demo.js
+```
 
-Running on http://127.0.0.1:5000
+Expected Result:
 
+```text
+TEST 1
+Commitment: 0x16d8eeb6913f20c1db9b2a0a3796b577659c79bf39d2ffba1ee598e808d17dd4
+
+TEST 2
+Commitment: 0xf7a60bda82ba8671534d6ecdeb0586380288f0ebbe1eb9b453d289102351bc6b
+
+TEST 3
+Commitment: 0xb1e438b0531f0a57e0da643ddbee8c8aefb42a2f5855fec4c59d14ec0334fff4
+
+TEST 4
+Commitment: 0x5a041850fddea7f427258bf88121c623b793570bb10b0ce2ec87ae2e4891e699
+
+TEST 5
+Commitment: 0x490e6db72ffb2582a39b995e0bbfae31891eab95c78c5c93e40585221150f2de
+```
