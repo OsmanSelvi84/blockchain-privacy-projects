@@ -26,7 +26,14 @@ The contract also stores the purpose of access and the type of medical data, suc
 
 ## How to Run the Project
 
-First, open the project folder:
+
+
+Clone the Repository
+git clone https://github.com/OsmanSelvi84/blockchain-privacy-projects.git
+Enter the Repository Folder
+cd blockchain-privacy-projects
+Switch to the Student Branch
+git checkout students/220304119-mena-ghazowan-hamood
 
 ```bash
 cd 14-ehealth-dynamic-consent
