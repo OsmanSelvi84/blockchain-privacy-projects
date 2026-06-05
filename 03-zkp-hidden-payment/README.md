@@ -226,24 +226,37 @@ cd tornado-core
 ### VERY IMPORTANT
 
 1. update truffle-config.js to
+   ```bash
+   nano truffle-config.js
+   ```
    ```json
      compilers: {
-      solc: {
-        version: require.resolve("solc"),
-        docker: false,
-        settings: {
-          optimizer: {
-            enabled: true,
-            runs: 200
-          }
-        }
-      }
-    }
+         solc: {
+           version: require.resolve("solc"), <== Write it exactly like this
+           docker: false, <== Add this one also
+           settings: {
+             optimizer: {
+               enabled: true,
+               runs: 200
+             }
+           }
+         }
+       }
    ```
-2. update .nvmrc to 18 instead of 12
-3. run
+3. update .nvmrc to 18 instead of 12
    ```bash
-   npm install --save-dev solc@0.7.6
+   nano .nvmrc
+   ```
+4. update package.json
+   ```bash
+   nano package.json
+   ```
+   ```json
+     "dependencies": {
+       ...
+       "solc": "0.7.6", <= Add this line
+       ...
+     }
    ```
 ### Usage
 
