@@ -1,3 +1,9 @@
 __pycache__/
 *.py[cod]
 venv/
+artifacts/
+cache/
+node_modules/
+package-lock.json
+test_precompile.js
+test_simple.js

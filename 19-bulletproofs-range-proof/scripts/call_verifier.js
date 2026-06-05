@@ -39,7 +39,7 @@ async function main() {
   // ── Build Solidity structs from JSON ────────────────────────────────────
 
   function toBN(x) {
-    return BigInt(x);
+    return BigInt(x.toString());
   }
 
   const points = {
@@ -75,6 +75,14 @@ async function main() {
 
   // ── Call verifyView ─────────────────────────────────────────────────────
   console.log("\nCalling verifyView()...");
+
+
+  console.log("points.T1:", points.T1);
+  console.log("scalars.t_hat:", scalars.t_hat.toString());
+  console.log("challenges.delta:", challenges.delta.toString());
+
+
+
   const result = await verifier.verifyView(
     points,
     scalars,

@@ -123,46 +123,37 @@ def export_for_solidity(proof) -> dict:
         "n_bits":  n,
         "range":   f"[0, {2**n})",
 
-        # Proof points (5 curve points)
-        "V":   point_to_pair(proof.V),
-        "A":   point_to_pair(proof.A),
-        "S":   point_to_pair(proof.S),
-        "T1":  point_to_pair(proof.T_1),
-        "T2":  point_to_pair(proof.T_2),
+        "V":   [str(int(p)) for p in point_to_pair(proof.V)],
+        "A":   [str(int(p)) for p in point_to_pair(proof.A)],
+        "S":   [str(int(p)) for p in point_to_pair(proof.S)],
+        "T1":  [str(int(p)) for p in point_to_pair(proof.T_1)],
+        "T2":  [str(int(p)) for p in point_to_pair(proof.T_2)],
 
-        # Proof scalars
-        "tau_x": proof.tau_x,
-        "mu":    proof.mu,
-        "t_hat": proof.t_hat,
+        "tau_x": str(proof.tau_x),
+        "mu":    str(proof.mu),
+        "t_hat": str(proof.t_hat),
 
-        # IPA points and final scalars
-        "L_vec": [point_to_pair(L) for L in proof.ipa.L_vec],
-        "R_vec": [point_to_pair(R) for R in proof.ipa.R_vec],
-        "ipa_a": proof.ipa.a,
-        "ipa_b": proof.ipa.b,
+        "L_vec": [[str(int(p)) for p in point_to_pair(L)] for L in proof.ipa.L_vec],
+        "R_vec": [[str(int(p)) for p in point_to_pair(R)] for R in proof.ipa.R_vec],
+        "ipa_a": str(proof.ipa.a),
+        "ipa_b": str(proof.ipa.b),
 
-        # Fiat-Shamir challenges (pre-computed off-chain)
-        "challenge_y": y,
-        "challenge_z": z,
-        "challenge_x": x,
+        "challenge_y": str(y),
+        "challenge_z": str(z),
+        "challenge_x": str(x),
+        "delta": str(delta),
+        "z2":    str(z2),
+        "x2":    str(x2),
 
-        # Pre-computed constants for Solidity polynomial identity check
-        "delta": delta,
-        "z2":    z2,
-        "x2":    x2,
+        "P_final": [str(int(p)) for p in point_to_pair(P_fold)],
+        "G_final": [str(int(p)) for p in point_to_pair(G_final)],
+        "H_final": [str(int(p)) for p in point_to_pair(H_final)],
 
-        # Pre-folded IPA inputs for efficient Solidity verification
-        "P_final": point_to_pair(P_fold),
-        "G_final": point_to_pair(G_final),
-        "H_final": point_to_pair(H_final),
+        "G_vec":   [[str(int(p)) for p in point_to_pair(pt)] for pt in G_vec],
+        "H_prime": [[str(int(p)) for p in point_to_pair(pt)] for pt in H_prime],
 
-        # Generator points (for full on-chain re-derivation if needed)
-        "G_vec":   [point_to_pair(p) for p in G_vec],
-        "H_prime": [point_to_pair(p) for p in H_prime],
-
-        # BN128 fixed generators (for Solidity reference)
-        "G_point": [1, 2],
-        "H_point": point_to_pair(H),
+        "G_point": ["1", "2"],
+        "H_point": [str(int(p)) for p in point_to_pair(H)],
     }
 
 

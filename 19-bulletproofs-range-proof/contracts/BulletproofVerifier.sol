@@ -50,6 +50,11 @@ contract BulletproofVerifier {
         459949481272866443960724912740899158807083125217931006567015893658029788644;
     uint256 public constant Hy =
         11645021172173330494259080844525435138787232316664030576438478695061142053648;
+    // ── Independent generator U (derived from SHA256 in Python) ───
+    uint256 public constant Ux =
+        18688975611804865972745798113835492227298776757174977525671296736932522457983;
+    uint256 public constant Uy =
+        19635377552547439862699260190583242724279873686411137233811362213180535085761;
 
     // ── Events ───────────────────────────────────────────────────────────────
     event ProofVerified(address indexed prover, bool valid, uint256 n_bits);
@@ -182,15 +187,24 @@ contract BulletproofVerifier {
      * The folding is sound because the IPA challenges are derived from the
      * Fiat-Shamir transcript (which commits the prover to their choices).
      */
+
+
+
+
+
     function _checkIPAFinal(
         IPAFinal calldata ipa,
         uint256 a,
         uint256 b
     ) internal view returns (bool) {
-        // a·G_final + b·H_final
+        // a·G_final + b·H_final + (a*b)·U
         uint256[2] memory aG = _ecMul(ipa.G_final[0], ipa.G_final[1], a);
         uint256[2] memory bH = _ecMul(ipa.H_final[0], ipa.H_final[1], b);
+        uint256 ab_mod = mulmod(a, b, Q);
+        uint256[2] memory abU = _ecMul(Ux, Uy, ab_mod);
+        
         uint256[2] memory lhs = _ecAdd(aG[0], aG[1], bH[0], bH[1]);
+        lhs = _ecAdd(lhs[0], lhs[1], abU[0], abU[1]);
 
         return lhs[0] == ipa.P_final[0] && lhs[1] == ipa.P_final[1];
     }
