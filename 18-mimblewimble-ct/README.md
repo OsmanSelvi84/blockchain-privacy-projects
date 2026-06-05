@@ -73,6 +73,31 @@ Expected output of `verify`:
 [OK] kernel signature valid
 ```
 
+### Run the full demo (copy-paste, in order)
+
+One command runs everything — the reference comparison, a verify, a tamper
+test, and the Solidity tests (macOS / Linux, with the venv active):
+
+```bash
+bash scripts/demo.sh
+```
+
+Or step by step (works on any OS):
+
+```bash
+# 1. Part A — reference vs this implementation on 5 scenarios
+PYTHONPATH=. python scripts/compare_with_reference.py
+
+# 2. Verify a confidential transaction
+PYTHONPATH=. python -m ct.cli verify examples/01_simple.json
+
+# 3. The on-chain Solidity verifier
+cd solidity && npm install && npx hardhat test && cd ..
+```
+
+To run the instructor's own inputs through both implementations, see §3
+("Supplying your own test inputs").
+
 ---
 
 ## 2. Project layout
