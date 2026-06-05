@@ -103,6 +103,7 @@ Expected output of `verify`:
 │   ├── generate_solidity_vectors.py # produce test vectors for the on-chain verifier
 │   ├── dry_run.sh                  # one-command pre-presentation sanity check
 │   └── demo.sh                     # guided live presentation walkthrough
+├── slides/                         # presentation deck (MimbleWimble_Presentation.pptx)
 └── solidity/                       # on-chain verifier (Hardhat project)
     ├── contracts/
     │   └── MimbleWimbleVerifier.sol
