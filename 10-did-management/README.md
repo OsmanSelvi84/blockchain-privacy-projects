@@ -59,7 +59,7 @@ It is an official Ethereum DID Registry maintained by the Decentralized Identity
 └── README.md               
 
 
-
+https://github.com/OsmanSelvi84/blockchain-privacy-projects/tree/students/220304129-angelica-mwinkeu-bankumuna
 **Required software tools:**
 
 a. [Node.js](https://nodejs.org) v22 or higher
@@ -68,6 +68,16 @@ b. npm v10 or higher
 
 c. [Git](https://git-scm.com)
 
+**How to Clone and Run This Project**
+
+Step 1 — Clone the Repository
+git clone https://github.com/OsmanSelvi84/blockchain-privacy-projects.git
+
+cd blockchain-privacy-projects 
+
+git checkout students/220304129-angelica-mwinkeu-bankumuna
+
+cd 10-did-management
 
 
 **How to Install:**
