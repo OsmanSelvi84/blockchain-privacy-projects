@@ -24,6 +24,39 @@ The contract also stores the purpose of access and the type of medical data, suc
 * Ethereum Smart Contracts
 * JavaScript
 
+
+
+## Project Structure
+
+The project folder is organized as follows:
+
+```text
+14-ehealth-dynamic-consent/
+│
+├── contracts/
+│   └── DynamicConsent.sol
+│
+├── scripts/
+│   └── deploy.ts
+│
+├── test/
+│   └── DynamicConsent.ts
+│
+├── typechain-types/
+│   ├── factories/
+│   ├── DynamicConsent.ts
+│   ├── common.ts
+│   ├── hardhat.d.ts
+│   └── index.ts
+│
+├── .gitignore
+├── README.md
+├── hardhat.config.ts
+├── package-lock.json
+├── package.json
+└── tsconfig.json
+```
+
 ## How to Run the Project
 
 
