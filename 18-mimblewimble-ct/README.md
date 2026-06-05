@@ -128,7 +128,7 @@ To run the instructor's own inputs through both implementations, see §3
 │   ├── generate_solidity_vectors.py # produce test vectors for the on-chain verifier
 │   ├── dry_run.sh                  # one-command pre-presentation sanity check
 │   └── demo.sh                     # guided live presentation walkthrough
-├── slides/                         # presentation deck (MimbleWimble_Presentation.pdf)
+├── slides/                         # presentation deck — .html (interactive) + .pdf
 └── solidity/                       # on-chain verifier (Hardhat project)
     ├── contracts/
     │   └── MimbleWimbleVerifier.sol
