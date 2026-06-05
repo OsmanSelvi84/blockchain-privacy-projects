@@ -1,13 +1,60 @@
-# Attribute-Based Encryption
+# Attribute-Based Encryption (CP-ABE)
 
-## 🎯 Goal
-Control data access based on user attributes.
+Veriyi, kullanıcının sahip olduğu özelliklere (attribute) göre şifreleyen küçük bir
+proje. Mesela bir dosyayı "doctor AND (cardiology OR admin)" politikasıyla
+şifreliyorsun; sadece bu attribute'lara sahip biri açabiliyor, başkası açamıyor.
+Erişim kontrolünü şifrenin kendisi yapıyor.
 
-## 📌 Requirements
-- Implement attribute validation system
-- Encrypt/decrypt based on policy
-- Support multi-attribute access control
+Hepsini sıfırdan yazdım, ekstra kütüphane yok, sadece Python (3.10+).
 
-## 🔐 Privacy Concept
-Fine-grained access control.
+## Çalıştırma
 
+```bash
+python3 demo.py
+```
+
+Tek bir senaryo denemek için:
+
+```bash
+python3 demo.py --policy "doctor AND (cardiology OR admin)" --attributes "doctor,cardiology" --message "gizli mesaj"
+```
+
+Politikada attribute isimlerini düz yazıyorsun, aralarına AND / OR koyuyorsun,
+parantez kullanabiliyorsun. "k tanesi yeterli" demek için THRESHOLD(2, a, b, c).
+
+## Testler
+
+```bash
+python3 -m unittest test_abe -v
+```
+
+## Örnek çıktı
+
+```
+Policy        : doctor AND (cardiology OR admin)
+User holds    : ['doctor', 'cardiology']
+Decision      : ACCESS GRANTED
+Recovered text: gizli mesaj
+```
+
+Attribute'lar politikayı sağlamazsa "ACCESS DENIED" yazıyor ve veri çözülmüyor.
+
+## Dosyalar
+
+- `abe.py` — şifreleme/şifre çözme mantığı
+- `demo.py` — demo ve komut satırı
+- `test_abe.py` — testler
+
+## Nasıl çalışıyor
+
+Şifrelerken rastgele bir gizli sayı seçip ondan bir anahtar türetiyorum, veriyi o
+anahtarla şifreliyorum. Gizli sayıyı da politika ağacına Shamir secret sharing ile
+dağıtıyorum: AND için bütün parçalar gerekiyor, OR için bir tanesi yetiyor. Her
+attribute'un payı o attribute'un anahtarıyla gizleniyor. Çözerken kullanıcı elindeki
+attribute'larla payları toplayıp Lagrange interpolasyonuyla gizli sayıyı geri
+kuruyor — ama yeterli attribute'u yoksa kuramıyor.
+
+## Kaynaklar
+
+- Bethencourt, Sahai, Waters – Ciphertext-Policy Attribute-Based Encryption (2007)
+- Shamir – How to Share a Secret (1979)
