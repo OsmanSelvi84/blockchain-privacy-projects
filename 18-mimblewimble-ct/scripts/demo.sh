@@ -81,7 +81,7 @@ pause
 header "4/4  ON-CHAIN  —  the Solidity verifier  (my own solution)"
 echo "From-scratch secp256k1 EC verification on the EVM."
 echo "\$ cd solidity && npx hardhat test"
-( cd solidity && npx hardhat test )
+( cd solidity && { [ -d node_modules ] || { echo "(first run: installing Hardhat, one moment...)"; npm install >/dev/null 2>&1; }; } && npx hardhat test )
 
 echo
 echo -e "${GREEN}${BOLD}Demo complete.${NC}"
