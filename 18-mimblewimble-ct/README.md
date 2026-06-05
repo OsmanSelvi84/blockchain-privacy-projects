@@ -37,66 +37,76 @@ are run on the same inputs for the output-matching evaluation — see §3.
 
 ---
 
-## 1. Quick start
+## 1. Step-by-step: clone, set up, and run
 
-Prereqs: macOS or Linux, Python 3.9+, git.
+Prereqs: **Python 3.9+**, **git**, and **Node.js** (for the Solidity tests).
+macOS / Linux throughout; Windows users see the notes at the end of this section.
+Every command uses relative paths, so it works wherever the repo is cloned.
+
+**Step 1 — Clone the repo and switch to this student branch**
 
 ```bash
-# clone this project
 git clone https://github.com/OsmanSelvi84/blockchain-privacy-projects.git
 cd blockchain-privacy-projects
 git checkout students/220304118-ege-deniz
 cd 18-mimblewimble-ct
+```
 
-# install dependencies
+**Step 2 — Set up Python and install dependencies**
+
+```bash
 python3 -m venv .venv
-source .venv/bin/activate
+source .venv/bin/activate          # Windows (Git Bash): source .venv/Scripts/activate
 pip install -r requirements.txt
-
-# run the tests
-PYTHONPATH=. pytest tests/ -v
-
-# build and verify a sample transaction
-PYTHONPATH=. python -m ct.cli build \
-    --in 100,3141 --in 50,2718 \
-    --out 140,1618 \
-    --fee 10 \
-    --output examples/tx_simple.json
-PYTHONPATH=. python -m ct.cli verify examples/tx_simple.json
 ```
 
-Expected output of `verify`:
+**Step 3 — Run the test suite** (confirms it works)
 
-```
-[OK] commitments balance
-[OK] all 1 range proofs valid
-[OK] kernel signature valid
+```bash
+PYTHONPATH=. pytest tests/ -v       # -> 21 passed
 ```
 
-### Run the full demo (copy-paste, in order)
-
-One command runs everything — the reference comparison, a verify, a tamper
-test, and the Solidity tests (macOS / Linux, with the venv active):
+**Step 4 — Run the full demo** (one command)
 
 ```bash
 bash scripts/demo.sh
 ```
 
-Or step by step (works on any OS):
+It runs all four parts, pausing between each (press **Enter** to advance):
+
+1. **Part A** — the reference and this implementation on 5 scenarios; the verdicts must match.
+2. **Verify** — a real confidential transaction passes every check.
+3. **Tamper** — a modified transaction is correctly rejected.
+4. **On-chain** — the Solidity verifier (Hardhat installs automatically on first run).
+
+Expected: `ALL SCENARIOS AGREE`, three `[OK]` checks, a rejection, then `10 passing`.
+
+**Step 5 — Run specific test inputs** (e.g. the 5 evaluation cases)
+
+Edit `examples/scenarios_template.json` — each input/output is `[value, blinding]`
+(the blinding may be any integer), set the `fee` — then:
 
 ```bash
-# 1. Part A — reference vs this implementation on 5 scenarios
-PYTHONPATH=. python scripts/compare_with_reference.py
-
-# 2. Verify a confidential transaction
-PYTHONPATH=. python -m ct.cli verify examples/01_simple.json
-
-# 3. The on-chain Solidity verifier
-cd solidity && npm install && npx hardhat test && cd ..
+bash scripts/demo.sh examples/scenarios_template.json
 ```
 
-To run the instructor's own inputs through both implementations, see §3
-("Supplying your own test inputs").
+### Prefer single commands? (any OS, no demo script)
+
+```bash
+PYTHONPATH=. python scripts/compare_with_reference.py        # Part A: reference vs mine
+PYTHONPATH=. python -m ct.cli verify examples/01_simple.json # verify a transaction
+cd solidity && npm install && npx hardhat test && cd ..      # on-chain verifier
+```
+
+### Notes
+
+- **The Grin reference** (for Part A) is a separate project with a native build
+  (see §3). If it is not installed, the comparison runs this implementation alone
+  and says so — the rest of the demo is unaffected.
+- **Windows:** use **Git Bash** (not cmd / PowerShell) so `bash` and `source`
+  work, and activate the venv with `source .venv/Scripts/activate`.
+- To supply your own inputs to the comparison directly, see §3
+  ("Supplying your own test inputs").
 
 ---
 
