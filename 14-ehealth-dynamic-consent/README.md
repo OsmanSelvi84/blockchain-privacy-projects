@@ -290,9 +290,3 @@ These ideas are similar to my project because my contract checks whether a healt
 
 My final implementation was developed independently. The references were only used for understanding system design, permission management, and testing structure.
 
-Reference project:
-
-SC-DCMS Reference Project: https://github.com/mlecjm/sc-dcms
-
-The reference project has a larger healthcare privacy architecture. My project focuses on the dynamic consent management part in a simpler and more practical way.
-
