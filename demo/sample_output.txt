@@ -1,32 +1,4 @@
 ================================================================
-  CoinShuffle Protocol Simulation  (5 participants)
-================================================================
-
-[INPUT] Participants:
-  Name       Source Address        Private Output Address
-  ------------------------------------------------------
-  User1      wallet_input_A       wallet_output_A_private
-  User2      wallet_input_B       wallet_output_B_private
-  User3      wallet_input_C       wallet_output_C_private
-  User4      wallet_input_D       wallet_output_D_private
-  User5      wallet_input_E       wallet_output_E_private
-
-[SHUFFLE] Mixing Pool Process:
-
-  [User1] step 1/5 -- output addresses are still hidden
-  [User2] step 2/5 -- output addresses are still hidden
-  [User3] step 3/5 -- output addresses are still hidden
-  [User4] step 4/5 -- output addresses are still hidden
-  [User5] step 5/5 -- final step, outputs are shuffled
-
-  Shuffled Output Addresses:
-    slot 0: wallet_output_B_private
-    slot 1: wallet_output_D_private
-    slot 2: wallet_output_A_private
-    slot 3: wallet_output_C_private
-    slot 4: wallet_output_E_private
-
-================================================================
   FINAL MIXED TRANSACTION
 ================================================================
 
