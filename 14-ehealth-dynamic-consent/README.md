@@ -440,15 +440,31 @@ The tested features include:
 These ideas are similar to my project because my contract checks whether a healthcare provider has active consent from a patient.
 
 ---
-
 ### Reference Comparison Summary
 
-| Part      | Healthcare Dynamic Consent Reference | Runnable Access Control Reference     | My Project                       |
-| --------- | ------------------------------------ | ------------------------------------- | -------------------------------- |
-| Topic     | Healthcare consent system            | Smart contract access control         | Healthcare dynamic consent       |
-| Runnable  | Not without modifying source code    | Yes                                   | Yes                              |
-| Main idea | Consent requests and agreements      | Grant/revoke/check permissions        | Give/update/revoke/check consent |
-| Used for  | Architecture understanding           | Runnable comparison and testing style | Final implementation             |
+| Part | Healthcare Dynamic Consent Reference | Runnable Access Control Reference | My Project |
+| --- | --- | --- | --- |
+| Topic | Healthcare consent system | Smart contract access control | Healthcare dynamic consent |
+| Runnable | Not without modifying source code | Yes | Yes |
+| Main idea | Consent requests and agreements | Grant/revoke/check permissions | Give/update/revoke/check consent |
+| Used for | Architecture understanding | Runnable comparison and testing style | Final implementation |
+| Contract structure | Multiple contracts for users, personal data, and consent | Single simple access control contract | Single `DynamicConsent.sol` contract |
+| Healthcare focus | Strong healthcare and personal data focus | Not healthcare-specific | Healthcare-specific patient-provider consent |
+| Data stored | User profiles, dataset information, consent agreements | Permission status | Consent status, purpose, and timestamp |
+| Consent flow | Request-based consent agreement flow | Permission grant/revoke flow | Direct patient consent flow |
+| Update consent | More complex agreement-based update logic | Not the main focus | Patient can update the consent purpose |
+| Revoke consent | Supported through consent agreement logic | Supported | Supported directly by the patient |
+| Check consent | Checks consent agreement validity | Checks permission status | Checks if provider has active consent |
+| Timestamp | Uses time for consent validity/expiration | Not the main focus | Records when consent is given, updated, or revoked |
+| Main advantage | Detailed architecture | Easy to run and test | Simple, runnable, and matches the assigned topic |
+| Limitation | Harder to run and explain | Too general for healthcare | Does not include separate user profile or dataset contracts |
+
+
+
+
+
+
+
 
 My final implementation was developed independently. The references were only used for understanding system design, permission management, and testing structure.
 
