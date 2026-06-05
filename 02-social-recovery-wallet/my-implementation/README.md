@@ -446,3 +446,7 @@ A nullifier works like a unique serial number. Once spent, it is permanently rec
 - Recovery flow: initiate→support→execute 
 - Guardian removal: 3-day timelock 
 - Threshold scheme: T(threshold)-of-N(guardians)
+
+
+##referencre links for privacy improvements
+https://everscale.network/blog/everscale-deep-tech-how-blockchains-support-data-privacy-ethereum-vs-everscale/
