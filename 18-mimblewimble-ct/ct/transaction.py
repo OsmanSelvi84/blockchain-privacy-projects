@@ -37,6 +37,8 @@ both values and blinding factors for every input. In a real wallet these
 would come from a wallet DB; in this demo they're supplied via the CLI.
 """
 
+from __future__ import annotations
+
 from ecdsa.ellipticcurve import PointJacobi
 
 from ct import pedersen, schnorr, rangeproof

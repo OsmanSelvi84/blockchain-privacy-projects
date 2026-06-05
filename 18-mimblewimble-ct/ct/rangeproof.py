@@ -45,6 +45,8 @@ VERIFICATION OF FULL RANGE PROOF
 Together these prove C commits to some v ∈ [0, 2^N) without revealing v.
 """
 
+from __future__ import annotations
+
 import hashlib
 import secrets
 from dataclasses import dataclass

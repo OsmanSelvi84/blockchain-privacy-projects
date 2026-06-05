@@ -36,6 +36,8 @@ spender proves possession of `excess` via a Schnorr signature on D
 (see schnorr.py). This proves no value was created from nothing.
 """
 
+from __future__ import annotations
+
 from ecdsa.ellipticcurve import PointJacobi
 from ct.curve import G, H, ORDER
 

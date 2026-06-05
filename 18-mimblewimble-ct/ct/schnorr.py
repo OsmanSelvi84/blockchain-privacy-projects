@@ -30,6 +30,8 @@ Nonce k MUST come from `secrets` (CSPRNG). Reusing k across two signatures
 under the same key leaks the key.
 """
 
+from __future__ import annotations
+
 import hashlib
 import secrets
 
