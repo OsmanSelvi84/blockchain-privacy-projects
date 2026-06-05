@@ -220,14 +220,163 @@ Reference repository:
 https://github.com/mlecjm/sc-dcms
 ```
 
-This project is related to Smart Contract Dynamic Consent Management Systems. It includes multiple smart contracts for:
+# SC-DCMS Reference Implementation Manual
 
-* user profile management
-* personal data management
-* consent request management
-* consent agreement management
+## 1. Project Description
 
-I used this reference to understand how a larger healthcare consent system can be structured. Compared to this reference, my project focuses only on the dynamic consent management part and implements a simpler version using Solidity and Hardhat.
+This project is the reference implementation for a Smart Contract-based Dynamic Consent Management System. It contains three Solidity smart contracts:
+
+* `UserProfileMgr.sol`: Manages user profiles and user roles.
+* `PersonalDataMgr.sol`: Manages personal dataset metadata.
+* `ConsentMgr.sol`: Manages consent requests, consent agreements, and consent validity.
+
+The purpose of using this reference implementation is to compare its behavior with my own implementation during evaluation.
+
+## 2. Environment
+
+The project was tested locally on macOS using:
+
+* Node.js / npm
+* Hardhat
+* Solidity compiler version 0.7.6
+
+## 3. Installation Steps
+
+First, clone the repository:
+
+```bash
+git clone https://github.com/mlecjm/sc-dcms.git
+cd sc-dcms
+```
+
+Initialize npm:
+
+```bash
+npm init -y
+```
+
+Install Hardhat and the Hardhat toolbox compatible with Hardhat 2:
+
+```bash
+npm install --save-dev hardhat@2.22.19
+npm install --save-dev @nomicfoundation/hardhat-toolbox@hh2
+```
+
+## 4. Hardhat Configuration
+
+Create a `hardhat.config.js` file:
+
+```bash
+touch hardhat.config.js
+```
+
+Add the following configuration:
+
+```js
+require("@nomicfoundation/hardhat-toolbox");
+
+module.exports = {
+  solidity: {
+    version: "0.7.6",
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 200
+      }
+    }
+  }
+};
+```
+
+## 5. Required Code Fixes
+
+Because the reference implementation is written in an older Solidity style, two small compatibility fixes were required.
+
+### Fix 1: Missing owner variable in `PersonalDataMgr.sol`
+
+Inside `PersonalDataMgr.sol`, the contract uses `owner`, but the variable was not declared. The following code was added near the beginning of the contract:
+
+```solidity
+address public owner;
+
+constructor() {
+    owner = msg.sender;
+}
+```
+
+### Fix 2: Replace deprecated `now`
+
+In `ConsentMgr.sol`, the deprecated keyword `now` was replaced with:
+
+```solidity
+block.timestamp
+```
+
+Original:
+
+```solidity
+if(now >= ConsentAgreements[_agrNum].endDateTime){
+```
+
+Updated:
+
+```solidity
+if(block.timestamp >= ConsentAgreements[_agrNum].endDateTime){
+```
+
+## 6. Compile the Contracts
+
+To compile the contracts:
+
+```bash
+npx hardhat compile
+```
+
+Expected result:
+
+```bash
+Compiled 3 Solidity files successfully
+```
+
+## 7. Run the Tests
+
+A test file was created under:
+
+```bash
+test/scdcms-test.js
+```
+
+The tests check the main behavior of the reference implementation:
+
+* Deploying `UserProfileMgr`
+* Creating a user profile
+* Deploying `PersonalDataMgr`
+* Adding a dataset
+* Deploying `ConsentAgreementMgr`
+* Creating a consent request
+* Creating a consent agreement
+* Checking whether the consent agreement is valid
+
+Run the tests using:
+
+```bash
+npx hardhat test
+```
+
+Expected output:
+
+```bash
+SC-DCMS Reference Contracts
+  ✔ should deploy UserProfileMgr and create a user profile
+  ✔ should deploy PersonalDataMgr and add a dataset
+  ✔ should deploy ConsentAgreementMgr and create consent request/agreement
+
+3 passing
+```
+
+## 8. Conclusion
+
+The reference implementation was successfully compiled and tested locally using Hardhat. The main smart contract functions are runnable and can be used for comparison with my own implementation during evaluation.
 
 
 ### 2. Runnable Access Control Reference
