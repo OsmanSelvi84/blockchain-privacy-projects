@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MimbleWimble Confidential Transactions — COMP4052</title>
+<title>MimbleWimble Confidential Transactions — Full Presentation</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -34,55 +34,58 @@
   .rail{position:absolute;left:0;bottom:0;height:2px;width:100%;background:var(--line-soft)}
   .rail i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--acc-dim),var(--acc));transition:width .5s cubic-bezier(.6,.1,.2,1);box-shadow:0 0 12px rgba(94,234,212,.5)}
   .deck{position:relative;height:100vh;width:100vw}
-  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;padding:clamp(40px,7vw,120px);padding-top:90px;padding-bottom:70px}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;padding:clamp(40px,7vw,118px);padding-top:88px;padding-bottom:64px}
   .slide.active{display:flex}
-  .slide.active .reveal{animation:rise .65s both cubic-bezier(.2,.7,.2,1)}
+  .slide.active .reveal{animation:rise .6s both cubic-bezier(.2,.7,.2,1)}
   .slide.active .reveal:nth-child(1){animation-delay:.02s}
-  .slide.active .reveal:nth-child(2){animation-delay:.10s}
-  .slide.active .reveal:nth-child(3){animation-delay:.18s}
-  .slide.active .reveal:nth-child(4){animation-delay:.26s}
-  .slide.active .reveal:nth-child(5){animation-delay:.34s}
-  @keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
-  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--acc);margin-bottom:22px;display:flex;align-items:center;gap:12px}
+  .slide.active .reveal:nth-child(2){animation-delay:.09s}
+  .slide.active .reveal:nth-child(3){animation-delay:.16s}
+  .slide.active .reveal:nth-child(4){animation-delay:.23s}
+  .slide.active .reveal:nth-child(5){animation-delay:.30s}
+  @keyframes rise{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:none}}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--acc);margin-bottom:20px;display:flex;align-items:center;gap:12px}
   .kicker::before{content:"";width:26px;height:1px;background:var(--acc);opacity:.6}
-  h1{font-family:var(--disp);font-weight:800;font-size:clamp(44px,7.6vw,98px);line-height:.96;letter-spacing:-.03em}
-  h2{font-family:var(--disp);font-weight:700;font-size:clamp(30px,5vw,58px);line-height:1.04;letter-spacing:-.02em;max-width:20ch}
-  .lede{font-size:clamp(16px,1.7vw,21px);color:var(--dim);max-width:62ch;margin-top:20px;line-height:1.55}
-  .sig{font-family:var(--mono);font-size:13px;color:var(--dim);margin-top:32px;letter-spacing:.04em}
+  h1{font-family:var(--disp);font-weight:800;font-size:clamp(44px,7.4vw,96px);line-height:.96;letter-spacing:-.03em}
+  h2{font-family:var(--disp);font-weight:700;font-size:clamp(28px,4.6vw,54px);line-height:1.05;letter-spacing:-.02em;max-width:21ch}
+  .lede{font-size:clamp(15px,1.6vw,20px);color:var(--dim);max-width:64ch;margin-top:18px;line-height:1.55}
+  .sig{font-family:var(--mono);font-size:13px;color:var(--dim);margin-top:30px;letter-spacing:.04em}
   .sig b{color:var(--ink);font-weight:500}
-  .thesis{font-family:var(--disp);font-weight:500;font-size:clamp(26px,4vw,52px);line-height:1.18;letter-spacing:-.02em;max-width:20ch;color:#f3f8f6}
+  .thesis{font-family:var(--disp);font-weight:500;font-size:clamp(24px,3.6vw,48px);line-height:1.2;letter-spacing:-.02em;max-width:21ch;color:#f3f8f6}
   .thesis em{color:var(--acc);font-style:normal}
-  .cards{display:grid;gap:18px;margin-top:30px}
+  .big-eq{font-family:var(--mono);font-size:clamp(20px,2.6vw,34px);color:#f3f8f6;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--acc);border-radius:12px;padding:20px 26px;margin-top:8px;display:inline-block;letter-spacing:.01em}
+  .big-eq b{color:var(--acc);font-weight:700}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;margin-top:18px}
+  .two.wide{grid-template-columns:1.1fr .9fr}
+  .note{font-size:clamp(14px,1.5vw,17px);color:var(--dim);line-height:1.6;max-width:48ch}
+  .note b{color:var(--ink);font-weight:600}
+  .note .hl{color:var(--acc)}
+  .cards{display:grid;gap:16px;margin-top:26px}
   .cards.c3{grid-template-columns:repeat(3,1fr)}
   .cards.c4{grid-template-columns:repeat(2,1fr)}
-  .card{background:var(--panel);border:1px solid var(--line-soft);border-radius:14px;padding:22px 22px 24px;position:relative;overflow:hidden}
+  .card{background:var(--panel);border:1px solid var(--line-soft);border-radius:14px;padding:20px 20px 22px;position:relative;overflow:hidden}
   .card .idx{font-family:var(--mono);font-size:12px;color:var(--acc);letter-spacing:.1em}
-  .card h3{font-family:var(--disp);font-weight:700;font-size:clamp(18px,2vw,23px);margin:8px 0 8px;letter-spacing:-.01em}
-  .card p{font-size:14.5px;color:var(--dim);line-height:1.5}
-  .card .f{font-family:var(--mono);font-size:13px;color:var(--ink);margin-top:12px;background:var(--bg2);border:1px solid var(--line-soft);border-radius:7px;padding:8px 11px;display:inline-block}
+  .card h3{font-family:var(--disp);font-weight:700;font-size:clamp(17px,1.9vw,22px);margin:7px 0 7px;letter-spacing:-.01em}
+  .card p{font-size:14px;color:var(--dim);line-height:1.5}
+  .card .f{font-family:var(--mono);font-size:12.5px;color:var(--ink);margin-top:11px;background:var(--bg2);border:1px solid var(--line-soft);border-radius:7px;padding:7px 10px;display:inline-block}
   .card.flag{border-color:var(--line)}
-  .card.flag::after{content:"OWN SOLUTION";position:absolute;top:13px;right:-32px;transform:rotate(45deg);background:var(--acc);color:#04100d;font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.14em;padding:3px 38px}
-  .bul{display:grid;gap:14px;margin-top:8px;max-width:80ch}
-  .bul li{list-style:none;display:flex;gap:14px;align-items:flex-start;font-size:clamp(15px,1.6vw,18px);color:var(--ink);line-height:1.45}
-  .bul li::before{content:"";width:7px;height:7px;margin-top:9px;flex:none;background:var(--acc);border-radius:1px;transform:rotate(45deg);box-shadow:0 0 8px rgba(94,234,212,.6)}
+  .card.flag::after{content:"OWN SOLUTION";position:absolute;top:12px;right:-32px;transform:rotate(45deg);background:var(--acc);color:#04100d;font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.14em;padding:3px 38px}
+  .bul{display:grid;gap:13px;margin-top:6px;max-width:82ch}
+  .bul li{list-style:none;display:flex;gap:13px;align-items:flex-start;font-size:clamp(14px,1.5vw,17px);color:var(--ink);line-height:1.45}
+  .bul li::before{content:"";width:7px;height:7px;margin-top:8px;flex:none;background:var(--acc);border-radius:1px;transform:rotate(45deg);box-shadow:0 0 8px rgba(94,234,212,.6)}
   .bul li b{color:#fff;font-weight:600}
   .bul li span{color:var(--dim)}
-  .term{background:#070b0b;border:1px solid var(--line);border-radius:12px;overflow:hidden;max-width:78ch;box-shadow:0 30px 70px -30px rgba(0,0,0,.8);margin-top:8px}
-  .term .bar{display:flex;gap:7px;padding:13px 16px;border-bottom:1px solid var(--line-soft);background:rgba(255,255,255,.015)}
+  .term{background:#070b0b;border:1px solid var(--line);border-radius:12px;overflow:hidden;max-width:80ch;box-shadow:0 30px 70px -30px rgba(0,0,0,.8);margin-top:8px}
+  .term .bar{display:flex;gap:7px;padding:12px 16px;border-bottom:1px solid var(--line-soft);background:rgba(255,255,255,.015)}
   .term .bar i{width:11px;height:11px;border-radius:50%;background:#26312f}
   .term .bar i:first-child{background:#2a3a37}
-  .term .body{padding:20px 22px;font-family:var(--mono);font-size:clamp(13px,1.35vw,16px);line-height:1.85}
-  .term .body .p{color:var(--acc)}
-  .term .body .ok{color:var(--acc);font-weight:700}
-  .term .body .mut{color:var(--dim)}
-  pre.code{background:#070b0b;border:1px solid var(--line);border-radius:12px;padding:18px 20px;font-family:var(--mono);font-size:clamp(11px,1.15vw,13.5px);line-height:1.6;color:#cfe9e2;overflow:auto;max-width:86ch;margin-top:8px}
+  .term .body{padding:18px 22px;font-family:var(--mono);font-size:clamp(12.5px,1.3vw,15px);line-height:1.8}
+  .term .body .p{color:var(--acc)} .term .body .ok{color:var(--acc);font-weight:700}
+  .term .body .mut{color:var(--dim)} .term .body .step{color:#f3f8f6}
+  pre.code{background:#070b0b;border:1px solid var(--line);border-radius:12px;padding:16px 18px;font-family:var(--mono);font-size:clamp(10.5px,1.05vw,12.5px);line-height:1.55;color:#cfe9e2;overflow:auto;max-width:88ch;margin-top:8px}
   pre.code .k{color:var(--acc)} pre.code .c{color:var(--dimmer)}
-  .twocol{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center}
-  .note{font-size:14.5px;color:var(--dim);line-height:1.55;max-width:46ch}
-  .note b{color:var(--ink);font-weight:600}
-  .refs{display:grid;gap:9px;margin-top:6px;font-family:var(--mono);font-size:13.5px;color:var(--dim);line-height:1.5}
+  .refs{display:grid;gap:8px;margin-top:6px;font-family:var(--mono);font-size:13px;color:var(--dim);line-height:1.5}
   .refs b{color:var(--acc);font-weight:500}
-  @media (max-width:900px){.cards.c3,.cards.c4,.twocol{grid-template-columns:1fr}}
+  @media (max-width:900px){.cards.c3,.cards.c4,.two,.two.wide{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -92,44 +95,86 @@
   <section class="slide active">
     <div class="reveal kicker">COMP4052 · Final Project</div>
     <h1 class="reveal">Mimble<span style="color:var(--acc)">Wimble</span><br>Confidential Transactions</h1>
-    <p class="reveal lede">Hiding transaction amounts on a blockchain while still proving no value is created — verified on-chain in Solidity, cross-validated against the Grin reference implementation.</p>
+    <p class="reveal lede">Hiding transaction amounts on a blockchain while still proving no value is created — explained from first principles, implemented on-chain in Solidity, and cross-validated against the Grin reference.</p>
     <div class="reveal sig">Ege Deniz &nbsp;·&nbsp; <b>220304118</b> &nbsp;·&nbsp; Introduction to Blockchain &amp; DLT</div>
   </section>
 
   <!-- 2 problem -->
   <section class="slide">
-    <div class="reveal kicker">The problem</div>
+    <div class="reveal kicker">01 · The problem</div>
     <h2 class="reveal">Public blockchains expose every amount.</h2>
-    <p class="reveal lede">On Bitcoin, anyone can see who paid whom and how much. Privacy-preserving chains hide this in different ways:</p>
+    <p class="reveal lede">On Bitcoin, the ledger is fully transparent: anyone can read who paid whom and exactly how much. For real payments — salaries, business flows — that is unacceptable. The challenge: hide the amounts, but keep the chain <span style="color:var(--acc)">publicly verifiable</span> so no one can cheat.</p>
+  </section>
+
+  <!-- 3 landscape -->
+  <section class="slide">
+    <div class="reveal kicker">02 · The privacy landscape</div>
+    <h2 class="reveal">Three ways to add privacy.</h2>
     <div class="reveal cards c3">
-      <div class="card"><div class="idx">Monero</div><h3>Ring signatures</h3><p>Hides sender, receiver, and amount via ring signatures, stealth addresses, and RingCT.</p></div>
-      <div class="card"><div class="idx">Zcash</div><h3>zk-SNARKs</h3><p>Hides everything with zero-knowledge proofs — at the cost of a trusted setup.</p></div>
-      <div class="card flag"><div class="idx">MimbleWimble</div><h3>Commitments</h3><p>Hides amounts with homomorphic Pedersen commitments. No addresses, no trusted setup.</p></div>
+      <div class="card"><div class="idx">Monero</div><h3>Ring signatures</h3><p>Hides sender, receiver, and amount with ring signatures, stealth addresses, and RingCT. Larger transactions.</p></div>
+      <div class="card"><div class="idx">Zcash</div><h3>zk-SNARKs</h3><p>Hides everything with zero-knowledge proofs — powerful, but historically needed a trusted setup.</p></div>
+      <div class="card flag"><div class="idx">MimbleWimble</div><h3>Commitments</h3><p>Hides amounts with homomorphic Pedersen commitments. No addresses, no trusted setup, compact chain.</p></div>
     </div>
   </section>
 
-  <!-- 3 one sentence -->
+  <!-- 4 one sentence -->
   <section class="slide">
-    <div class="reveal kicker">In one sentence</div>
+    <div class="reveal kicker">03 · MimbleWimble</div>
     <p class="reveal thesis">A blockchain where amounts are <em>hidden</em>, yet every transaction stays <em>mathematically verifiable</em>.</p>
-    <p class="reveal lede">Proposed anonymously in 2016; used in production by Grin and Beam.</p>
+    <p class="reveal lede">Proposed anonymously in 2016 by "Tom Elvis Jedusor"; formalised by Andrew Poelstra. Live in production as Grin and Beam. The next slides build it from four ideas.</p>
   </section>
 
-  <!-- 4 four moves -->
+  <!-- 5 pedersen -->
   <section class="slide">
-    <div class="reveal kicker">The protocol</div>
-    <h2 class="reveal">Four cryptographic moves.</h2>
-    <div class="reveal cards c4">
-      <div class="card"><div class="idx">01 · Hide</div><h3>Pedersen commitment</h3><p>A commitment locks an amount behind a random blinding factor. Hiding, and binding.</p><span class="f">C = v·H + r·G</span></div>
-      <div class="card"><div class="idx">02 · Check</div><h3>Balance the books</h3><p>Commitments are homomorphic, so the network verifies balance without seeing amounts.</p><span class="f">ΣC_in − ΣC_out − fee·H = excess·G</span></div>
-      <div class="card"><div class="idx">03 · Prove</div><h3>Kernel signature</h3><p>A Schnorr signature on the excess proves balance and ownership — no value created.</p><span class="f">s·G == R + e·P</span></div>
-      <div class="card"><div class="idx">04 · Protect</div><h3>Range proof</h3><p>Proves every amount is non-negative, defeating the negative-amount inflation attack.</p><span class="f">0 ≤ v < 2⁶⁴</span></div>
+    <div class="reveal kicker">04 · Idea 1 — hide the amount</div>
+    <h2 class="reveal">Pedersen commitment.</h2>
+    <div class="two wide">
+      <p class="reveal note">A commitment is a <b>locked box</b> for a number. The amount <b>v</b> is locked behind a random <b>blinding factor r</b>. <b class="hl">Hiding:</b> r is uniform, so the box reveals nothing about v. <b class="hl">Binding:</b> you cannot later open the box to a different amount, because no one knows how the two generators G and H relate.</p>
+      <div class="reveal big-eq">C = v·<b>H</b> + r·<b>G</b></div>
     </div>
   </section>
 
-  <!-- 5 architecture -->
+  <!-- 6 homomorphic balance -->
   <section class="slide">
-    <div class="reveal kicker">Architecture</div>
+    <div class="reveal kicker">05 · Idea 2 — check the balance</div>
+    <h2 class="reveal">Commitments add up.</h2>
+    <div class="two wide">
+      <p class="reveal note">Pedersen commitments are <b>homomorphic</b> — adding two boxes gives the box of the sum. So the network can confirm <b>money in = money out + fee</b> by adding the commitments. If it balances, every amount term cancels and only a blinding term (the <b class="hl">excess</b>) remains. <b>No amount is ever revealed.</b></p>
+      <div class="reveal big-eq" style="font-size:clamp(15px,1.8vw,23px)">ΣC_in − ΣC_out − fee·H<br>= <b>excess·G</b></div>
+    </div>
+  </section>
+
+  <!-- 7 kernel -->
+  <section class="slide">
+    <div class="reveal kicker">06 · Idea 3 — prove no inflation</div>
+    <h2 class="reveal">The kernel signature.</h2>
+    <div class="two wide">
+      <p class="reveal note">The leftover <b>excess·G</b> is published as a public key. The spender signs it with a <b>Schnorr signature</b>. A valid signature proves two things at once: the amounts <b class="hl">balanced</b>, and the spender <b class="hl">owns the inputs</b>. An unbalanced transaction would leave an amount term the spender cannot sign for.</p>
+      <div class="reveal big-eq" style="font-size:clamp(16px,2vw,26px)">verify: s·G <b>==</b> R + e·P</div>
+    </div>
+  </section>
+
+  <!-- 8 range proof -->
+  <section class="slide">
+    <div class="reveal kicker">07 · Idea 4 — block the cheat</div>
+    <h2 class="reveal">Range proofs.</h2>
+    <p class="reveal lede">The balance check accepts <span style="color:var(--bad)">negative amounts</span> — a spender could commit to −5 and +100, "balance" with +95, and mint 5 from nothing. A <b style="color:var(--acc)">range proof</b> proves each amount lies in <span style="font-family:var(--mono)">[0, 2⁶⁴)</span> without revealing it, closing the attack. This project uses the classical bit-commitment construction (pre-Bulletproofs).</p>
+  </section>
+
+  <!-- 9 security -->
+  <section class="slide">
+    <div class="reveal kicker">08 · Why it is secure</div>
+    <h2 class="reveal">Two generators, one hard problem.</h2>
+    <ul class="reveal bul">
+      <li><b>secp256k1, the same curve as Bitcoin.</b> <span>G is the standard generator; H is a second generator.</span></li>
+      <li><b>H is "nothing up my sleeve".</b> <span>Derived from a public seed by try-and-increment, so nobody knows a scalar k with H = k·G — which is exactly what keeps commitments binding.</span></li>
+      <li><b>Everything rests on the discrete-log problem.</b> <span>Given Q = k·G, recovering k is infeasible. Hiding, binding, and signature unforgeability all follow.</span></li>
+    </ul>
+  </section>
+
+  <!-- 10 architecture -->
+  <section class="slide">
+    <div class="reveal kicker">09 · What I built</div>
     <h2 class="reveal">An on-chain verifier, a prover, and a reference.</h2>
     <div class="reveal cards c3">
       <div class="card flag"><div class="idx">Solidity</div><h3>On-chain verifier</h3><p>Verifies the kernel signature and commitment balance on Ethereum, with secp256k1 implemented from scratch.</p></div>
@@ -138,24 +183,24 @@
     </div>
   </section>
 
-  <!-- 6 on-chain verifier -->
+  <!-- 11 on-chain verifier -->
   <section class="slide">
-    <div class="reveal kicker">The proposed solution</div>
-    <h2 class="reveal">Verifying confidential transactions on Ethereum.</h2>
+    <div class="reveal kicker">10 · The proposed solution</div>
+    <h2 class="reveal">Verifying privacy on Ethereum.</h2>
     <ul class="reveal bul">
-      <li><b>verifyKernelSignature</b> <span>— confirms the spender knows the kernel excess (proves ownership).</span></li>
+      <li><b>verifyKernelSignature</b> <span>— confirms the spender knows the kernel excess (ownership).</span></li>
       <li><b>verifyBalance</b> <span>— confirms Σ inputs − Σ outputs − fee·H equals the kernel excess (no inflation).</span></li>
-      <li><b>secp256k1 from scratch</b> <span>— point add, double, scalar-mul, and modular inverse, since the EVM has no curve precompile.</span></li>
+      <li><b>secp256k1 from scratch</b> <span>— point add, double, scalar-mul, modular inverse, since the EVM has no curve precompile.</span></li>
       <li><b>Range proofs stay off-chain</b> <span>— on-chain they would cost tens of millions of gas; verified in the Python prover instead.</span></li>
     </ul>
   </section>
 
-  <!-- 7 balance check code -->
+  <!-- 12 code -->
   <section class="slide">
-    <div class="reveal kicker">Inside the verifier</div>
-    <h2 class="reveal" style="font-size:clamp(26px,4.2vw,48px)">The no-inflation check.</h2>
-    <div class="twocol" style="margin-top:22px">
-      <p class="reveal note">Sum the input commitments, subtract the outputs and the fee term, and confirm the result equals the published kernel excess. If the amounts did not balance, an amount term would remain and the check would fail.</p>
+    <div class="reveal kicker">11 · Inside the verifier</div>
+    <h2 class="reveal" style="font-size:clamp(24px,3.8vw,44px)">The no-inflation check, in code.</h2>
+    <div class="two" style="margin-top:20px">
+      <p class="reveal note">Sum the input points, subtract each output point, subtract the fee term, and compare the result to the published kernel excess. If the amounts did not balance, an amount term would remain and the equality would fail.</p>
       <pre class="reveal code"><span class="k">uint256</span> x = inX[0]; <span class="k">uint256</span> y = inY[0];
 <span class="k">for</span> (i=1; i&lt;inX.length; i++)        <span class="c">// add inputs</span>
   (x,y) = ecAdd(x,y, inX[i],inY[i]);
@@ -169,19 +214,37 @@
     </div>
   </section>
 
-  <!-- 8 verification / results -->
+  <!-- 13 demo / commands -->
   <section class="slide">
-    <div class="reveal kicker">Verification</div>
-    <h2 class="reveal">Cross-validated against Grin, and fully tested.</h2>
-    <div class="reveal term">
-      <div class="bar"><i></i><i></i><i></i></div>
-      <div class="body"><span class="mut"># reference vs this implementation, 5 scenarios</span><br><span class="p">$</span> python scripts/compare_with_reference.py<br>&nbsp;&nbsp;Result: <span class="ok">ALL SCENARIOS AGREE</span> &nbsp;<span class="mut">(5 / 5)</span><br><br><span class="p">$</span> pytest tests/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ <span class="ok">21 passed</span><br><span class="p">$</span> npx hardhat test &nbsp;&nbsp;→ <span class="ok">10 passing</span></div>
+    <div class="reveal kicker">12 · The live demo</div>
+    <h2 class="reveal">One command runs everything.</h2>
+    <div class="two" style="margin-top:18px">
+      <div class="reveal term">
+        <div class="bar"><i></i><i></i><i></i></div>
+        <div class="body"><span class="p">$</span> bash scripts/demo.sh<br><br><span class="step">1/4 Part A</span> &nbsp;→ <span class="ok">ALL SCENARIOS AGREE</span><br><span class="step">2/4 Verify</span> &nbsp;→ <span class="ok">[OK] [OK] [OK]</span><br><span class="step">3/4 Tamper</span> &nbsp;→ <span class="ok">REJECTED</span><br><span class="step">4/4 On-chain</span> → <span class="ok">10 passing</span></div>
+      </div>
+      <ul class="reveal bul">
+        <li><b>Part A</b> <span>— reference vs mine on 5 inputs; verdicts must match.</span></li>
+        <li><b>Verify</b> <span>— a real confidential transaction passes all checks.</span></li>
+        <li><b>Tamper</b> <span>— flip one byte → it is rejected.</span></li>
+        <li><b>On-chain</b> <span>— the Solidity verifier on Ethereum.</span></li>
+      </ul>
     </div>
   </section>
 
-  <!-- 9 limitations -->
+  <!-- 14 verification results -->
   <section class="slide">
-    <div class="reveal kicker">Scope &amp; future work</div>
+    <div class="reveal kicker">13 · Verification</div>
+    <h2 class="reveal">Cross-validated against Grin, and fully tested.</h2>
+    <div class="reveal term">
+      <div class="bar"><i></i><i></i><i></i></div>
+      <div class="body"><span class="mut"># reference vs this implementation, the instructor's inputs</span><br><span class="p">$</span> python scripts/compare_with_reference.py --scenarios inputs.json<br>&nbsp;&nbsp;Result: <span class="ok">ALL SCENARIOS AGREE</span><br><br><span class="p">$</span> pytest tests/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ <span class="ok">21 passed</span><br><span class="p">$</span> npx hardhat test &nbsp;&nbsp;→ <span class="ok">10 passing</span></div>
+    </div>
+  </section>
+
+  <!-- 15 limitations -->
+  <section class="slide">
+    <div class="reveal kicker">14 · Scope &amp; future work</div>
     <h2 class="reveal">Known limitations.</h2>
     <ul class="reveal bul">
       <li><b>Cut-through &amp; kernel aggregation</b> <span>— not implemented; this is the CT primitive layer.</span></li>
@@ -191,10 +254,10 @@
     </ul>
   </section>
 
-  <!-- 10 references -->
+  <!-- 16 references -->
   <section class="slide">
-    <div class="reveal kicker">References</div>
-    <h2 class="reveal" style="margin-bottom:24px">Foundations.</h2>
+    <div class="reveal kicker">15 · References</div>
+    <h2 class="reveal" style="margin-bottom:22px">Foundations.</h2>
     <div class="reveal refs">
       <div><b>Jedusor (2016)</b> — the original MimbleWimble text.</div>
       <div><b>Poelstra (2016)</b> — the canonical MimbleWimble write-up.</div>
@@ -202,14 +265,14 @@
       <div><b>Grin documentation</b> — docs.grin.mw</div>
       <div><b>grinventions/mimblewimble-py</b> — reference implementation.</div>
     </div>
-    <div class="reveal sig" style="margin-top:34px">MimbleWimble Confidential Transactions &nbsp;·&nbsp; <b>Ege Deniz</b> &nbsp;·&nbsp; COMP4052</div>
+    <div class="reveal sig" style="margin-top:32px">MimbleWimble Confidential Transactions &nbsp;·&nbsp; <b>Ege Deniz</b> &nbsp;·&nbsp; COMP4052</div>
   </section>
 
 </div>
 
 <div class="chrome">
   <div class="brand">MimbleWimble <b>// Confidential Transactions</b></div>
-  <div class="count"><b id="cur">01</b> / <span id="tot">10</span></div>
+  <div class="count"><b id="cur">01</b> / <span id="tot">16</span></div>
   <div class="rail"><i id="rail"></i></div>
 </div>
 
