@@ -27,12 +27,18 @@ The contract also stores the purpose of access and the type of medical data, suc
 ## How to Run the Project
 
 
+### Clone the Repository
 
-Clone the Repository
+```bash
 git clone https://github.com/OsmanSelvi84/blockchain-privacy-projects.git
+
+```bash
 Enter the Repository Folder
 cd blockchain-privacy-projects
+
+```bash
 Switch to the Student Branch
+
 git checkout students/220304119-mena-ghazowan-hamood
 
 ```bash
