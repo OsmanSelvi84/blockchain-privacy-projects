@@ -19,7 +19,7 @@ sys.path.insert(0, "src")
 sys.path.insert(0, ".")
 
 from ec_math import (
-    G, H, ec_add, ec_mul, ORDER, multi_exp,
+    G, H, U ,ec_add, ec_mul, ORDER, multi_exp,
     get_generator_vector, hash_to_scalar, point_to_bytes
 )
 from pedersen import commit, open_commit, vector_commit, add_commitments
@@ -220,6 +220,7 @@ class TestIPA:
         c     = inner_product(a_vec, b_vec)
         # Commitment P = <a, G> + <b, H>
         P     = ec_add(multi_exp(a_vec, G_vec), multi_exp(b_vec, H_vec))
+        P = ec_add(P, ec_mul(c, U))
         return a_vec, b_vec, G_vec, H_vec, c, P
 
     def _prove_verify(self, n):
@@ -430,6 +431,7 @@ class TestSolidityExport:
         a = d["ipa_a"]
         b = d["ipa_b"]
         lhs = ec_add(ec_mul(a, G_final), ec_mul(b, H_final))
+        lhs = ec_add(lhs, ec_mul((a * b) % ORDER, U))
         assert int(lhs[0]) == P_final[0] and int(lhs[1]) == P_final[1]
 
 

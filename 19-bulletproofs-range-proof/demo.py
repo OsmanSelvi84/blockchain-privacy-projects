@@ -11,7 +11,15 @@ Run:  cd src && python ../demo.py
 """
 
 import sys, time, json
-sys.path.insert(0, "src")
+from pathlib import Path
+import sys
+
+ROOT = Path(__file__).resolve().parent
+SRC = ROOT / "src"
+
+sys.path.insert(0, str(SRC))
+print(SRC)
+print(SRC.exists())
 
 from ec_math import ORDER
 from range_proof import prove, verify

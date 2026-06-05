@@ -16,7 +16,7 @@ import sys, json
 sys.path.insert(0, "src")
 
 from ec_math import (
-    G, H, ec_add, ec_mul, ORDER, get_generator_vector, point_to_bytes
+    G, H,U, ec_add, ec_mul, ORDER, get_generator_vector, point_to_bytes
 )
 from range_proof import prove, verify, power_vector, mod_inv
 from transcript import Transcript
@@ -74,6 +74,7 @@ def export_for_solidity(proof) -> dict:
         coeff = (z * y_n[i] + z2 * two_n[i]) % ORDER
         P = ec_add(P, ec_mul(coeff, H_prime[i]))
     P = ec_add(P, ec_mul((-proof.mu) % ORDER, H))
+    P = ec_add(P, ec_mul(proof.t_hat, U))
 
     # ── Fold IPA: iterate the same reduction as ipa_verify ───────────────
     G_fold = list(G_vec)
@@ -109,6 +110,10 @@ def export_for_solidity(proof) -> dict:
 
     # ── Sanity check: a*G_final + b*H_final should equal P_final ─────────
     expected = ec_add(ec_mul(proof.ipa.a, G_final), ec_mul(proof.ipa.b, H_final))
+    expected = ec_add(
+    expected,
+    ec_mul((proof.ipa.a * proof.ipa.b) % ORDER, U)
+)
     assert (int(expected[0]) == int(P_fold[0]) and
             int(expected[1]) == int(P_fold[1])), "IPA final check failed in export!"
 
