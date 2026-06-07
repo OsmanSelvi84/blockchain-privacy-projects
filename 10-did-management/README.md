@@ -1,19 +1,5 @@
 DID Management System
 
-**Project description:**
-
-This project is a Decentralized Identifier (DID) Management System built on the Ethereum blockchain. The idea behind it is that users own and control the their identities without depending on a central authority, and it is called **self-sovereign identity**.
-
-Using a Solidity smart contract, this system lets users:
-- Create their own digital identity (DID)
-- Update it whenever they need to
-- Revoke it if they no longer want it active
-- Look it up (resolve it) at any time
-  
-Everything is stored on the blockchain, meaning no single authority controls the identity.
-
-
-
 **Branch information:**
 
 Name: Angelica Mwinkeu Bankumuna
@@ -23,6 +9,33 @@ Student ID: 220304129
 Branch: students/220304129-angelica-mwinkeu-bankumuna
 
 
+**Project description:**
+
+This project is a Decentralized Identifier (DID) Management System built on the Ethereum blockchain. The idea behind it is that users own and control the their identities without depending on a central authority, and it is called **self-sovereign identity**.
+
+Using a Solidity smart contract, this system lets users:
+- Create their own digital identity (DID)
+- Update it whenever they need to
+- Revoke it if they no longer want it active
+- Look it up (resolve it) at any time
+
+Because in today's world, my identity is controlled by others:
+- Facebook owns my Facebook identity
+- Google owns my Gmail identity
+- Governments own my national ID
+- Banks own my financial identity
+
+This means they can delete your account, sell your data, or deny my access at any time.
+
+This project solves this by putting my identity on the **blockchain** where:
+- Nobody can delete it
+- Nobody can modify it without your permission
+- Nobody controls it except YOU
+- It exists forever
+
+This concept is called **Self-Sovereign Identity (SSI)**Everything is stored on the blockchain, meaning no single authority controls the identity.
+
+The concept behind the **Self-Sovereign Identity** is I own and control my identity with 3 key principles: control, Portability and privacy.
 
 **Reference Implementation:**
 
@@ -32,7 +45,15 @@ For learning and comparison purposes, I studied the following open-source projec
 https://github.com/uport-project/ethr-did-registry
 
 It is an official Ethereum DID Registry maintained by the Decentralized Identity Foundation. It is the industry standard for managing DIDs on Ethereum.
-*How to run it:* Clone the repository and follow the setup instructions in their README file.
+- **How to run it:**
+```bash
+git clone https://github.com/uport-project/ethr-did-registry.git
+cd ethr-did-registry
+npm install
+npx hardhat compile
+npx hardhat test
+```
+**Result:* 54 tests passing
 
 
 
@@ -97,8 +118,6 @@ Compiled 1 Solidity file successfully
 
 
 **How to Deploy**
-
-Start the local blockchain (keep this running):
 
 ```bash
 npx hardhat node
