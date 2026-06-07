@@ -126,6 +126,55 @@ Differences:
 - My implementation focuses on simplicity and educational demonstration.
 - My project includes a dedicated Hardhat demo script that shows the complete recovery workflow.
 
+## Requirements
+
+Before running the project, make sure the following software is installed:
+
+- Node.js
+- npm
+- Git
+- Hardhat
+
+## Build and Run
+
+### Install Dependencies
+
+```bash
+npm install
+```
+
+### Compile Smart Contracts
+
+```bash
+npx hardhat compile
+```
+
+### Run Demo
+
+```bash
+npx hardhat run scripts/demo.ts
+```
+
+### Run Tests
+
+```bash
+npx hardhat test
+```
+
+## Expected Demo Flow
+
+1. Contract is deployed.
+2. Original owner is displayed.
+3. Guardian 1 starts recovery.
+4. Guardian 2 approves recovery.
+5. Threshold is reached.
+6. Ownership is transferred to the new owner.
+
+Expected result:
+
+- Recovery process succeeds.
+- New owner becomes the wallet owner.
+
 ### Reference Setup
 
 ```bash
