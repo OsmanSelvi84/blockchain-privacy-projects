@@ -8,6 +8,6 @@ gas-report.txt
 deployment.json
 typechain-types/
 
-# CRITICAL — Lamport private key files. Never commit these.
+# Lamport private key files - NEVER commit these
 lamport-keys-*.json
 lamport-key.json
