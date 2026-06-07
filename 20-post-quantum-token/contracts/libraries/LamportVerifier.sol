@@ -2,81 +2,68 @@
 pragma solidity ^0.8.20;
 
 /**
- * @title LamportVerifier
- * @author PostQuantumToken Project
- * @notice Library implementing Lamport one-time signature verification on-chain.
+ * @title  LamportVerifier
+ * @notice Solidity library for Lamport one-time signature verification.
  *
- * @dev Lamport signatures are quantum-resistant because their security depends
- * solely on the one-wayness of a hash function (keccak256 here), NOT on
- * the hardness of discrete logarithm or elliptic-curve problems.
+ * @dev    Lamport signatures are quantum-resistant because their security
+ *         depends only on the one-wayness of keccak256, not on elliptic-curve
+ *         or discrete-logarithm hardness (which Shor's algorithm breaks).
  *
- * Quantum computers running Shor's algorithm can break ECDSA (used by
- * Ethereum's default secp256k1). They CANNOT break hash-based schemes
- * like Lamport, which only require a quantum speedup of ~sqrt (Grover),
- * meaning doubling the hash output size fully restores security.
+ * How Lamport Signatures Work:
  *
- * ─── How Lamport Signatures Work ──────────────────────────────────────────
+ *  KEY GENERATION
+ *    Private key : 256 random pairs  SK = { (sk[i][0], sk[i][1]) }  i=0..255
+ *    Public key  : hash of each pair PK = { (H(sk[i][0]), H(sk[i][1])) }
+ *                  where H = keccak256
  *
- * KEY GENERATION:
- * Private key:  256 pairs of random 32-byte values
- * SK = { (sk[i][0], sk[i][1]) } for i = 0..255
+ *  SIGNING  (message hash M, 256 bits)
+ *    For each bit i of M:
+ *      bit == 0  =>  reveal sk[i][0]
+ *      bit == 1  =>  reveal sk[i][1]
+ *    Signature = 256 revealed preimage values
  *
- * Public key:   Hash of each private value
- * PK = { (H(sk[i][0]), H(sk[i][1])) } for i = 0..255
+ *  VERIFICATION
+ *    For each bit i of M:
+ *      bit == 0  =>  check H(sig[i]) == PK[i][0]
+ *      bit == 1  =>  check H(sig[i]) == PK[i][1]
  *
- * SIGNING (message hash M, 256 bits):
- * For each bit i of M:
- * - if M[i] == 0 → reveal sk[i][0]
- * - if M[i] == 1 → reveal sk[i][1]
- * Signature = 256 revealed preimage values
+ *  ONE-TIME RULE
+ *    Each key pair must be used exactly once. Reusing a key leaks the
+ *    complementary preimage and allows signature forgery.
  *
- * VERIFICATION:
- * For each bit i of M:
- * - if M[i] == 0 → check H(sig[i]) == PK[i][0]
- * - if M[i] == 1 → check H(sig[i]) == PK[i][1]
- *
- * SECURITY NOTE:
- * Each key pair is ONE-TIME USE. Reusing a key leaks half the private key
- * per signature, enabling forgery. Key rotation is mandatory after each use.
+ * Reference: https://github.com/Tetration-Lab/lamport-solidity (MIT)
  */
 library LamportVerifier {
 
     /**
-     * @notice Verifies a Lamport one-time signature against a message hash.
+     * @notice Verifies a Lamport one-time signature.
      * @param messageHash  32-byte hash of the message that was signed.
-     * @param signature    256 revealed preimage values (the Lamport signature).
-     * @param publicKey    256 pairs of hash values (the Lamport public key).
-     * @return valid       True if the signature is valid for the given public key.
-     *
-     * @dev Iterates over all 256 bits of messageHash MSB-first.
-     * For each bit: keccak256(signature[i]) must equal publicKey[i][bit].
-     * Short-circuits on the first failure.
+     * @param signature    256 revealed preimage values (the signature).
+     * @param publicKey    256 pairs of keccak256 hash values (the public key).
+     * @return             True if every bit check passes, false otherwise.
      */
     function verify(
-        bytes32 messageHash,
-        bytes32[256] calldata signature,
+        bytes32         messageHash,
+        bytes32[256]    calldata signature,
         bytes32[2][256] calldata publicKey
-    ) internal pure returns (bool valid) {
+    ) internal pure returns (bool) {
         for (uint256 i = 0; i < 256; ) {
             uint256 byteIndex = i >> 3;
             uint256 bitIndex  = 7 - (i & 0x7);
             uint256 bit       = (uint8(messageHash[byteIndex]) >> bitIndex) & 1;
+
             if (keccak256(abi.encode(signature[i])) != publicKey[i][bit]) {
                 return false;
             }
-            unchecked { ++i;
-            }
+            unchecked { ++i; }
         }
         return true;
     }
 
     /**
-     * @notice Computes a compact commitment hash of a full Lamport public key.
-     * @param publicKey  The 256-pair Lamport public key (16,384 bytes).
-     * @return           keccak256 hash of the ABI-encoded public key (32 bytes).
-     *
-     * @dev Storing the full public key on-chain costs ~16 KB.
-     * Instead we store only this 32-byte commitment.
+     * @notice Computes the 32-byte commitment of a Lamport public key.
+     * @param  publicKey  The full 256-pair Lamport public key.
+     * @return            keccak256(abi.encode(publicKey))
      */
     function computeCommitment(bytes32[2][256] calldata publicKey)
         internal pure returns (bytes32)
@@ -85,10 +72,9 @@ library LamportVerifier {
     }
 
     /**
-     * @notice Verifies that a supplied public key matches a stored commitment.
-     * @param publicKey   The claimed Lamport public key.
-     * @param commitment  The previously stored commitment.
-     * @return            True if keccak256(encode(publicKey)) == commitment.
+     * @notice Returns true if the supplied key matches a stored commitment.
+     * @param  publicKey   The claimed Lamport public key.
+     * @param  commitment  The previously stored commitment hash.
      */
     function verifyCommitment(
         bytes32[2][256] calldata publicKey,
