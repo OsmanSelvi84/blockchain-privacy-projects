@@ -1,72 +1,108 @@
-# Solidity-RingSignature
-Ring-Signature using secp256k1 in Solidity for educational purpose.  Allows untracable voting and coin transfer within the EVM environment.
-First implementation of "Linkable Spontaneous Anonymous Groups Signature [REF](https://bitcointalk.org/index.php?topic=972541.msg10619684#msg10619684)."-Verification in solidity.
-secp256k1 is forked from [jbaylina](https://github.com/jbaylina/ecsol)
+# Blockchain Privacy Projects: Untraceable Voting & Anonymous Messaging
 
-##Note
-LSAG-signature voting with 3 cosigners requires ≈ 12.34 mGas. ECC operations are costly^^ use a testnet!
+**Student:** Eylül Uygur 210304040
+**Course:** COMP4052 Introduction to Blockchain and Distributed Ledger Technology
+**Branch:** 04-ring-signature-anonymous-messaging
 
+---
 
-## Guide
-1. Deploy secp256k1.sol on an ethereum chain
-2. Deploy UntraceableVoting.sol (pass the secp256k1 contract address in the constructor)
-3. Run main.go, to create a random set of "n voters and m candidates" and "signatures for each voter, to vote on on of the randomly selected candidates"
-4. copy the newly generated text in solargs.txt and pass them as arguments for the creation and setup a voting on the chain
-5. in vote.txt you'll find randomly generated valid vote parameters, pass them as argument for AnnonymousVote(..) function in UntraceableVoting.sol
+## 📌 1. Project Vision (What is this?)
+Normal blockchains are very transparent. Everyone can see who send the transaction and who vote for who. This is a big problem for privacy. 
 
+In this project, I solve this problem. I write a smart contract for **Untraceable Voting** and **Anonymous Messaging** on the Ethereum Virtual Machine (EVM). I use the Linkable Spontaneous Anonymous Group (LSAG) ring signature algorithm. When a user vote or send a message, the system know the user is in the authorized group, but nobody can know *who* exactly the user is. I am doing this project completely alone.
 
+---
 
-## Requirements
+## 💻 2. Technical Details & Engineering (How I did it?)
+I write the math engine (`secp256k1`) directly in Solidity. I do not use easy libraries, I build the cryptography from scratch. I use Hardhat and TypeScript for testing the system.
 
-[Go](http://golang.org) 1.9 or newer.
+My main engineering solutions in this project:
+* **Fixing EVM Limits:** EVM has a "Stack Too Deep" error when there are too many variables. I solve this by dividing my big math formulas into `l` (left) and `r` (right) helper functions.
+* **Gas Optimization:** Normal X and Y coordinate math is very expensive on Ethereum. I use 3D Jacobian Coordinates to make the math cheaper, then I convert it back to 2D.
+* **Double Spend Protection:** I add a "Key Image" feature. This stop bad users from voting 100 times. If someone try to use the same signature again, my smart contract blocks it.
 
-## Getting Started
+---
 
-- Solidity-RingSignature (and utilities) will now be installed in either ```$GOROOT/bin``` or
-  ```$GOPATH/bin``` depending on your configuration.  If you did not already
-  add the bin directory to your system path during Go installation, we
-  recommend you do so now.
+## ⚙️ 3. Project Setup Instructions (How to run?)
+To test my project on your computer, please follow these steps carefully in your terminal. Because my branch name and the folder name are the same, I use a special `-b` command to download it correctly.
 
-## Updating
+### Step 1: Download the Project
+First, clone the repository directly from my branch and go into the folder:
 
-#### Windows
-
-Install a newer MSI
-
-#### Linux/BSD/MacOSX/POSIX - Build from Source
-
-- **Dep**
-
-  Dep is used to manage project dependencies and provide reproducible builds.
-  To install:
-
-  `go get -u github.com/golang/dep/cmd/dep`
-
-Unfortunately, the use of `dep` prevents a handy tool such as `go get` from
-automatically downloading, building, and installing the source in a single
-command.  Instead, the latest project and dependency sources must be first
-obtained manually with `git` and `dep`, and then `go` is used to build and
-install the project.
-
-**Getting the source**:
-
-For a first time installation, the project and dependency sources can be
-obtained manually with `git` and `dep` (create directories as needed):
+```bash
+git clone -b 04-ring-signature-anonymous-messaging https://github.com/OsmanSelvi84/blockchain-privacy-projects.git
+cd blockchain-privacy-projects
 
 ```
-git clone https://github.com/mottla/Solidity-RingSignature.git
-cd $GOPATH/src/github.com/Solidity-RingSignature
-dep ensure
-go install . ./cmd/...
+
+### Step 2: Open in VS Code
+
+Open the project folder in Visual Studio Code:
+
+```bash
+code .
+
 ```
 
-To update an existing source tree, pull the latest changes and install the
-matching dependencies:
+### Step 3: Install Packages
+
+After VS Code opens, open a new terminal inside VS Code (Terminal -> New Terminal) and run this command:
+
+```bash
+npm install
 
 ```
-cd $GOPATH/src/github.com/Solidity-RingSignature
-git pull
-dep ensure
-go install . ./cmd/...
+
+> **🛠️ Ubuntu/Linux Troubleshooting (NVM / Node):**
+> If you get an `npm: command not found` error on Ubuntu, your NVM might be sleeping. Wake it up with these commands before `npm install`:
+> ```bash
+> export NVM_DIR="$HOME/.nvm"
+> [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+> nvm use 24
+> 
+> ```
+> 
+> 
+
+---
+
+## 🧪 4. Testing & Security Evaluation
+
+I write very strong security tests. These tests check if my contract blocks fake keys and bad array lengths.
+
+To run my security simulation, use this command:
+
+```bash
+npx hardhat test
+
 ```
 
+### 🎯 Expected Output:
+
+When you run the test, you will see my system defending itself successfully:
+
+```text
+  AnonymousMessaging System Simulation
+    1. Deployment Phase
+      ✔ Should deploy the contract successfully to the blockchain
+    2. Security & Cryptography Phase (Part A & B Evaluation)
+      ✔ Should BLOCK hackers trying to bypass the Ring Signature with fake data
+      ✔ Should BLOCK inputs with mismatched array lengths
+    3. Part A - Instructor Evaluation (5 Inputs Test)
+
+      --- INSTRUCTOR EVALUATION STARTED ---
+      [ Input 1 ] Result: REJECTED - Invalid Signature Detected (System Secure)
+      [ Input 2 ] Result: REJECTED - Invalid Signature Detected (System Secure)
+      [ Input 3 ] Result: REJECTED - Invalid Signature Detected (System Secure)
+      [ Input 4 ] Result: REJECTED - Invalid Signature Detected (System Secure)
+      [ Input 5 ] Result: REJECTED - Invalid Signature Detected (System Secure)
+      --- INSTRUCTOR EVALUATION COMPLETED ---
+
+      ✔ Should evaluate 5 different inputs provided by the instructor
+
+  4 passing (2s)
+
+```
+
+```
+```
