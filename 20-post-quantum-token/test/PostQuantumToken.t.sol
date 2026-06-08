@@ -10,7 +10,7 @@ contract PostQuantumTokenTest is Test {
     address ahmet = address(0x1111);
     address murat = address(0x2222);
 
-    /// @dev Bundle of Lamport key material for a single key generation.
+    ///  Bundle of Lamport key material for a single key generation.
     struct Keys {
         bytes32[256] sk0;
         bytes32[256] sk1;
