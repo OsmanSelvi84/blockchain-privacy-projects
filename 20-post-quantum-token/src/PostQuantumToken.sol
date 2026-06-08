@@ -5,7 +5,6 @@ pragma solidity ^0.8.20;
 /// @notice A token whose transfers are authorized by Lamport one-time signatures.
 /// @dev Uses SHA-256 to match the reference implementation (simple-lamport).
 contract PostQuantumToken {
-    /// @notice Bits in message hash. SHA-256 -> 256 bits.
     uint256 public constant N = 256;
 
     // --- Storage ---
