@@ -62,7 +62,7 @@ Clone the repository and switch to the project branch:
 
 Install the Solidity test dependency:
 
-    forge install foundry-rs/forge-std
+    git submodule update --init --recursive
 
 Install the reference implementation:
 
