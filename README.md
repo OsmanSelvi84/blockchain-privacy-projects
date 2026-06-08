@@ -30,8 +30,9 @@ To test my project on your computer, please follow these steps carefully in your
 First, clone the repository directly from my branch and go into the folder:
 
 ```bash
-git clone -b 04-ring-signature-anonymous-messaging https://github.com/OsmanSelvi84/blockchain-privacy-projects.git
+git clone https://github.com/OsmanSelvi84/blockchain-privacy-projects.git
 cd blockchain-privacy-projects
+git checkout eylul-uygur-210304040
 
 ```
 
