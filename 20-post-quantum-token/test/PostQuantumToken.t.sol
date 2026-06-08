@@ -144,8 +144,6 @@ contract PostQuantumTokenTest is Test {
         token.transfer(murat, 100, nextCommit, k.pk0, k.pk1, sig);
     }
 
-    // --- Custom scenario for Part A (instructor-provided inputs) ---
-    // Override any of these from the command line, e.g.:
     //   AMOUNT=250 TAMPER=0 forge test --match-test test_Custom -vvv
     // Inputs:
     //   SENDER_BALANCE - ahmet's starting balance (default 1000)
