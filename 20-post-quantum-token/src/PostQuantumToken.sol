@@ -1,9 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-/// @title PostQuantumToken
-/// @notice A token whose transfers are authorized by Lamport one-time signatures.
-/// @dev Uses SHA-256 to match the reference implementation (simple-lamport).
+///  A token whose transfers are authorized by Lamport one-time signatures.
+///  Uses SHA-256 to match the reference implementation (simple-lamport).
 contract PostQuantumToken {
     uint256 public constant N = 256;
 
@@ -24,7 +23,7 @@ contract PostQuantumToken {
         emit Registered(msg.sender, pkCommitment, initialBalance);
     }
 
-    /// @notice Transfer tokens, authorized by a Lamport one-time signature.
+    ///  Transfer tokens, authorized by a Lamport one-time signature.
     function transfer(
         address to,
         uint256 amount,
@@ -63,7 +62,7 @@ contract PostQuantumToken {
         emit Transfer(msg.sender, to, amount);
     }
 
-    /// @notice Verify a Lamport one-time signature.
+    ///  Verify a Lamport one-time signature.
     /// @param msgHash The SHA-256 hash of the signed message.
     /// @param signature 256 revealed preimages (one per bit).
     /// @param pk0 256 public key components for bit = 0.
