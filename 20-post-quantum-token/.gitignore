@@ -1,0 +1,12 @@
+# Foundry
+lib/
+cache/
+out/
+broadcast/
+
+# Node
+node_modules/
+reference/simple-lamport/
+
+# OS
+.DS_Store

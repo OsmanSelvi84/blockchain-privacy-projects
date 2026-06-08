@@ -1,0 +1,3 @@
+[submodule "20-post-quantum-token/lib/forge-std"]
+	path = 20-post-quantum-token/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
