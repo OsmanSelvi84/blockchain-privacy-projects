@@ -110,6 +110,7 @@ npm install
 **How to Compile:**
 
 ```bash
+npx hardhat clean
 npx hardhat compile
 ```
 
@@ -126,6 +127,7 @@ npx hardhat node
 Open a new terminal and deploy the contract:
 
 ```bash
+cd C:\Users\gykmw\blockchain-privacy-projects\10-did-management
 npx hardhat run scripts/deploy.js
 ```
 
