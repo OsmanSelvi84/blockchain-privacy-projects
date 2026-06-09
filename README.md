@@ -30,25 +30,29 @@ git checkout students/220304016-begum-gunaydin
 ---
 
 ## Implementation
-cd ~
-1 — Git ve curl kur
-sudo apt update && sudo apt install git curl -y
-2 — Foundry'yi indir
+Social Recovery Wallet
+Installation and Setup
+1. Install Git and Curl
+sudo apt update
+sudo apt install git curl -y
+2. Install Foundry
 curl -L https://foundry.paradigm.xyz | bash
-3 — PATH'i yenile
+3. Reload PATH
 source ~/.bashrc
-4 — Foundry'yi aktifleştir
+4. Install Foundry Components
 foundryup
-5 — Projeyi klonla
+5. Clone the Repository
 git clone https://github.com/OsmanSelvi84/blockchain-privacy-projects.git
 cd blockchain-privacy-projects
 git checkout students/220304016-begum-gunaydin
-6 — Bağımlılığı yükle
+6. Install Dependencies
 forge install foundry-rs/forge-std
-7 — Derle
-bashforge build
-8 — Test et
+7. Build the Project
+forge build
+8. Run Tests
 forge test -vvv
+
+
 
 <img width="748" height="161" alt="image" src="https://github.com/user-attachments/assets/04d271a4-1c35-439c-b929-6c9bf687ae35" />
 
