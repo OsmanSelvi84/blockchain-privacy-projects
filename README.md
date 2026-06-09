@@ -151,34 +151,82 @@ vote_count → 0
 ---
 
 ## Reference Implementation
+cd ~
+#### 1. Install Git and Curl
 
-This project was developed by studying the following reference implementation:
+```bash
+sudo apt update && sudo apt install git curl -y
+```
 
-**Repository:** https://github.com/verumlotus/social-recovery-wallet
+#### 2. Install Foundry
 
-**Setup instructions for reference project:**
+```bash
+curl -L https://foundry.paradigm.xyz | bash
+```
 
-Setup instructions for reference project:
+#### 3. Reload PATH
 
-git clone https://github.com/verumlotus/social-recovery-wallet.git
+```bash
+source ~/.bashrc
+```
+
+#### 4. Install Foundry Components
+
+```bash
+foundryup
+```
+
+#### 5. Clone the Repository
+
+```bash
+git clone --recurse-submodules https://github.com/verumlotus/social-recovery-wallet.git
 cd social-recovery-wallet
-forge install
-mkdir -p src/test/utils
+```
 
+#### 6
+
+```bash
+mkdir -p src/test/utils
 cat > src/test/utils/console.sol << 'EOF'
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.4.22 <0.9.0;
+pragma solidity ^0.8.0;
+
+address constant CONSOLE_ADDRESS = address(0x000000000000000000636F6e736F6c652e6c6f67);
+
+function _sendLogPayload(bytes memory b) view {
+    address consoleAddress = CONSOLE_ADDRESS;
+    assembly {
+        let start := add(b, 32)
+        let length := mload(b)
+        let r := staticcall(gas(), consoleAddress, start, length, 0, 0)
+    }
+}
 
 library console {
-    function log(string memory) internal pure {}
-    function log(uint) internal pure {}
-    function log(bool) internal pure {}
-    function log(address) internal pure {}
+    function log() internal view { _sendLogPayload(abi.encodeWithSignature("log()")); }
+    function log(string memory p0) internal view { _sendLogPayload(abi.encodeWithSignature("log(string)", p0)); }
+    function log(bool p0) internal view { _sendLogPayload(abi.encodeWithSignature("log(bool)", p0)); }
+    function log(uint256 p0) internal view { _sendLogPayload(abi.encodeWithSignature("log(uint256)", p0)); }
+    function log(address p0) internal view { _sendLogPayload(abi.encodeWithSignature("log(address)", p0)); }
+    function log(string memory p0, string memory p1) internal view { _sendLogPayload(abi.encodeWithSignature("log(string,string)", p0, p1)); }
+    function log(string memory p0, bool p1) internal view { _sendLogPayload(abi.encodeWithSignature("log(string,bool)", p0, p1)); }
+    function log(string memory p0, uint256 p1) internal view { _sendLogPayload(abi.encodeWithSignature("log(string,uint256)", p0, p1)); }
+    function log(string memory p0, address p1) internal view { _sendLogPayload(abi.encodeWithSignature("log(string,address)", p0, p1)); }
 }
 EOF
+```
 
+#### 7. Build the Project
+
+```bash
 forge build
-forge test -v
+```
+
+#### 8. Run Tests
+
+```bash
+forge test -vvv
+```
 **Expected output after `forge test -v`:**
 
 <img width="726" height="214" alt="image" src="https://github.com/user-attachments/assets/5cd1caf0-1873-48f0-9a37-3d10dc4bc98d" />
