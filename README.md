@@ -26,11 +26,14 @@ This makes it difficult to determine which sender belongs to which receiver.
 
 ## Project Description
 
-This project is a simplified implementation of the CoinShuffle protocol written in Python.
+CoinShuffle is a privacy protocol that aims to hide the relationship between senders and receivers in blockchain transactions.
 
-Participants join a mixing pool, their output addresses are collected, shuffled, and then used to create a mixed transaction.
+In this project, a simplified version of CoinShuffle is implemented in Python. Participants are collected in a MixingPool, and the system validates the minimum number of participants and equal transaction amounts before mixing.
 
-The project demonstrates the core privacy idea of CoinShuffle without implementing a full blockchain network.
+The output addresses are then shuffled and used to create a new transaction. As a result, the direct link between input and output addresses is hidden.
+
+This project demonstrates the main privacy goal of CoinShuffle: transaction unlinkability.
+
 
 ---
 
