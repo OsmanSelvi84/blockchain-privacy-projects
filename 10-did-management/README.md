@@ -102,7 +102,7 @@ Before running this project, make sure you have the following installed:
 node --version
 ```
 
-### IMPORTANT — If your version is below v22, upgrade first:
+### IMPORTANT If your version is below v22, upgrade first:
 
 #### On Linux:
 ```bash
@@ -121,9 +121,9 @@ node --version
 
 ### Verify your installation:
 ```bash
-node --version    # Must show v22.x.x or higher
-npm --version     # Should show 10.x.x
-git --version     # Should show git version 2.x.x
+node --version    
+npm --version     
+git --version     
 
 
 **How to Install:**
