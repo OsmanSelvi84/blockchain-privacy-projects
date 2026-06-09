@@ -45,4 +45,16 @@ describe("SocialRecoveryWallet", function () {
 
     expect(await wallet.owner()).to.equal(newOwner.address);
   });
+  it("Input Output Demo", async function () {
+  console.log("===== INPUTS =====");
+  console.log("Owner:", owner.address);
+  console.log("Guardian1:", guardian1.address);
+  console.log("Guardian2:", guardian2.address);
+  console.log("Guardian3:", guardian3.address);
+  console.log("NewOwner:", newOwner.address);
+
+  console.log("===== OUTPUT =====");
+  console.log("Test completed successfully");
 });
+});
+
