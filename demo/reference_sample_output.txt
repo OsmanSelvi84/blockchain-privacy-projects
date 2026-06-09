@@ -1,37 +1,6 @@
-================================================================
-  CoinShuffle Protokolü Simülasyonu  (4 katılımcı)
-================================================================
-
-[INPUT] Katılımcılar:
-  Ad           Kaynak       Gerçek Hedef
-  ------------------------------------
-  Client-0     KAYNAK_0     HEDEF_0
-  Client-1     KAYNAK_1     HEDEF_1
-  Client-2     KAYNAK_2     HEDEF_2
-  Client-3     KAYNAK_3     HEDEF_3
-
-[SHUFFLE] Zincir:
-
-  [Client-0]  adım 1/4 — hedefler hâlâ şifreli
-  [Client-1]  adım 2/4 — hedefler hâlâ şifreli
-  [Client-2]  adım 3/4 — hedefler hâlâ şifreli
-  [Client-3]  adım 4/4 — ✓ son adım, hedefler tamamen çözüldü
-
-  Görülen hedefler (sadece son client görebilir):
-    slot 0: HEDEF_2
-    slot 1: HEDEF_0
-    slot 2: HEDEF_3
-    slot 3: HEDEF_1
-
-================================================================
-  SONUÇ: Oluşturulan İşlem
-================================================================
-
-  Slot   Kaynak (INPUT)     Hedef (OUTPUT)     Geçerli?
+ Slot   Kaynak (INPUT)     Hedef (OUTPUT)     Geçerli?
   ------------------------------------------------------
-  0      KAYNAK_2           HEDEF_2            ✓
-  1      KAYNAK_0           HEDEF_0            ✓
-  2      KAYNAK_3           HEDEF_3            ✓
-  3      KAYNAK_1           HEDEF_1            ✓
-
-  ✅ Tüm hedefler doğru çözüldü!
+  0      INPUT_C            OUTPUT_C           ✓
+  1      INPUT_B            OUTPUT_A           ✓
+  2      INPUT_D            OUTPUT_D           ✓
+  3      INPUT_A            OUTPUT_B           ✓
