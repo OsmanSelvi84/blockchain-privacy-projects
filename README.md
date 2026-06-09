@@ -30,27 +30,57 @@ git checkout students/220304016-begum-gunaydin
 ---
 
 ## Implementation
-Social Recovery Wallet
-Installation and Setup
-1. Install Git and Curl
-sudo apt update
-sudo apt install git curl -y
-2. Install Foundry
+ cd ~
+
+#### 1. Install Git and Curl
+
+```bash
+sudo apt update && sudo apt install git curl -y
+```
+
+#### 2. Install Foundry
+
+```bash
 curl -L https://foundry.paradigm.xyz | bash
-3. Reload PATH
+```
+
+#### 3. Reload PATH
+
+```bash
 source ~/.bashrc
-4. Install Foundry Components
+```
+
+#### 4. Install Foundry Components
+
+```bash
 foundryup
-5. Clone the Repository
+```
+
+#### 5. Clone the Repository
+
+```bash
 git clone https://github.com/OsmanSelvi84/blockchain-privacy-projects.git
 cd blockchain-privacy-projects
 git checkout students/220304016-begum-gunaydin
-6. Install Dependencies
+```
+
+#### 6. Install Dependencies
+
+```bash
 forge install foundry-rs/forge-std
-7. Build the Project
+```
+
+#### 7. Build the Project
+
+```bash
 forge build
-8. Run Tests
+```
+
+#### 8. Run Tests
+
+```bash
 forge test -vvv
+```
 
 
 
