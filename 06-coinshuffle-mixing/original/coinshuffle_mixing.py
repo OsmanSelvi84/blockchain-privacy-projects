@@ -1,19 +1,3 @@
-"""
-CoinShuffle Mixing Protocol - Original Implementation
-======================================================
-
-Goal:        Break transaction traceability using coin mixing.
-Requirements:
-  1. Implement mixing pool contract  -> MixingPool class
-  2. Shuffle inputs and outputs      -> shuffle_phase() method
-  3. Prevent linking sender->receiver-> Layered encryption (onion routing)
-
-Privacy concept: Transaction unlinkability.
-
-Based on: Ruffing, Moreno-Sanchez, Kate, "CoinShuffle: Practical
-Decentralized Coin Mixing for Bitcoin", ESORICS 2014.
-"""
-
 import os
 import json
 import random
