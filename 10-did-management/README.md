@@ -89,6 +89,42 @@ b. npm v10 or higher
 
 c. [Git](https://git-scm.com)
 
+## Requirements
+
+Before running this project, make sure you have the following installed:
+
+- [Node.js](https://nodejs.org) **v22.13.0 or higher** — download from https://nodejs.org
+- npm v10 or higher — comes with Node.js automatically
+- [Git](https://git-scm.com) — download from https://git-scm.com
+
+### Check your Node.js version first:
+```bash
+node --version
+```
+
+### IMPORTANT — If your version is below v22, upgrade first:
+
+#### On Linux:
+```bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+source ~/.bashrc
+nvm install 22
+nvm use 22
+node --version
+```
+
+#### On Windows:
+- Go to https://nodejs.org
+- Download and install LTS version v22
+- Restart your terminal
+- Run node --version to verify
+
+### Verify your installation:
+```bash
+node --version    # Must show v22.x.x or higher
+npm --version     # Should show 10.x.x
+git --version     # Should show git version 2.x.x
+
 
 **How to Install:**
 
@@ -127,7 +163,7 @@ npx hardhat node
 Open a new terminal and deploy the contract:
 
 ```bash
-cd C:\Users\gykmw\blockchain-privacy-projects\10-did-management
+cd blockchain-privacy-projects/10-did-management
 npx hardhat run scripts/deploy.js
 ```
 
