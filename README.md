@@ -29,85 +29,26 @@ git checkout students/220304016-begum-gunaydin
 
 ---
 
-## Installation
-
-Install Foundry:
-
-```bash
+## Implementation
+cd ~
+1 — Git ve curl kur
+sudo apt update && sudo apt install git curl -y
+2 — Foundry'yi indir
 curl -L https://foundry.paradigm.xyz | bash
+3 — PATH'i yenile
+source ~/.bashrc
+4 — Foundry'yi aktifleştir
 foundryup
-```
-
-Verify installation:
-
-```bash
-forge --version
-```
-
-Install dependencies:
-
-```bash
-forge install
-```
-
----
-
-## Build
-
-```bash
-forge build
-```
-
-Expected output:
-Compiler run successful!
-
----
-
-## Run Tests
-
-How to Run the Project
-
-This project is a Social Recovery Wallet implementation written in Solidity and tested with Foundry.
-
-1. Clone the repository
-```bash
+5 — Projeyi klonla
 git clone https://github.com/OsmanSelvi84/blockchain-privacy-projects.git
-```
-
-2. Enter the repository
-```bash
-cd blockchain-privacy-privacy-projects
-```
-
-3. Switch to the correct branch
-```bash
+cd blockchain-privacy-projects
 git checkout students/220304016-begum-gunaydin
-```
-
-4. Enter the project folder
-```bash
-cd social-recovery-wallet
-```
-
-5. Install dependencies
-```bash
-forge install
-```
-
-6. Build the project
-```bash
-forge build
-```
-
-7. Run tests
-```bash
-forge test -v
-```
-
-8. Run tests with detailed output
-```bash
-forge test -vvvv
-```
+6 — Bağımlılığı yükle
+forge install foundry-rs/forge-std
+7 — Derle
+bashforge build
+8 — Test et
+forge test -vvv
 
 <img width="748" height="161" alt="image" src="https://github.com/user-attachments/assets/04d271a4-1c35-439c-b929-6c9bf687ae35" />
 
