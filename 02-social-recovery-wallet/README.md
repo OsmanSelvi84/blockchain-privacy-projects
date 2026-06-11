@@ -174,7 +174,39 @@ Expected result:
 
 - Recovery process succeeds.
 - New owner becomes the wallet owner.
+## Interactive Demo
 
+This project includes a simple terminal-based demonstration of the Social Recovery Wallet concept.
+
+Run the demo:
+
+```bash
+node scripts/input-output.cjs
+```
+
+Example Input:
+
+```text
+2
+```
+
+Example Output:
+
+```text
+Social Recovery Wallet Demo
+Enter guardian approval count: 2
+
+Input: 2
+Output: Recovery successful
+Owner changed to new owner
+```
+
+Explanation:
+
+- Threshold = 2 guardian approvals
+- If approval count is greater than or equal to 2, recovery succeeds.
+- Ownership is transferred to the new owner.
+- If approval count is less than 2, recovery fails and ownership remains unchanged.
 ### Reference Setup
 
 ```bash
