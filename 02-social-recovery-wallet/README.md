@@ -101,14 +101,27 @@ This project demonstrates how blockchain technology can be used to implement a s
 
 ## Reference Implementation
 
-For comparison and learning purposes, I studied the following social recovery wallet implementation:
+A simplified reference implementation is included in this repository for comparison purposes.
 
-Reference Repository:
-https://github.com/ldsanchez/smart-contract-wallet-se
+Run Reference Implementation:
 
-### Why This Reference Was Selected
+bash node reference-implementation/input-output-reference.cjs 
 
-This repository demonstrates a smart contract wallet with social recovery mechanisms. It addresses the problem of wallet recovery through trusted participants and account recovery workflows, which closely matches the objectives of my assigned project topic.
+Run Original Implementation:
+
+bash node scripts/input-output.cjs 
+
+### Test Scenario
+
+Input:
+
+text 2 
+
+Expected Output:
+
+text Output: Recovery successful Owner changed to new owner 
+
+Both implementations produce the same result for the same input.
 
 ### Comparison With My Implementation
 
