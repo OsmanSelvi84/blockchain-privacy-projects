@@ -1,183 +1,131 @@
 # CoinShuffle Mixing Protocol
 
-## Goal
-
-Break transaction traceability using coin mixing.
-
----
-
-## Requirements
-
-* Implement a mixing pool
-* Shuffle inputs and outputs
-* Prevent linking sender to receiver
-
----
-
-## Privacy Concept
-
-Transaction unlinkability.
-
-CoinShuffle improves privacy by collecting output addresses from multiple participants and randomly shuffling them before creating the final transaction.
-
-This makes it difficult to determine which sender belongs to which receiver.
-
----
-
 ## Project Description
 
-CoinShuffle is a privacy protocol that aims to hide the relationship between senders and receivers in blockchain transactions.
+CoinShuffle is a privacy-focused protocol that helps reduce transaction traceability in blockchain systems. Instead of directly linking senders and receivers, multiple participants join a mixing pool and their output addresses are shuffled before transactions are finalized.
 
-In this project, a simplified version of CoinShuffle is implemented in Python. Participants are collected in a MixingPool, and the system validates the minimum number of participants and equal transaction amounts before mixing.
+This project implements a simplified version of CoinShuffle using Solidity. Participants provide input and output addresses along with a transaction amount. The contract validates the mixing pool, performs the shuffle process, and creates new transaction mappings that make it harder to determine the original sender-receiver relationship.
 
-The output addresses are then shuffled and used to create a new transaction. As a result, the direct link between input and output addresses is hidden.
-
-This project demonstrates the main privacy goal of CoinShuffle: transaction unlinkability.
-
-
----
-
-## Project Structure
-
-```text
-06-coinshuffle-mixing/
-│
-├── original/
-│   ├── coinshuffle.py
-│   ├── test_coinshuffle.py
-│   └── requirements.txt
-│
-├── demo/
-│   └── sample_output.txt
-│
-├── reference/
-│   └── README.md
-│
-└── README.md
-```
+The main goal of the project is to demonstrate transaction unlinkability and show how privacy can be improved through address mixing techniques in blockchain environments.
 
 ---
 
 ## Features
 
-* MixingPool implementation
+* Mixing pool implementation
 * Multiple participant support
-* Output shuffling
 * Equal denomination validation
 * Minimum participant validation
-* Transaction creation
-* Automated tests
+* Output address shuffling
+* Transaction generation
+* Solidity smart contract implementation
 
 ---
 
-## Requirements
+## How to Run
 
-The project was developed and tested using:
-
-* Python 3.9+
-* pytest
-
-Install pytest if needed:
-
-```bash
-pip3 install pytest
-```
-
----
-
-## Run
-# 1. Download the Repository
+### Download the Repository
 
 ```bash
 git clone -b students/220304027-hasan-yigit-kilinc https://github.com/OsmanSelvi84/blockchain-privacy-projects.git
 ```
 
-# 2. Enter the Project Folder
-
 ```bash
 cd blockchain-privacy-projects/06-coinshuffle-mixing
 ```
 
-# 3. Install pytest
+### Open Remix IDE
 
-```bash
-pip3 install pytest
-```
+https://remix.ethereum.org
 
-# 4. Run the CoinShuffle Simulation
+### Compile the Contract
 
-```bash
-python3 original/coinshuffle.py
-```
+1. Create a new file named `CoinShuffle.sol`
+2. Copy the contract code into the file
+3. Open the Solidity Compiler tab
+4. Select Solidity version `0.8.20`
+5. Click **Compile CoinShuffle.sol**
 
-# 5. Run the Tests
+### Deploy the Contract
 
-```bash
-python3 -m pytest original/test_coinshuffle.py
-```
+1. Open **Deploy & Run Transactions**
+2. Select **Remix VM**
+3. Click **Deploy**
 
-Expected result:
+### Demo Steps
 
-```text
-7 passed
-```
-
-
----
-
-## Example Output
+Add at least 3 participants using:
 
 ```text
-============================================================
-FINAL MIXED TRANSACTION
-============================================================
-
-Slot  Input Address       Output Address              Valid
------------------------------------------------------------
-0     wallet_input_A      wallet_output_B_private     yes
-1     wallet_input_B      wallet_output_E_private     yes
-2     wallet_input_C      wallet_output_C_private     yes
-3     wallet_input_D      wallet_output_D_private     yes
-4     wallet_input_E      wallet_output_A_private     yes
-
-Privacy Goal:
-Break the direct link between input addresses and output addresses.
+User1
+0x1111111111111111111111111111111111111111
+0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+1
 ```
 
-Note:
+```text
+User2
+0x2222222222222222222222222222222222222222
+0xBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+1
+```
 
-The output order changes because the addresses are shuffled randomly during each execution.
-
----
-
-## Testing
-
-The project includes automated tests for:
-
-* MixingPool validation
-* Minimum participant validation
-* Equal denomination validation
-* Output preservation after shuffle
-* Transaction generation
+```text
+User3
+0x3333333333333333333333333333333333333333
+0xCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+1
+```
 
 Run:
 
-```bash
-python3 -m pytest original/test_coinshuffle.py
+```text
+createShuffleTransaction()
+```
+
+Check results:
+
+```text
+getTransactionDetails(0)
+getTransactionDetails(1)
+getTransactionDetails(2)
 ```
 
 Expected result:
 
 ```text
-7 passed
+changed = true
+valid = true
 ```
+
+---
+
+## Example Result
+
+Before shuffle:
+
+```text
+User1 → OutputA
+User2 → OutputB
+User3 → OutputC
+```
+
+After shuffle:
+
+```text
+User1 → OutputC
+User2 → OutputA
+User3 → OutputB
+```
+
+This makes it difficult to determine which output address originally belonged to which participant.
 
 ---
 
 ## Reference
 
-This project was inspired by the CoinShuffle implementation created by Alexander Tong.
+Reference implementation used for comparison:
 
-Reference repository:
+coinshuffle_reference.py
 
 https://github.com/atong01/coinshuffle
