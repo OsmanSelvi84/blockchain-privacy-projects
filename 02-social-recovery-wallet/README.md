@@ -220,6 +220,69 @@ Explanation:
 - If approval count is greater than or equal to 2, recovery succeeds.
 - Ownership is transferred to the new owner.
 - If approval count is less than 2, recovery fails and ownership remains unchanged.
+## How to Run
+
+### 1. Go to the repository
+
+```bash
+cd blockchain-privacy-projects
+```
+
+### 2. Switch to the student branch
+
+```bash
+git checkout students/210304038-zeynep-kiziltekin
+```
+
+### 3. Pull latest changes
+
+```bash
+git pull
+```
+
+### 4. Go to the project folder
+
+```bash
+cd 02-social-recovery-wallet
+```
+
+## Run Reference Implementation
+
+```bash
+node reference-implementation/input-output-reference.cjs
+```
+
+Example Input:
+
+```text
+2
+```
+
+Expected Output:
+
+```text
+Output: Recovery successful
+Owner changed to new owner
+```
+
+## Run Original Implementation
+
+```bash
+node scripts/input-output.cjs
+```
+
+Example Input:
+
+```text
+2
+```
+
+Expected Output:
+
+```text
+Output: Recovery successful
+Owner changed to new owner
+```
 ## Reference Implementation Demo
 
 Run the reference implementation:
