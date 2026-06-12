@@ -220,6 +220,49 @@ Explanation:
 - If approval count is greater than or equal to 2, recovery succeeds.
 - Ownership is transferred to the new owner.
 - If approval count is less than 2, recovery fails and ownership remains unchanged.
+## Reference Implementation Demo
+
+Run the reference implementation:
+
+```bash
+node reference-implementation/input-output-reference.cjs
+```
+
+Example Input:
+
+```text
+2
+```
+
+Expected Output:
+
+```text
+Output: Recovery successful
+Owner changed to new owner
+```
+
+## Original Implementation Demo
+
+Run the original implementation:
+
+```bash
+node scripts/input-output.cjs
+```
+
+Example Input:
+
+```text
+2
+```
+
+Expected Output:
+
+```text
+Output: Recovery successful
+Owner changed to new owner
+```
+
+Both implementations produce the same result for the same input.
 ### Reference Setup
 
 ```bash
